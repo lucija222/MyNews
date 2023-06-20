@@ -1,0 +1,29 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+
+.toggler-contaier {
+    display: flex;
+    justify-content: center;
+    padding: 42px 0 26px;
+
+    h2 {
+        @include font-S-W-F($Px-16, $W-600, $InterV);
+        display: inline;
+        padding: 10px 16px;
+
+        &:hover {
+            cursor: pointer;
+            color: $red;
+        }
+    }
+}
+
+.mobile-toggler {
+    color: $dark-gray;
+}
+
+.selected-mobile-toggler {
+    color: $red;
+    background: rgba(187, 30, 30, 0.1);
+    border-radius: 20px;
+}

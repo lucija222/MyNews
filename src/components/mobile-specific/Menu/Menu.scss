@@ -1,0 +1,54 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+.menu-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    min-width: 232px;
+    padding: 111px 16px 0;
+
+    button {
+        align-self: baseline; //Check the 4px on top of menu
+
+        > svg {
+            position: absolute;
+            top: 28px;
+            right: 18.2px;
+            cursor: pointer;
+
+            &:hover rect {
+                fill: $red;
+            }
+        }
+    }
+}
+
+.menu-heading {
+    @include font-S-W(32px, $W-900);
+    align-self: center;
+    color: $dark-gray;
+    padding-bottom: 36px;
+
+    span {
+        color: $red;
+    }
+}
+
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 15px;
+    column-gap: 10px;
+    min-width: 200px;
+    max-width: 315px;
+}
+
+@media screen and (min-width: 402px) {
+    nav ul {
+        justify-content: flex-start;
+        column-gap: 15px;
+
+    }
+}
