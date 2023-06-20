@@ -1,17 +1,17 @@
 import { useContext, MouseEventHandler } from "react";
-import "./Nav.scss";
 import { ToggleMenuContext } from "../../context/context";
 import { SelectedCategoryContext } from "../../context/SelectedCategoryProvider";
+import "./Nav.scss";
 
 const Nav = () => {
-    const { selectedCategory } = useContext(SelectedCategoryContext);
-    const { setIsMenuOpen, setIsHamburgerClicked } =
-        useContext(ToggleMenuContext);
+    const { selectedCategory, setSelectedCategory } = useContext(SelectedCategoryContext);
+    const { setIsMenuOpen, setIsHamburgerClicked } = useContext(ToggleMenuContext);
 
     const handleNavClick: MouseEventHandler<HTMLLIElement> = (e) => {
         e.stopPropagation();
         setIsMenuOpen(false);
         setIsHamburgerClicked(false);
+        setSelectedCategory(e.currentTarget.id);
     };
 
     return (

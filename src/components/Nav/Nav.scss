@@ -1,0 +1,50 @@
+@use "../../util/helpers/sassHelpers.scss" as *;
+
+nav {
+    display: flex;
+    align-self: center;
+    padding: 0 30px;
+
+    ul {
+        .li {
+            @include font-S-W-F($Px-14, $W-600, $InterV);
+            position: relative;
+            z-index: 11;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            row-gap: 5.63px;
+            width: 95px;
+            height: 95px;
+            border-radius: 5px;
+            color: #8d8d8c;
+            cursor: pointer;
+
+            &:hover {
+                color: $red;
+
+                svg path {
+                    fill: $red;
+                }
+            }
+
+            span {
+                line-height: 19.7px;
+            }
+        }
+    }
+}
+
+.selected-nav {
+    background-color: $white;
+    box-shadow: 0px 6px 36px rgba(0, 0, 0, 0.16);
+
+    svg path {
+        fill: $red;
+    }
+
+    span {
+        color: $red;
+    }
+}

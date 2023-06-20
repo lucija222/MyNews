@@ -23,11 +23,13 @@ const Header = () => {
     return (
         <header>
             <div className="banner-container">
+                <div className="banner-container__content">
                 <h2>Make MyNews your homepage</h2>
                 <p>Discover what's trending on the internet every day!</p>
-                <div className="banner-container_btns">
+                <div className="banner-container__btns">
                     <button>GET</button>
                     <button>No, thanks</button>
+                </div>
                 </div>
             </div>
             {!isHamburgerClicked && !isMenuOpen && (

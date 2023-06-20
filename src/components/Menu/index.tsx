@@ -37,7 +37,7 @@ const Menu = ({ handleClosingMenu, formClassName }: MenuProps) => {
                     />
                 </svg>
             </button>
-            <h1 className="main-heading">
+            <h1 className="menu-heading">
                 <span>My</span>News
             </h1>
             <SearchFilter formClassName={formClassName}/>
