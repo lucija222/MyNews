@@ -1,0 +1,38 @@
+//------------------------------------------------Sass variables
+//------Font-family
+$serif: sans-serif;
+$InterV: "InterV", $serif;
+$InterV_Bold: "InterV_Bold", $serif;
+
+//------Font-weights
+$W-400: 400;
+$W-600: 600;
+$W-700: 700;
+$W-900: 900;
+
+//------PX values
+$Px-10: 10px;
+$Px-14: 14px;
+$Px-15: 15px;
+
+//------Colors
+$red: #bb1e1e;
+$dark-gray: #1d1d1b;
+$white: #fff;
+
+//------------------------------------------------Mixins
+@mixin font-S-W($size, $weight) {
+    font-size: $size;
+    font-weight: $weight;
+}
+
+@mixin font-S-W-F($size, $weight, $family) {
+    font-size: $size;
+    font-weight: $weight;
+    font-family: $family;
+}
+
+@mixin border-and-radius ($border, $radius) {
+    border: $border;
+    border-radius: $radius;
+}
