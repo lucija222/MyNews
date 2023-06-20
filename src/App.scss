@@ -5,3 +5,9 @@ body {
 button {
     cursor: pointer;
 }
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

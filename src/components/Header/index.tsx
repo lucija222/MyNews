@@ -1,7 +1,7 @@
 import { useState, MouseEventHandler } from "react";
 import "./Header.scss";
 import SearchFilter from "../SearchFilter";
-import Menu from "../Menu";
+import Menu from "../mobile-specific/Menu";
 import { ToggleMenuContext } from "../../context/context";
 
 const Header = () => {

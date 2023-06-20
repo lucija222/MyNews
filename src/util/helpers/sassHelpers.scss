@@ -2,10 +2,13 @@
 //------Font-family
 $serif: sans-serif;
 $InterV: "InterV", $serif;
+$InterV_Semi: "InterV_Semi", $serif;
+$InterV_Medium: "InterV_Medium", $serif;
 $InterV_Bold: "InterV_Bold", $serif;
 
 //------Font-weights
 $W-400: 400;
+$W-500: 500;
 $W-600: 600;
 $W-700: 700;
 $W-900: 900;
@@ -14,11 +17,14 @@ $W-900: 900;
 $Px-10: 10px;
 $Px-14: 14px;
 $Px-15: 15px;
+$Px-16: 16px;
 
 //------Colors
 $red: #bb1e1e;
-$dark-gray: #1d1d1b;
+$blue: #1E71BB;
 $white: #fff;
+$light-gray: #F4F5F8;
+$dark-gray: #1d1d1b;
 
 //------------------------------------------------Mixins
 @mixin font-S-W($size, $weight) {

@@ -24,7 +24,6 @@ form {
         display: flex;
         flex: 1;
         justify-content: center;
-        // align-self: center;
         min-width: 200px;
         max-width: 343px;
         height: 48px;
@@ -40,9 +39,9 @@ form {
 }
 
 .form-btn {
+    display: none; //Change for desktop
     @include font-S-W-F($Px-15, $W-600, $InterV_Bold);
     @include border-and-radius(none, 6px);
-    display: none; //Change for desktop
     line-height: 20px;
     padding: 10px 16px;
     color: $white;

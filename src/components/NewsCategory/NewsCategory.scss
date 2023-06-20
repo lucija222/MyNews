@@ -1,0 +1,15 @@
+@use "../../util/helpers/sassHelpers.scss" as *;
+
+.news-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .news-heading {
+        display: none; //Change for desktop 
+        color: $dark-gray;
+        font-size: 18px;
+        font-family: $InterV_Semi;
+        line-height: 24px;
+    }
+}

@@ -1,0 +1,58 @@
+@use "../../util/helpers/sassHelpers.scss" as *;
+
+.widget-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px; //change later when data is fetched
+    flex: 1;
+    font-family: $InterV;
+    width: 343px;
+    height: 529px;
+    padding: 18px 17px 0 15px;
+    background-color: $white;
+    box-shadow: 0px 1px 2px -1px #c8cad1;
+    border-radius: 8px;
+
+    .latest-heading-container {
+        display: flex;
+        align-items: center;
+
+        h2 {
+            @include font-S-W($Px-16, $W-600);
+            color: black;
+            padding-left: 10px;
+        }
+    }
+
+    .see-all-news {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        padding: 15px 0;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -15px;
+            border-top: 1px solid $light-gray;
+            width: 322px;
+            height: 1px;
+        }
+
+        button {
+            @include font-S-W-F($Px-14, $W-500, $InterV);
+            border: none;
+            color: $blue;
+            background-color: transparent;
+        }
+
+        svg {
+            position: absolute;
+            top: 17px;
+            left: 82px;
+            cursor: pointer;
+        }
+    }
+}
