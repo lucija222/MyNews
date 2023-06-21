@@ -1,4 +1,3 @@
-import InfiniteScroller from "../InfinteScroller";
 import "./LatestNewsWidget.scss";
 
 const LatestNewsWidget = () => {

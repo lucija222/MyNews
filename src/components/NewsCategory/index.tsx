@@ -11,7 +11,7 @@ const NewsCategory = ({featuredOrLatestToggler}: NewsCategoryProps) => {
         <main className="news-container">
             <h2 className="news-heading">News</h2>
             {/* Add infinite scroller and render card components in it */}
-            {(featuredOrLatestToggler === "none") && <LatestNewsWidget />}
+            {(featuredOrLatestToggler === "none") && <><LatestNewsWidget /> <p>toggler = "none"</p></>}
         </main>
     );
 };

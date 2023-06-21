@@ -45,10 +45,9 @@ nav ul {
     max-width: 315px;
 }
 
-@media screen and (min-width: 402px) {
+@media screen and (min-width: 422px) { //Fix the behaviour from 397 to 422px
     nav ul {
         justify-content: flex-start;
         column-gap: 15px;
-
     }
 }

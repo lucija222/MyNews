@@ -1,14 +1,27 @@
-import { useState, MouseEventHandler } from "react";
+import { useState, MouseEventHandler, useEffect } from "react";
 import "./App.scss";
 import Header from "./components/Header";
 import NewsCategory from "./components/NewsCategory";
 import SelectedCategoryProvider from "./context/SelectedCategoryProvider";
 import FeaturedOrWidgetToggler from "./components/mobile-specific/FeaturedOrWidgetToggler";
 import LatestNewsWidget from "./components/LatestNewsWidget";
+import useMatchMedia from "./util/helpers/useMatchMedia";
 
-function App() {
+const App = () => {
     const [featuredOrLatestToggler, setFeaturedOrLatestToggler] =
         useState("Featured");
+
+    const isDesktopViewport = useMatchMedia("(min-width: 794px)");
+
+    useEffect(() => {
+        console.log("app working");
+        
+        if (isDesktopViewport) {
+            setFeaturedOrLatestToggler("none");
+        } else if (!isDesktopViewport) {
+            setFeaturedOrLatestToggler("Featured");
+        }
+    }, [isDesktopViewport]);
 
     const handleFeaturedOrLatestToggle: MouseEventHandler<HTMLDivElement> = (
         e
@@ -24,15 +37,25 @@ function App() {
         <SelectedCategoryProvider>
             <Header />
             <div className="app-container">
-            {featuredOrLatestToggler !== "none" && ( //TRACK VIEWPORT SIZE AND SET featuredOrLatestToggler TO *none* FOR DESKTOP
-                <FeaturedOrWidgetToggler
-                    featuredOrLatestToggler={featuredOrLatestToggler}
-                    handleFeaturedOrLatestToggle={handleFeaturedOrLatestToggle}
-                />
-            )}
-            {(featuredOrLatestToggler === "Featured") && <NewsCategory featuredOrLatestToggler={featuredOrLatestToggler}/>}
-            {(featuredOrLatestToggler === "Latest") && <LatestNewsWidget />}
-            {(featuredOrLatestToggler === "none") && <NewsCategory featuredOrLatestToggler={featuredOrLatestToggler}/> }
+                {featuredOrLatestToggler !== "none" && ( //TRACK VIEWPORT SIZE AND SET featuredOrLatestToggler TO *none* FOR DESKTOP
+                    <FeaturedOrWidgetToggler
+                        featuredOrLatestToggler={featuredOrLatestToggler}
+                        handleFeaturedOrLatestToggle={
+                            handleFeaturedOrLatestToggle
+                        }
+                    />
+                )}
+                {featuredOrLatestToggler === "Featured" && (
+                    <NewsCategory
+                        featuredOrLatestToggler={featuredOrLatestToggler}
+                    />
+                )}
+                {featuredOrLatestToggler === "Latest" && <LatestNewsWidget />}
+                {featuredOrLatestToggler === "none" && (
+                    <NewsCategory
+                        featuredOrLatestToggler={featuredOrLatestToggler}
+                    />
+                )}
             </div>
         </SelectedCategoryProvider>
     );
