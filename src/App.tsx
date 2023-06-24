@@ -1,21 +1,18 @@
-import { useState, MouseEventHandler, useEffect } from "react";
-import "./App.scss";
+import { useState, MouseEventHandler, useEffect, useContext } from "react";
 import Header from "./components/Header";
 import NewsCategory from "./components/NewsCategory";
 import SelectedCategoryProvider from "./context/SelectedCategoryProvider";
 import FeaturedOrWidgetToggler from "./components/mobile-specific/FeaturedOrWidgetToggler";
 import LatestNewsWidget from "./components/LatestNewsWidget";
-import useMatchMedia from "./util/helpers/useMatchMedia";
+import { IsDesktopViewportContext } from "./context/IsDesktopViewportProvider";
+import "./App.scss";
 
 const App = () => {
     const [featuredOrLatestToggler, setFeaturedOrLatestToggler] =
         useState("Featured");
-
-    const isDesktopViewport = useMatchMedia("(min-width: 794px)");
+    const isDesktopViewport = useContext(IsDesktopViewportContext);
 
     useEffect(() => {
-        console.log("app working");
-        
         if (isDesktopViewport) {
             setFeaturedOrLatestToggler("none");
         } else if (!isDesktopViewport) {
@@ -37,7 +34,7 @@ const App = () => {
         <SelectedCategoryProvider>
             <Header />
             <div className="app-container">
-                {featuredOrLatestToggler !== "none" && ( //TRACK VIEWPORT SIZE AND SET featuredOrLatestToggler TO *none* FOR DESKTOP
+                {featuredOrLatestToggler !== "none" && (
                     <FeaturedOrWidgetToggler
                         featuredOrLatestToggler={featuredOrLatestToggler}
                         handleFeaturedOrLatestToggle={

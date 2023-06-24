@@ -1,6 +1,11 @@
+import { newsAPI_Key } from "../../util/helpers/constants";
+// import InfiniteScroller from "../InfinteScroller";
 import "./LatestNewsWidget.scss";
 
 const LatestNewsWidget = () => {
+    //Figure out how to track and implement offset
+    // const nytAPI_URL = `https://api.nytimes.com/svc/news/v3/content/all/all.json?limit=20&offset=${URL_Offset}&api-key=${nytAPI_Key}`;
+    const newsAPI_topHeadlines_URL = `https://newsapi.org/v2/top-headlines?apiKey=${newsAPI_Key}`;
 
     return (
         <section className="widget-container">
@@ -23,11 +28,7 @@ const LatestNewsWidget = () => {
                 </svg>
                 <h2>Latest news</h2>
             </div>
-            <div className="latest-articles-container">
-                <article>Article</article>
-                {/* ADD INFINITE SCROLL & DELETE <article> */}
-                {/* <InfiniteScroller parentComponent="LatestNewsWidget" /> */}
-            </div>
+            {/* <InfiniteScroller URL={newsAPI_topHeadlines_URL} cardClass="widget-card" containerName="widget-scroller_container"/> */}
             <div className="see-all-news">
                 <button>See all news</button>
                 <svg

@@ -5,7 +5,7 @@ const useMatchMedia = (mediaQuery: string): boolean => {
     const isFirstRender = useRef(true);
 
     const handleMatchMediaChange = (e: MediaQueryListEvent) => {
-        console.log("handleMatchMediaChange", e.matches);
+        // console.log("handleMatchMediaChange", e.matches);
             setIsMatching(e.matches);
     };
 
@@ -28,7 +28,7 @@ const useMatchMedia = (mediaQuery: string): boolean => {
         };
     }, [mediaQuery]);
 
-    console.log("matchMedia", isMatching);
+    // console.log("matchMedia", isMatching);
 
     return isMatching;
 };

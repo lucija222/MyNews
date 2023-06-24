@@ -9,7 +9,8 @@
     h2 {
         @include font-S-W-F($Px-16, $W-600, $InterV);
         display: inline;
-        padding: 10px 16px;
+        line-height: 20px;
+        padding: 10px 17.215px;
 
         &:hover {
             cursor: pointer;
