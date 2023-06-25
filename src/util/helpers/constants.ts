@@ -1,6 +1,6 @@
 export const newsAPI_Key = "99af17735e214fc6b56e5c158dc68beb";
 export const nytAPI_Key = "TlmHY3uqmTHkOkb2z1j1qqSnbsWPNw9L";
-export const jsonData = {
+export const TESTING_jsonData = {
     "status": "OK",
     "copyright": "Copyright (c) 2023 The New York Times Company.  All Rights Reserved.",
     "num_results": 100,

@@ -25,7 +25,7 @@ interface NytArticle {
     multimedia: Multimedia;
 }
 
-type Multimedia = {
+export type Multimedia = {
     url: string;
     format: string;
     height: number;

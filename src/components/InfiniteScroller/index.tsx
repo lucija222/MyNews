@@ -1,9 +1,15 @@
-import { useState, useRef, useEffect, useContext } from "react";
+import {
+    useState,
+    useRef,
+    useEffect,
+    useContext,
+    useCallback
+} from "react";
 import { IsDesktopViewportContext } from "../../context/IsDesktopViewportProvider";
-import { NewDataArray, filtered_Newswire } from "../../interfaces&types/NYT_API_interface";
 import CategoryCard from "../cards/CategoryCard";
 import WidgetCard from "../cards/WidgetCard";
 import Loader from "../Loader";
+import { filterJsonData } from "../../util/helpers/functions/filterJsonData";
 
 interface InfiniteScrollerProps {
     URL: string;
@@ -33,7 +39,7 @@ const InfiniteScroller = ({
     const slicedArticleData = articleData.slice(0, indexOfLastRenderedCard);
     const observerRef = useRef<HTMLDivElement | null>(null);
 
-    const fetchData = async (URL: string) => {
+    const fetchData = useCallback(async (URL: string) => {
         setIsLoading(true);
         try {
             const response = await fetch(URL);
@@ -43,39 +49,22 @@ const InfiniteScroller = ({
                 //Display error message
             }
 
-                const jsonData = await response.json();
-                let newDataArray: NewDataArray | null = null;
-                jsonData.results.forEach((articleObject: filtered_Newswire) => {
-                    if (articleObject.byline && articleObject.section) {
-                        const mapped = {
-                            url: articleObject.url,
-                            title: articleObject.title,
-                            byline: articleObject.byline,
-                            section: articleObject.section,
-                            timestamp: articleObject.created_date,
-                            img_src: articleObject.multimedia[0].url
-                        };
-                        if (!newDataArray) {
-                            newDataArray = [mapped];
-                        } else {
-                            newDataArray.push(mapped);
-                        }
-                    }
-                });
-                if (newDataArray) {
-                    setArticleData(newDataArray);
-                }
+            const jsonData = await response.json();
+            const filteredData = filterJsonData(jsonData);
 
+            if (filteredData) {
+                setArticleData(filteredData);
+            }
         } catch (error) {
             console.error("Error in fetchData:", error);
         } finally {
             setIsLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchData(URL);
-    }, [URL]);
+    }, [fetchData, URL]);
 
     const observer = useRef<IntersectionObserver | null>(null);
 
@@ -84,7 +73,7 @@ const InfiniteScroller = ({
             ([entry]: IntersectionObserverEntry[]) => {
                 console.log("observing", entry);
 
-                if (entry.isIntersecting) {
+                if (entry.isIntersecting && !isLoading) {
                     switch (isDesktopViewport) {
                         case false:
                             setIndexOfLastRenderedCard((prevIndex) => {
@@ -133,51 +122,56 @@ const InfiniteScroller = ({
 
         const observerConst = observer.current;
         const observerRefConst = observerRef.current;
-        console.log("ArticleData",articleData);
-        
-        
+        console.log("ArticleData", articleData);
+
         return () => {
             if (observerConst && observerRefConst) {
                 observerConst.unobserve(observerRefConst);
                 console.log("Unobserving");
             }
         };
-    }, [articleData, indexOfLastRenderedCard, isDesktopViewport, isFirstRender]);
+    }, [
+        articleData,
+        indexOfLastRenderedCard,
+        isDesktopViewport,
+        isFirstRender,
+        isLoading
+    ]);
 
     return (
         <div className={containerName}>
             {isLoading && <Loader />}
             {cardClass === "category-card" &&
-                   slicedArticleData.map((article, index) => {
-                        return (
-                            <article
-                                key={`category-card${index}`}
-                                className="category-card"
-                            >
-                                <CategoryCard
-                                    imgSrc={article.img_src}
-                                    category={article.section}
-                                    title={article.title}
-                                    author={article.byline}
-                                    url={article.url}
-                                />
-                            </article>
-                        );
-                    })}
+                slicedArticleData.map((article, index) => {
+                    return (
+                        <article
+                            key={`category-card${index}`}
+                            className="category-card"
+                        >
+                            <CategoryCard
+                                imgSrc={article.img_src}
+                                category={article.section}
+                                title={article.title}
+                                author={article.byline}
+                                url={article.url}
+                            />
+                        </article>
+                    );
+                })}
             {cardClass === "widget-card" &&
-                    slicedArticleData.map((article, index) => {
-                        return (
-                            <article
-                                key={`widget-card${index}`}
-                                className={cardClass}
-                            >
-                                <WidgetCard
-                                    timestamp={article.timestamp}
-                                    title={article.title}
-                                />
-                            </article>
-                        );
-                    })}
+                slicedArticleData.map((article, index) => {
+                    return (
+                        <article
+                            key={`widget-card${index}`}
+                            className={cardClass}
+                        >
+                            <WidgetCard
+                                timestamp={article.timestamp}
+                                title={article.title}
+                            />
+                        </article>
+                    );
+                })}
             <div ref={observerRef} className="observerRef"></div>
         </div>
     );

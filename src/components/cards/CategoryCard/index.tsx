@@ -1,3 +1,4 @@
+import StringSlicer from "../../../util/helpers/functions/StringSlicer";
 import "./CategoryCard.scss";
 
 interface CategoryCardProps {
@@ -31,14 +32,13 @@ CategoryCardProps) => {
                 <p className="category-card__category">
                     {category.toUpperCase()}
                 </p>
-                {title.length < 30 && (
+                {title.length < 35 && (
                     <h3>
                         {title} <span className="shortStringFiller">{shortStringFiller}</span>
                     </h3>
                 )}
-                {title.length > 55 && <h3>{`${title.slice(0, 55)}...`}</h3>}
-                {(title.length >= 30) && (title.length <= 55) && <h3>{title}</h3>}
-                {/* <h3>{title}</h3> */}
+                {title.length > 55 && <StringSlicer string={title} maxLength={55} asHTMLelement="h3" />}
+                {(title.length >= 35) && (title.length <= 55) && <h3>{title}</h3>}
                 <p className="author">{author}</p>
             </div>
         </>

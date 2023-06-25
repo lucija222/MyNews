@@ -15,7 +15,7 @@ const NewsCategory = ({ featuredOrLatestToggler }: NewsCategoryProps) => {
         selectedCategory === "home"
             ? `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${nytAPI_Key}`
             : selectedCategory === "general"
-            ? `https://api.nytimes.com/svc/news/v3/content/nyt/home%page.json?limit=100&offset=0&api-key=${nytAPI_Key}`
+            ? `https://api.nytimes.com/svc/news/v3/content/nyt/homepage.json?limit=100&offset=0&api-key=${nytAPI_Key}`
             : `https://api.nytimes.com/svc/news/v3/content/nyt/${selectedCategory}.json?limit=100&offset=0&api-key=${nytAPI_Key}`;
 
     return (
