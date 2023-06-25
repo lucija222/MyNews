@@ -1,0 +1,26 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+.widget-scroller_container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden; //Change this when adding scrollbar
+}
+
+.widget-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 79px;
+    border-bottom: 2px solid $light-gray; //Change to 1px later
+
+    time {
+        @include font-S-W($Px-10, $W-700);
+        line-height: 16px;
+        color: $blue;
+    }
+
+    h3 {
+        @include font-S-W($Px-16, $W-500);
+        line-height: 20px;
+    }
+}

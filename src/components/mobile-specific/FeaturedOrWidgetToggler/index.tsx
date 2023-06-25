@@ -1,15 +1,13 @@
-import { MouseEvent } from "react";
+import { MouseEvent, useContext } from "react";
 import "./FeaturedOrWidgetToggler.scss";
+import { FeaturedOrLatestTogglerContext } from "../../../context/FeaturedOrLatestTogglerProvider";
 
 interface FeaturedOrWidgetTogglerProps {
-    featuredOrLatestToggler: string,
-    handleFeaturedOrLatestToggle: (e: MouseEvent<HTMLDivElement>) => void
-}
+    handleFeaturedOrLatestToggle: (e: MouseEvent<HTMLDivElement>) => void;
+};
 
-const FeaturedOrWidgetToggler = ({
-    featuredOrLatestToggler,
-    handleFeaturedOrLatestToggle,
-}: FeaturedOrWidgetTogglerProps) => {
+const FeaturedOrWidgetToggler = ({ handleFeaturedOrLatestToggle }: FeaturedOrWidgetTogglerProps) => {
+    const { featuredOrLatestToggler } = useContext(FeaturedOrLatestTogglerContext);
 
     return (
         <div

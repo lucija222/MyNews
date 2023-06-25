@@ -71,7 +71,7 @@ const InfiniteScroller = ({
     useEffect(() => {
         observer.current = new IntersectionObserver(
             ([entry]: IntersectionObserverEntry[]) => {
-                console.log("observing", entry);
+                // console.log("observing", entry);
 
                 if (entry.isIntersecting && !isLoading) {
                     switch (isDesktopViewport) {
@@ -122,7 +122,7 @@ const InfiniteScroller = ({
 
         const observerConst = observer.current;
         const observerRefConst = observerRef.current;
-        console.log("ArticleData", articleData);
+        // console.log("ArticleData", articleData);
 
         return () => {
             if (observerConst && observerRefConst) {

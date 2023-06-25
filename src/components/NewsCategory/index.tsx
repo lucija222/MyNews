@@ -1,15 +1,15 @@
 import { useContext } from "react";
 import LatestNewsWidget from "../LatestNewsWidget";
 import { SelectedCategoryContext } from "../../context/SelectedCategoryProvider";
-import "./NewsCategory.scss";
 import { nytAPI_Key } from "../../util/helpers/constants";
 import InfiniteScroller from "../InfiniteScroller";
+import { FeaturedOrLatestTogglerContext } from "../../context/FeaturedOrLatestTogglerProvider";
+import "./NewsCategory.scss";
 
-interface NewsCategoryProps {
-    featuredOrLatestToggler: "Featured" | "none";
-}
-
-const NewsCategory = ({ featuredOrLatestToggler }: NewsCategoryProps) => {
+const NewsCategory = () => {
+    const { featuredOrLatestToggler } = useContext(
+        FeaturedOrLatestTogglerContext
+    );
     const { selectedCategory } = useContext(SelectedCategoryContext);
     const nytAPI_URL =
         selectedCategory === "home"

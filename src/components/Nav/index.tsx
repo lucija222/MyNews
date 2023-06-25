@@ -1,17 +1,25 @@
 import { useContext, MouseEventHandler } from "react";
 import { ToggleMenuContext } from "../../context/context";
 import { SelectedCategoryContext } from "../../context/SelectedCategoryProvider";
+import { FeaturedOrLatestTogglerContext } from "../../context/FeaturedOrLatestTogglerProvider";
 import "./Nav.scss";
 
 const Nav = () => {
     const { selectedCategory, setSelectedCategory } = useContext(SelectedCategoryContext);
     const { setIsMenuOpen, setIsHamburgerClicked } = useContext(ToggleMenuContext);
+    const { featuredOrLatestToggler, setFeaturedOrLatestToggler } = useContext(
+        FeaturedOrLatestTogglerContext
+    );
 
     const handleNavClick: MouseEventHandler<HTMLLIElement> = (e) => {
         e.stopPropagation();
         setIsMenuOpen(false);
         setIsHamburgerClicked(false);
         setSelectedCategory(e.currentTarget.id);
+
+        if (featuredOrLatestToggler === "Latest") {
+            setFeaturedOrLatestToggler("Featured");
+        }
     };
 
     return (

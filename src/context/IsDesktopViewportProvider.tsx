@@ -1,5 +1,5 @@
 import { createContext, useEffect } from "react";
-import useMatchMedia from "../util/helpers/useMatchMedia";
+import useMatchMedia from "../util/helpers/functions/useMatchMedia";
 
 export const IsDesktopViewportContext = createContext(false);
 

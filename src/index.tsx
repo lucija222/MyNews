@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.scss";
 import App from "./App";
 import IsDesktopViewportProvider from "./context/IsDesktopViewportProvider";
+import FeaturedOrLatestTogglerProvider from "./context/FeaturedOrLatestTogglerProvider";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
@@ -10,7 +11,9 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <IsDesktopViewportProvider>
-            <App />
+            <FeaturedOrLatestTogglerProvider>
+                <App />
+            </FeaturedOrLatestTogglerProvider>
         </IsDesktopViewportProvider>
     </React.StrictMode>
 );

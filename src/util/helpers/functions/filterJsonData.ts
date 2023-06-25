@@ -15,10 +15,10 @@ export const filterJsonData = (jsonData: any) => {
                     articleObject.multimedia.find(
                         (multimediaObject) => {
                             if (multimediaObject.width === 440) {
-                                console.log("M_URL - case 400");
+                                // console.log("M_URL - case 400");
                                 return true;
                             } else if (multimediaObject.width === 600) {
-                                console.log("M_URL - case 600");
+                                // console.log("M_URL - case 600");
                                 return true;
                             }
                             return false;
@@ -34,7 +34,8 @@ export const filterJsonData = (jsonData: any) => {
                     title: articleObject.title,
                     byline: articleObject.byline,
                     section: articleObject.section,
-                    timestamp: articleObject.created_date,
+                    // timestamp: articleObject.created_date,
+                    timestamp: "14:30", //Change this later
                     img_src: filteredMultimedia_URL,
                 };
 
