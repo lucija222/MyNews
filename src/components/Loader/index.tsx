@@ -3,12 +3,21 @@ import "./Loader.scss";
 const Loader = () => {
     return (
         <div className="loader-container">
-            <p>Loading</p>
-            <div className="lds-ellipsis">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+            <div className="loader-backgroud">
+                <div className="lds-default">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
             </div>
         </div>
     );
