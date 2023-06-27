@@ -1,12 +1,12 @@
-import { MouseEventHandler, useEffect, useContext } from "react";
+import "./App.scss";
 import Header from "./components/Header";
 import NewsCategory from "./components/NewsCategory";
+import { MouseEventHandler, useEffect, useContext } from "react";
 import SelectedCategoryProvider from "./context/SelectedCategoryProvider";
 import FeaturedOrWidgetToggler from "./components/mobile-specific/FeaturedOrWidgetToggler";
 import LatestNewsWidget from "./components/LatestNewsWidget";
 import { IsDesktopViewportContext } from "./context/IsDesktopViewportProvider";
 import { FeaturedOrLatestTogglerContext } from "./context/FeaturedOrLatestTogglerProvider";
-import "./App.scss";
 
 const App = () => {
     const { featuredOrLatestToggler, setFeaturedOrLatestToggler } = useContext(

@@ -31,7 +31,7 @@
     max-width: 365px;
     font-family: $InterV;
     row-gap: 20px;
-    padding: 0 10px 0;
+    padding: 0 10px 20px;
 }
 
 .category-card__text-content {
@@ -48,22 +48,38 @@
     padding: 20px 17px 20px 17px;
     border-radius: 0 0 10px 10px;
 
+    // &::after {
+    //     content: url("../../../heart.svg");
+    //     transform: translateX(200px, -10px)
+    // }
+
     .category-card__category {
         @include font-S-W($Px-10, $W-700);
         line-height: 16px;
         color: $blue;
+        text-transform: uppercase
     }
 
     h3 {
         @include font-S-W($Px-16, $W-500);
         line-height: 20px;
         text-transform: capitalize;
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
     }
 
     .author {
         display: none;
         color: $dark-gray;
         font-size: 12px;
+    }
+
+    svg {
+        align-self: flex-end;
+        transform: translateY(-10px);
     }
 }
 

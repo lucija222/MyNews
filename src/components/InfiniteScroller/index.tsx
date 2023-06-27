@@ -1,15 +1,10 @@
-import {
-    useState,
-    useRef,
-    useEffect,
-    useContext,
-    useCallback
-} from "react";
-import { IsDesktopViewportContext } from "../../context/IsDesktopViewportProvider";
-import CategoryCard from "../cards/CategoryCard";
-import WidgetCard from "../cards/WidgetCard";
 import Loader from "../Loader";
+import ErrorMessage from "../ErrorMessage";
+import WidgetCard from "../cards/WidgetCard";
+import CategoryCard from "../cards/CategoryCard";
 import { filterJsonData } from "../../util/helpers/functions/filterJsonData";
+import { useState, useRef, useEffect, useContext, useCallback } from "react";
+import { IsDesktopViewportContext } from "../../context/IsDesktopViewportProvider";
 
 interface InfiniteScrollerProps {
     URL: string;
@@ -35,9 +30,11 @@ const InfiniteScroller = ({
     const [articleData, setArticleData] = useState<ArticleData>([]);
     const [indexOfLastRenderedCard, setIndexOfLastRenderedCard] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
-    const [isFirstRender, setIsFirstRender] = useState(true);
+    const [isError, setIsError] = useState(false);
+    const isFirstRenderRef = useRef(true);
     const slicedArticleData = articleData.slice(0, indexOfLastRenderedCard);
-    const observerRef = useRef<HTMLDivElement | null>(null);
+    const observerElemRef = useRef<HTMLDivElement | null>(null);
+    const pusherElemRef = useRef<HTMLDivElement | null>(null);
 
     const fetchData = useCallback(async (URL: string) => {
         setIsLoading(true);
@@ -46,11 +43,13 @@ const InfiniteScroller = ({
 
             if (!response.ok) {
                 console.error("Error: !response.ok");
-                //Display error message
+                setIsError(true);
+                return;
             }
 
             const jsonData = await response.json();
             const filteredData = filterJsonData(jsonData);
+            console.log("Fetched data");
 
             if (filteredData) {
                 setArticleData(filteredData);
@@ -71,14 +70,20 @@ const InfiniteScroller = ({
     useEffect(() => {
         observer.current = new IntersectionObserver(
             ([entry]: IntersectionObserverEntry[]) => {
-                // console.log("observing", entry);
+                // console.log("isIntersecting:", entry.isIntersecting);
+
+                const isThereMoreData =
+                    articleData.length > indexOfLastRenderedCard;
 
                 if (entry.isIntersecting && !isLoading) {
+
                     switch (isDesktopViewport) {
                         case false:
-                            setIndexOfLastRenderedCard((prevIndex) => {
-                                return prevIndex + 6;
-                            });
+                            if (isThereMoreData) {
+                                setIndexOfLastRenderedCard((prevIndex) => {
+                                    return prevIndex + 6;
+                                });
+                            }
                             break;
 
                         case true:
@@ -89,13 +94,14 @@ const InfiniteScroller = ({
                                     });
                                     break;
 
-                                case 15:
-                                    setIndexOfLastRenderedCard((prevIndex) => {
-                                        return prevIndex + 12;
-                                    });
-                                    break;
-
                                 default:
+                                    if (isThereMoreData) {
+                                        setIndexOfLastRenderedCard(
+                                            (prevIndex) => {
+                                                return prevIndex + 12;
+                                            }
+                                        );
+                                    }
                                     break;
                             }
 
@@ -103,7 +109,7 @@ const InfiniteScroller = ({
 
                         default:
                             console.error(
-                                "Error in switch statement while loading more cards"
+                                "Error: in observer switch statement"
                             );
                             break;
                     }
@@ -112,35 +118,28 @@ const InfiniteScroller = ({
             { root: null, threshold: 1 }
         );
 
-        if (!isFirstRender && observer.current) {
-            observer.current.observe(observerRef.current!);
+        if (!isFirstRenderRef.current && observer.current) {
+            observer.current.observe(observerElemRef.current!);
         }
 
-        if (isFirstRender) {
-            setIsFirstRender(false);
+        if (isFirstRenderRef.current) {
+            isFirstRenderRef.current = false;
         }
 
         const observerConst = observer.current;
-        const observerRefConst = observerRef.current;
-        // console.log("ArticleData", articleData);
 
         return () => {
-            if (observerConst && observerRefConst) {
-                observerConst.unobserve(observerRefConst);
+            if (observerConst) {
+                observerConst.disconnect();
                 console.log("Unobserving");
             }
         };
-    }, [
-        articleData,
-        indexOfLastRenderedCard,
-        isDesktopViewport,
-        isFirstRender,
-        isLoading
-    ]);
+    }, [indexOfLastRenderedCard, isDesktopViewport, isLoading]);
 
     return (
         <div className={containerName}>
             {isLoading && <Loader />}
+            {isError && <ErrorMessage />}
             {cardClass === "category-card" &&
                 slicedArticleData.map((article, index) => {
                     return (
@@ -168,11 +167,15 @@ const InfiniteScroller = ({
                             <WidgetCard
                                 timestamp={article.timestamp}
                                 title={article.title}
+                                url={article.url}
                             />
                         </article>
                     );
                 })}
-            <div ref={observerRef} className="observerRef"></div>
+            <div ref={observerElemRef} className="observerRef"></div>
+            {cardClass === "widget-card" && (
+                    <div ref={pusherElemRef} className="pusher-elem"></div>
+                )}
         </div>
     );
 };
