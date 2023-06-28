@@ -35,18 +35,35 @@
     }
 }
 
-nav ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    row-gap: 15px;
-    column-gap: 10px;
-    min-width: 200px;
-    max-width: 315px;
+.menu-nav {
+    padding: 0 30px;
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        row-gap: 15px;
+        column-gap: 10px;
+        min-width: 200px;
+        max-width: 315px;
+    
+        .li {
+            @include font-S-W-F($Px-14, $W-600, $InterV);
+            row-gap: 5.63px;
+            width: 95px;
+            height: 95px !important;
+    
+            svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+    }
 }
 
-@media screen and (min-width: 422px) { //Fix the behaviour from 397 to 422px
-    nav ul {
+@media screen and (min-width: 422px) {
+    //Fix the behaviour from 397 to 422px
+    .menu-nav ul {
         justify-content: flex-start;
         column-gap: 15px;
     }

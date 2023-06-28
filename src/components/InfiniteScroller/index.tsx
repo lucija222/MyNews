@@ -5,6 +5,8 @@ import CategoryCard from "../cards/CategoryCard";
 import { filterJsonData } from "../../util/helpers/functions/filterJsonData";
 import { useState, useRef, useEffect, useContext, useCallback } from "react";
 import { IsDesktopViewportContext } from "../../context/IsDesktopViewportProvider";
+import { TESTING_jsonData } from "../../util/helpers/constants";
+import Nav from "../Nav";
 
 interface InfiniteScrollerProps {
     URL: string;
@@ -34,36 +36,43 @@ const InfiniteScroller = ({
     const isFirstRenderRef = useRef(true);
     const slicedArticleData = articleData.slice(0, indexOfLastRenderedCard);
     const observerElemRef = useRef<HTMLDivElement | null>(null);
-    const pusherElemRef = useRef<HTMLDivElement | null>(null);
+    const isCategoryCard = cardClass === "category-card";
 
-    const fetchData = useCallback(async (URL: string) => {
-        setIsLoading(true);
-        try {
-            const response = await fetch(URL);
+    const fetchData = useCallback(
+        async (/*URL: string*/) => {
+            setIsLoading(true);
+            try {
+                // const response = await fetch(URL);
 
-            if (!response.ok) {
-                console.error("Error: !response.ok");
-                setIsError(true);
-                return;
+                // if (!response.ok) {
+                //     console.error("Error: !response.ok");
+                //     setIsError(true);
+                //     return;
+                // }
+
+                // const jsonData = await response.json();
+                const jsonData = TESTING_jsonData;
+                const filteredData = filterJsonData(jsonData);
+                console.log("Fetched data");
+
+                if (filteredData) {
+                    setArticleData(filteredData);
+                }
+            } catch (error) {
+                console.error("Error in fetchData:", error);
+            } finally {
+                setIsLoading(false);
             }
+        },
+        []
+    );
 
-            const jsonData = await response.json();
-            const filteredData = filterJsonData(jsonData);
-            console.log("Fetched data");
-
-            if (filteredData) {
-                setArticleData(filteredData);
-            }
-        } catch (error) {
-            console.error("Error in fetchData:", error);
-        } finally {
-            setIsLoading(false);
-        }
-    }, []);
-
+    // useEffect(() => {
+    //     fetchData(URL);
+    // }, [fetchData, URL]);
     useEffect(() => {
-        fetchData(URL);
-    }, [fetchData, URL]);
+        fetchData();
+    }, [fetchData]);
 
     const observer = useRef<IntersectionObserver | null>(null);
 
@@ -76,7 +85,6 @@ const InfiniteScroller = ({
                     articleData.length > indexOfLastRenderedCard;
 
                 if (entry.isIntersecting && !isLoading) {
-
                     switch (isDesktopViewport) {
                         case false:
                             if (isThereMoreData) {
@@ -134,13 +142,19 @@ const InfiniteScroller = ({
                 console.log("Unobserving");
             }
         };
-    }, [indexOfLastRenderedCard, isDesktopViewport, isLoading]);
+    }, [
+        indexOfLastRenderedCard,
+        isDesktopViewport,
+        isLoading,
+        articleData.length,
+    ]);
 
     return (
         <div className={containerName}>
             {isLoading && <Loader />}
             {isError && <ErrorMessage />}
-            {cardClass === "category-card" &&
+            {isCategoryCard && isDesktopViewport && <Nav />}
+            {isCategoryCard &&
                 slicedArticleData.map((article, index) => {
                     return (
                         <article
@@ -173,9 +187,7 @@ const InfiniteScroller = ({
                     );
                 })}
             <div ref={observerElemRef} className="observerRef"></div>
-            {cardClass === "widget-card" && (
-                    <div ref={pusherElemRef} className="pusher-elem"></div>
-                )}
+            {cardClass === "widget-card" && <div className="pusher-elem"></div>}
         </div>
     );
 };

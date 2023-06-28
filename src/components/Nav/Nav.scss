@@ -1,22 +1,17 @@
 @use "../../util/helpers/sassHelpers.scss" as *;
 
-nav {
+.general-nav {
     display: flex;
     align-self: center;
-    padding: 0 30px;
 
     ul {
         .li {
-            @include font-S-W-F($Px-14, $W-600, $InterV);
             position: relative;
             z-index: 11;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            row-gap: 5.63px;
-            width: 95px;
-            height: 95px;
             border-radius: 5px;
             color: #8d8d8c;
             cursor: pointer;
@@ -36,9 +31,30 @@ nav {
     }
 }
 
+.desktop-nav ul {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+
+    .li {
+        @include font-S-W-F($Px-10, $W-600, $InterV_Semi);
+        height: 49.68px;
+        padding: 5px 0;
+        row-gap: 1.68px;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
 .selected-nav {
     background-color: $white;
     box-shadow: 0px 6px 36px rgba(0, 0, 0, 0.16);
+    padding: 0 !important;
+    height: 63px !important;
+    width: 63px;
 
     svg path {
         fill: $red;

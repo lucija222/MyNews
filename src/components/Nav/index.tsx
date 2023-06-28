@@ -4,7 +4,11 @@ import { SelectedCategoryContext } from "../../context/SelectedCategoryProvider"
 import { FeaturedOrLatestTogglerContext } from "../../context/FeaturedOrLatestTogglerProvider";
 import "./Nav.scss";
 
-const Nav = () => {
+interface NavProps {
+    menuClassName?: string
+}
+
+const Nav = ({menuClassName}: NavProps) => {
     const { selectedCategory, setSelectedCategory } = useContext(SelectedCategoryContext);
     const { setIsMenuOpen, setIsHamburgerClicked } = useContext(ToggleMenuContext);
     const { featuredOrLatestToggler, setFeaturedOrLatestToggler } = useContext(
@@ -23,7 +27,7 @@ const Nav = () => {
     };
 
     return (
-        <nav>
+        <nav className={menuClassName ? `${menuClassName} general-nav` : "desktop-nav general-nav"}>
             <ul>
                 <li
                     id="home"

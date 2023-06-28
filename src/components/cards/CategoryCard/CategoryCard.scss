@@ -48,16 +48,11 @@
     padding: 20px 17px 20px 17px;
     border-radius: 0 0 10px 10px;
 
-    // &::after {
-    //     content: url("../../../heart.svg");
-    //     transform: translateX(200px, -10px)
-    // }
-
     .category-card__category {
         @include font-S-W($Px-10, $W-700);
         line-height: 16px;
         color: $blue;
-        text-transform: uppercase
+        text-transform: uppercase;
     }
 
     h3 {
@@ -98,15 +93,21 @@
 
     .category-card__img {
         max-height: 100%;
-    } 
+    }
 }
 
 @media screen and (min-width: 794px) {
     .category-scroller_container {
-        width: 322px;
+        min-width: 794px;
 
         .author {
             display: block;
+        }
+    }
+
+    .category-card__text-content {
+        .category-card__category {
+            max-width: 322px;
         }
     }
 }

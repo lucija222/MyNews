@@ -35,7 +35,6 @@ const App = () => {
     return (
         <SelectedCategoryProvider>
             <Header />
-            <div className="app-container">
                 {featuredOrLatestToggler !== "none" && (
                     <FeaturedOrWidgetToggler
                         handleFeaturedOrLatestToggle={
@@ -46,7 +45,6 @@ const App = () => {
                 {featuredOrLatestToggler === "Featured" && <NewsCategory />}
                 {featuredOrLatestToggler === "Latest" && <LatestNewsWidget />}
                 {featuredOrLatestToggler === "none" && <NewsCategory />}
-            </div>
         </SelectedCategoryProvider>
     );
 };
