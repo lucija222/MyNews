@@ -6,6 +6,15 @@
     position: relative;
     height: 260px;
     flex: 1;
+
+    svg {
+        position: absolute;
+        left: 87%;
+        top: 83%;
+        z-index: 1;
+        opacity: 0.7;
+        cursor: pointer;
+    }
 }
 
 .img_container {
@@ -57,10 +66,13 @@
         font-size: 12px;
     }
 
-    svg {
-        align-self: flex-end;
-        transform: translateY(-10px);
-    }
+    // svg {
+    //     // align-self: flex-end;
+    //     // transform: translateY(-10px);
+    //     position: absolute;
+    //     // bottom: 10px;
+    //     left: 300px;
+    // }
 }
 
 .shortStringFiller {
@@ -74,6 +86,19 @@
 
     .category-card__img {
         max-height: 100%;
+    }
+
+    .category-card svg {
+        top: 91%;
+    }
+}
+
+@media screen and (min-width: 345px) {
+    .category-card svg {
+        width: 24px;
+        height: 24px;
+        left: 90%;
+        top: 88%;
     }
 }
 
@@ -93,8 +118,14 @@
             display: block;
         }
     }
+
     .category-card {
         @include width-min-max(250px, 322px);
         height: 252px;
+
+        svg {
+            left: 89%;
+            top: 86%;
+        }
     }
 }

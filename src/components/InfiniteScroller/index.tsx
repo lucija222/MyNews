@@ -11,6 +11,7 @@ import {
     useCallback
 } from "react";
 import { IsSmallViewportContext } from "../../context/ViewportSizesProvider";
+import { TESTING_jsonData } from "../../util/helpers/constants";
 
 interface InfiniteScrollerProps {
     URL: string;
@@ -41,19 +42,51 @@ const InfiniteScroller = ({ URL, cardClass }: InfiniteScrollerProps) => {
     const isCategoryCard = cardClass === "category-card";
     const isWidgetCard = cardClass === "widget-card";
 
+    // const fetchData = useCallback(
+    //     async (URL: string) => {
+    //         setIsLoading(true);
+    //         try {
+    //             const response = await fetch(URL);
+
+    //             if (!response.ok) {
+    //                 console.error("Error: !response.ok");
+    //                 setIsError(true);
+    //                 return;
+    //             }
+
+    //             const jsonData = await response.json();
+    //             const filteredData = filterJsonData(jsonData);
+    //             console.log("Fetched data");
+
+    //             if (filteredData) {
+    //                 setArticleData(filteredData);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error in fetchData:", error);
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     },
+    //     []
+    // );
+
+    // useEffect(() => {
+    //     fetchData(URL);
+    // }, [fetchData, URL]);
     const fetchData = useCallback(
-        async (URL: string) => {
+        async (/*URL: string*/) => {
             setIsLoading(true);
             try {
-                const response = await fetch(URL);
+                // const response = await fetch(URL);
 
-                if (!response.ok) {
-                    console.error("Error: !response.ok");
-                    setIsError(true);
-                    return;
-                }
+                // if (!response.ok) {
+                //     console.error("Error: !response.ok");
+                //     setIsError(true);
+                //     return;
+                // }
 
-                const jsonData = await response.json();
+                // const jsonData = await response.json();
+                const jsonData = TESTING_jsonData;
                 const filteredData = filterJsonData(jsonData);
                 console.log("Fetched data");
 
@@ -70,8 +103,8 @@ const InfiniteScroller = ({ URL, cardClass }: InfiniteScrollerProps) => {
     );
 
     useEffect(() => {
-        fetchData(URL);
-    }, [fetchData, URL]);
+        fetchData();
+    }, [fetchData]);
 
     useEffect(() => {
         observer.current = new IntersectionObserver(
