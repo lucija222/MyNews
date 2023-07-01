@@ -1,6 +1,7 @@
 @use "../../util/helpers/sassHelpers.scss" as *;
 
 form {
+    position: relative;
     display: flex;
     justify-content: center;
 
@@ -8,24 +9,23 @@ form {
         position: relative;
         display: flex;
         justify-content: center;
-        min-width: 200px;
-        max-width: 343px;
+        @include width-min-max(200px, 345px);
         flex: 1;
 
         svg {
             position: absolute;
             inset: 16.12px 12.12px;
+            cursor: text;
         }
     }
 
     input {
-        @include font-S-W-F($Px-15, $W-400, $InterV);
+        @include font-S-W($Px-15, $W-400);
         @include border-and-radius(none, $Px-10);
+        @include width-min-max(230px, 345px);
         display: flex;
         flex: 1;
         justify-content: center;
-        min-width: 200px;
-        max-width: 343px;
         height: 48px;
         line-height: 16px;
         text-indent: 36px;
@@ -39,16 +39,51 @@ form {
 }
 
 .form-btn {
-    display: none; //Change for desktop
-    @include font-S-W-F($Px-15, $W-600, $InterV_Bold);
+    display: none;
+    @include font-S-W($Px-15, $W-600);
     @include border-and-radius(none, 6px);
+    font-family: $InterV;
     line-height: 20px;
     padding: 10px 16px;
     color: $white;
     background-color: $red;
-
 }
 
 .menuFormClassName {
     padding-bottom: 36px;
+}
+
+@media screen and (min-width: 794px) {
+    form {
+        div {
+            @include width-min-max(500px, 500px);
+}
+        
+        input {
+            height: 50px;
+            @include width-min-max(500px, 500px);
+    }}
+
+    .form-btn {
+        display: block;
+        position: absolute;
+        top: 5px;
+        left: 399px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    form {
+        div {
+            @include width-min-max(725px, 725px);
+        }
+
+        input {
+            @include width-min-max(725px, 725px);
+        }
+    }
+
+    .form-btn {
+        left: 622px;
+    }
 }

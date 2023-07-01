@@ -5,3 +5,21 @@ body {
 button {
     cursor: pointer;
 }
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-width: 250px;
+}
+
+@media screen and (min-width: 794px) {
+    #root {
+        min-width: 794px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    #root {
+        min-width: 1200px;
+    }
+}

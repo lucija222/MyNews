@@ -1,5 +1,5 @@
-import { sliceString } from "../../../util/helpers/functions/stringSlicer";
 import "./CategoryCard.scss";
+import { sliceString } from "../../../util/helpers/functions/stringSlicer";
 
 interface CategoryCardProps {
     imgSrc: string;
@@ -7,15 +7,16 @@ interface CategoryCardProps {
     title: string;
     author: string;
     url: string;
-}
+};
 
 const CategoryCard = ({
     imgSrc,
     category,
     title,
     author,
-    url,
+    url
 }: CategoryCardProps) => {
+
     const shortStringFiller = "xxx xxxx xxxx xxxx xxxxx xxxxx";
 
     return (
@@ -29,34 +30,33 @@ const CategoryCard = ({
             </div>
             <div className="category-card__text-content">
                 <p className="category-card__category">
-                    {/* {category.toUpperCase()} */}
                     {category}
                 </p>
-                {title.length < 35 && (
+                {title.length < 42 && (
                     <h3>
-                        {/* <a href={url} target="_blank" rel="noopener noreferrer"> */}
-                            {title}
-                        {/* </a> */}
+                        <a href={url} target="_blank" rel="noopener noreferrer">
+                        {title}
+                        </a>
                         <span className="shortStringFiller">
                             {shortStringFiller}
                         </span>
                     </h3>
                 )}
-                {title.length > 55 && (
+                {title.length > 70 && (
                     <h3>
-                        {/* <a href={url} target="_blank" rel="noopener noreferrer"> */}
-                            {sliceString(title, 55)}
-                        {/* </a> */}
+                        <a href={url} target="_blank" rel="noopener noreferrer">
+                        {sliceString(title, 70)}
+                        </a>
                     </h3>
                 )}
-                {title.length >= 35 && title.length <= 55 && (
+                {title.length >= 42 && title.length <= 70 && (
                     <h3>
-                        {/* <a href={url} target="_blank" rel="noopener noreferrer"> */}
-                            {title}
-                        {/* </a> */}
+                        <a href={url} target="_blank" rel="noopener noreferrer">
+                        {title}
+                        </a>
                     </h3>
                 )}
-                <p className="author">{author}</p>
+                <p className="author">{sliceString(author, 40, "author")}</p>
             </div>
         </>
     );

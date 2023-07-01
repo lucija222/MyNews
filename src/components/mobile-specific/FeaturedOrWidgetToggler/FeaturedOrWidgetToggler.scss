@@ -4,10 +4,10 @@
 .toggler-contaier {
     display: flex;
     justify-content: center;
-    padding: 42px 0 26px;
+    padding: 32px 0 16px;
 
     h2 {
-        @include font-S-W-F($Px-16, $W-600, $InterV);
+        @include font-S-W($Px-16, $W-600);
         display: inline;
         line-height: 20px;
         padding: 10px 17.215px;

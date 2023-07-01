@@ -1,17 +1,32 @@
 @use "../../util/helpers/sassHelpers.scss" as *;
 
 .news-container {
+    @include width-min-max(250px, 363px);
+    position: relative;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 250px;
-    padding: 0 10px;
+    align-self: center;
+    padding: 0;
 
     .news-heading {
-        display: none; //Change for desktop 
+        @include font-S-W(18px, $W-600);
+        display: block;
         color: $dark-gray;
-        font-size: 18px;
-        font-family: $InterV_Semi;
         line-height: 24px;
+        padding-bottom: 16px;
+    }
+}
+
+@media screen and (min-width: 794px) {
+    .news-container {
+        align-items: flex-start;
+        max-width: 794px;
+        align-self: center;
+        padding: 0 19px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .news-container {
+        @include width-min-max(1135.98px, 1135.98px);
     }
 }

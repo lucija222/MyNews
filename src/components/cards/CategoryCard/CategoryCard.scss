@@ -1,15 +1,14 @@
 @use "../../../util/helpers/sassHelpers.scss" as *;
 
 .category-card {
-    display: flex;
-    flex-direction: column;
+    @extend %flex-column;
+    @include width-min-max(230px, 345px);
     position: relative;
     height: 260px;
     flex: 1;
 }
 
 .img_container {
-    min-width: 230px;
     max-width: 345px;
     max-height: 260px;
 }
@@ -19,33 +18,19 @@
     object-fit: cover;
     object-position: top center;
     width: 100%;
+    max-width: 345px;
     height: 100%;
     max-height: 240px;
 }
 
-.category-scroller_container {
-    display: flex;
-    flex-wrap: wrap;
-    flex: 1;
-    min-width: 230px;
-    max-width: 365px;
-    font-family: $InterV;
-    row-gap: 20px;
-    padding: 0 10px 20px;
-}
-
 .category-card__text-content {
-    display: flex;
-    flex-direction: column;
+    @extend %flex-column;
+    @include height-min-max(110px, 120px);
     row-gap: 5px;
     position: absolute;
     top: 130px;
-    min-width: 230px;
-    max-width: 345px;
-    min-height: 110px;
-    max-height: 120px;
     background-color: $white;
-    padding: 20px 17px 20px 17px;
+    padding: 17px 15px;
     border-radius: 0 0 10px 10px;
 
     .category-card__category {
@@ -85,10 +70,6 @@
 @media screen and (min-width: 290px) {
     .category-card__text-content {
         top: 150px;
-
-        h3 {
-            font-size: $Px-20;
-        }
     }
 
     .category-card__img {
@@ -97,17 +78,23 @@
 }
 
 @media screen and (min-width: 794px) {
-    .category-scroller_container {
-        min-width: 794px;
+    .category-card__text-content {
+        @include height-min-max(112px, 112px);
+        top: 138px;
+        justify-content: space-around;
+        padding: 12px;
+
+        h3 {
+            font-weight: 500;
+            font-style: normal;
+        }
 
         .author {
             display: block;
         }
     }
-
-    .category-card__text-content {
-        .category-card__category {
-            max-width: 322px;
-        }
+    .category-card {
+        @include width-min-max(250px, 322px);
+        height: 252px;
     }
 }

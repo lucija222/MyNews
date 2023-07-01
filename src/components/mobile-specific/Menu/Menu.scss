@@ -44,14 +44,13 @@
         justify-content: center;
         row-gap: 15px;
         column-gap: 10px;
-        min-width: 200px;
-        max-width: 315px;
+        @include width-min-max(200px, 315px);
     
         .li {
-            @include font-S-W-F($Px-14, $W-600, $InterV);
+            @include font-S-W($Px-14, $W-600);
             row-gap: 5.63px;
             width: 95px;
-            height: 95px !important;
+            height: 95px;
     
             svg {
                 width: 24px;

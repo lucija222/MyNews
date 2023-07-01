@@ -13,7 +13,6 @@ const SearchFilter = ({ menuFormClassName }: SearchFilterProps) => {
         e.stopPropagation();
         const target = e.target as HTMLInputElement;
         setSearchFilterInput(target.value);
-        //Add filtering functionality once Category is done
     };
 
     return (

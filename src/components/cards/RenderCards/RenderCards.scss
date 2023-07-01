@@ -1,0 +1,68 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+.category-scroller_container {
+    @extend %flex-and-wrap;
+    @include width-min-max(230px, 365px);
+    flex: 1;
+    row-gap: 16px;
+    padding: 0 10px 20px;
+}
+
+.heading-and-scroller {
+    @extend %flex-column;
+}
+
+.two-articles_container {
+    @extend %flex-and-wrap;
+    flex: 1;
+    row-gap: 20px;
+}
+
+.four-articles_container {
+    @extend %flex-and-wrap;
+    flex: 1 1 50%;
+    column-gap: 20px;
+    row-gap: 20px;
+}
+
+.widget-scroller_container {
+    position: relative;
+    @extend %flex-column;
+    padding-right: 12px;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+        width: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #c2c2c2;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+}
+
+@media screen and (min-width: 794px) {
+
+    .category-scroller_container {
+        align-self: flex-end;
+        @include width-min-max(666px, 666px);
+        row-gap: 20px;
+        column-gap: 20px;
+        padding: 0 0 20px;
+        
+    }
+
+    .widget-scroller_container::-webkit-scrollbar {
+        width: 4px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .category-scroller_container {
+        @include width-min-max(1010px, 1010px);
+    }
+}

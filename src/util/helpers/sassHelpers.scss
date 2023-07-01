@@ -1,10 +1,6 @@
 //------------------------------------------------Sass variables
 //------Font-family
-$serif: sans-serif;
-$InterV: "InterV", $serif;
-$InterV_Semi: "InterV_Semi", $serif;
-$InterV_Medium: "InterV_Medium", $serif;
-$InterV_Bold: "InterV_Bold", $serif;
+$InterV: "Inter", sans-serif;
 
 //------Font-weights
 $W-400: 400;
@@ -33,13 +29,32 @@ $dark-gray: #1d1d1b;
     font-weight: $weight;
 }
 
-@mixin font-S-W-F($size, $weight, $family) {
-    font-size: $size;
-    font-weight: $weight;
-    font-family: $family;
-}
-
 @mixin border-and-radius ($border, $radius) {
     border: $border;
     border-radius: $radius;
+}
+
+@mixin width-min-max ($min, $max) {
+    min-width: $min;
+    max-width: $max;
+}
+
+@mixin height-min-max ($min, $max) {
+    min-height: $min;
+    max-height: $max;
+}
+
+
+%flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+%flex-and-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+%positon-relative {
+    position: relative;
 }
