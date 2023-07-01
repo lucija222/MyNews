@@ -1,14 +1,14 @@
-import Nav from "../Nav";
-import SearchFilter from "../SearchFilter";
+import Nav from "../../Nav";
+import SearchFilter from "../../SearchFilter";
 import { MouseEvent } from "react";
 import "./Menu.scss";
 
 interface MenuProps {
     handleClosingMenu: (e: MouseEvent<HTMLButtonElement>) => void,
-    formClassName: string,
+    menuFormClassName: string,
 };
 
-const Menu = ({ handleClosingMenu, formClassName }: MenuProps) => {
+const Menu = ({ handleClosingMenu, menuFormClassName }: MenuProps) => {
     return (
         <div className="menu-container">
             <button onClick={handleClosingMenu}>
@@ -40,8 +40,8 @@ const Menu = ({ handleClosingMenu, formClassName }: MenuProps) => {
             <h1 className="menu-heading">
                 <span>My</span>News
             </h1>
-            <SearchFilter formClassName={formClassName}/>
-            <Nav />
+            <SearchFilter menuFormClassName={menuFormClassName}/>
+            <Nav menuClassName="menu-nav"/>
         </div>
     );
 };

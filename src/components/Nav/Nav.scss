@@ -1,45 +1,77 @@
 @use "../../util/helpers/sassHelpers.scss" as *;
 
-nav {
+.general-nav {
     display: flex;
     align-self: center;
-    padding: 0 30px;
+
+    ul .li {
+        position: relative;
+        z-index: 11;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        color: #8d8d8c;
+        cursor: pointer;
+
+        &:hover {
+            color: $red;
+
+            svg path {
+                fill: $red;
+            }
+        }
+
+        span {
+            line-height: 19.7px;
+        }
+    }
+}
+
+.desktop-nav {
+    align-self: auto;
+    padding-right: 25px;
 
     ul {
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+
         .li {
-            @include font-S-W-F($Px-14, $W-600, $InterV);
-            position: relative;
-            z-index: 11;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            row-gap: 5.63px;
-            width: 95px;
-            height: 95px;
-            border-radius: 5px;
-            color: #8d8d8c;
-            cursor: pointer;
+            @include font-S-W($Px-10, $W-600);
+            height: 49.68px;
+            padding: 5px 0;
+            row-gap: 1.68px;
 
-            &:hover {
-                color: $red;
-
-                svg path {
-                    fill: $red;
-                }
-            }
-
-            span {
-                line-height: 19.7px;
+            svg {
+                width: 20px;
+                height: 20px;
             }
         }
     }
 }
 
-.selected-nav {
+%selected-nav {
     background-color: $white;
     box-shadow: 0px 6px 36px rgba(0, 0, 0, 0.16);
+    padding: 0;
+}
 
+.desktop-nav ul .li.selected-li-desktop {
+    @extend %selected-nav;
+    height: 63px;
+    width: 63px;
+}
+
+.selected-li-mobile {
+    @extend %selected-nav;
+    width: 95px;
+    height: 95px;
+}
+
+
+.desktop-nav ul .li.selected-li-desktop, .selected-li-mobile {
     svg path {
         fill: $red;
     }

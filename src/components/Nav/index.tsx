@@ -1,27 +1,43 @@
+import "./Nav.scss";
 import { useContext, MouseEventHandler } from "react";
 import { ToggleMenuContext } from "../../context/context";
 import { SelectedCategoryContext } from "../../context/SelectedCategoryProvider";
-import "./Nav.scss";
+import { FeaturedOrLatestTogglerContext } from "../../context/FeaturedOrLatestTogglerProvider";
+import { IsSmallViewportContext } from "../../context/ViewportSizesProvider";
 
-const Nav = () => {
+
+interface NavProps {
+    menuClassName?: string
+}
+
+const Nav = ({menuClassName}: NavProps) => {
     const { selectedCategory, setSelectedCategory } = useContext(SelectedCategoryContext);
     const { setIsMenuOpen, setIsHamburgerClicked } = useContext(ToggleMenuContext);
+    const { featuredOrLatestToggler, setFeaturedOrLatestToggler } = useContext(
+        FeaturedOrLatestTogglerContext
+    );
+    const isSmallViewport = useContext(IsSmallViewportContext);
+    const selectedLiClassName = isSmallViewport ? "selected-li-mobile" : "selected-li-desktop";
 
     const handleNavClick: MouseEventHandler<HTMLLIElement> = (e) => {
         e.stopPropagation();
         setIsMenuOpen(false);
         setIsHamburgerClicked(false);
         setSelectedCategory(e.currentTarget.id);
+
+        if (featuredOrLatestToggler === "Latest") {
+            setFeaturedOrLatestToggler("Featured");
+        }
     };
 
     return (
-        <nav>
+        <nav className={menuClassName ? `${menuClassName} general-nav` : "desktop-nav general-nav"}>
             <ul>
                 <li
                     id="home"
                     onClick={handleNavClick}
                     className={
-                        selectedCategory === "home" ? "li selected-nav" : "li"
+                        selectedCategory === "home" ? `li ${selectedLiClassName}` : "li"
                     }
                 >
                     <svg
@@ -45,8 +61,7 @@ const Nav = () => {
                     onClick={handleNavClick}
                     className={
                         selectedCategory === "general"
-                            ? "li selected-nav"
-                            : "li"
+                        ? `li ${selectedLiClassName}` : "li"
                     }
                 >
                     <svg
@@ -71,8 +86,7 @@ const Nav = () => {
                     onClick={handleNavClick}
                     className={
                         selectedCategory === "business"
-                            ? "li selected-nav"
-                            : "li"
+                        ? `li ${selectedLiClassName}` : "li"
                     }
                 >
                     <svg
@@ -95,7 +109,7 @@ const Nav = () => {
                     id="health"
                     onClick={handleNavClick}
                     className={
-                        selectedCategory === "health" ? "li selected-nav" : "li"
+                        selectedCategory === "health" ? `li ${selectedLiClassName}` : "li"
                     }
                 >
                     <svg
@@ -125,8 +139,7 @@ const Nav = () => {
                     onClick={handleNavClick}
                     className={
                         selectedCategory === "science"
-                            ? "li selected-nav"
-                            : "li"
+                        ? `li ${selectedLiClassName}` : "li"
                     }
                 >
                     <svg
@@ -149,7 +162,7 @@ const Nav = () => {
                     id="sports"
                     onClick={handleNavClick}
                     className={
-                        selectedCategory === "sports" ? "li selected-nav" : "li"
+                        selectedCategory === "sports" ? `li ${selectedLiClassName}` : "li"
                     }
                 >
                     <svg
@@ -173,8 +186,7 @@ const Nav = () => {
                     onClick={handleNavClick}
                     className={
                         selectedCategory === "technology"
-                            ? "li selected-nav"
-                            : "li"
+                        ? `li ${selectedLiClassName}` : "li"
                     }
                 >
                     <svg

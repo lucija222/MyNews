@@ -1,11 +1,10 @@
 //------------------------------------------------Sass variables
 //------Font-family
-$serif: sans-serif;
-$InterV: "InterV", $serif;
-$InterV_Bold: "InterV_Bold", $serif;
+$InterV: "Inter", sans-serif;
 
 //------Font-weights
 $W-400: 400;
+$W-500: 500;
 $W-600: 600;
 $W-700: 700;
 $W-900: 900;
@@ -14,11 +13,15 @@ $W-900: 900;
 $Px-10: 10px;
 $Px-14: 14px;
 $Px-15: 15px;
+$Px-16: 16px;
+$Px-20: 20px;
 
 //------Colors
 $red: #bb1e1e;
-$dark-gray: #1d1d1b;
+$blue: #1E71BB;
 $white: #fff;
+$light-gray: #F4F5F8;
+$dark-gray: #1d1d1b;
 
 //------------------------------------------------Mixins
 @mixin font-S-W($size, $weight) {
@@ -26,13 +29,32 @@ $white: #fff;
     font-weight: $weight;
 }
 
-@mixin font-S-W-F($size, $weight, $family) {
-    font-size: $size;
-    font-weight: $weight;
-    font-family: $family;
-}
-
 @mixin border-and-radius ($border, $radius) {
     border: $border;
     border-radius: $radius;
+}
+
+@mixin width-min-max ($min, $max) {
+    min-width: $min;
+    max-width: $max;
+}
+
+@mixin height-min-max ($min, $max) {
+    min-height: $min;
+    max-height: $max;
+}
+
+
+%flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+%flex-and-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+%positon-relative {
+    position: relative;
 }

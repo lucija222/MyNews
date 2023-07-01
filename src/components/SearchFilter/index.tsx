@@ -2,10 +2,10 @@ import { useState, FormEventHandler } from "react";
 import "./SearchFilter.scss";
 
 interface SearchFilterProps {
-    formClassName?: string;
+    menuFormClassName?: string;
 }
 
-const SearchFilter = ({ formClassName }: SearchFilterProps) => {
+const SearchFilter = ({ menuFormClassName }: SearchFilterProps) => {
     const [searchFilterInput, setSearchFilterInput] = useState("");
 
     const handleFormSubmit: FormEventHandler<HTMLFormElement> = (e) => {
@@ -13,13 +13,12 @@ const SearchFilter = ({ formClassName }: SearchFilterProps) => {
         e.stopPropagation();
         const target = e.target as HTMLInputElement;
         setSearchFilterInput(target.value);
-        //Add filtering functionality once Category is done
     };
 
     return (
         <form
             onSubmit={handleFormSubmit}
-            className={formClassName ? formClassName : ""}
+            className={menuFormClassName ? menuFormClassName : ""}
         >
             <div>
                 <svg

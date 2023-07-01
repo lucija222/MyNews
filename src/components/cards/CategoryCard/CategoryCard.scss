@@ -1,0 +1,100 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+.category-card {
+    @extend %flex-column;
+    @include width-min-max(230px, 345px);
+    position: relative;
+    height: 260px;
+    flex: 1;
+}
+
+.img_container {
+    max-width: 345px;
+    max-height: 260px;
+}
+
+.category-card__img {
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: top center;
+    width: 100%;
+    max-width: 345px;
+    height: 100%;
+    max-height: 240px;
+}
+
+.category-card__text-content {
+    @extend %flex-column;
+    @include height-min-max(110px, 120px);
+    row-gap: 5px;
+    position: absolute;
+    top: 130px;
+    background-color: $white;
+    padding: 17px 15px;
+    border-radius: 0 0 10px 10px;
+
+    .category-card__category {
+        @include font-S-W($Px-10, $W-700);
+        line-height: 16px;
+        color: $blue;
+        text-transform: uppercase;
+    }
+
+    h3 {
+        @include font-S-W($Px-16, $W-500);
+        line-height: 20px;
+        text-transform: capitalize;
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    }
+
+    .author {
+        display: none;
+        color: $dark-gray;
+        font-size: 12px;
+    }
+
+    svg {
+        align-self: flex-end;
+        transform: translateY(-10px);
+    }
+}
+
+.shortStringFiller {
+    visibility: hidden;
+}
+
+@media screen and (min-width: 290px) {
+    .category-card__text-content {
+        top: 150px;
+    }
+
+    .category-card__img {
+        max-height: 100%;
+    }
+}
+
+@media screen and (min-width: 794px) {
+    .category-card__text-content {
+        @include height-min-max(112px, 112px);
+        top: 138px;
+        justify-content: space-around;
+        padding: 12px;
+
+        h3 {
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        .author {
+            display: block;
+        }
+    }
+    .category-card {
+        @include width-min-max(250px, 322px);
+        height: 252px;
+    }
+}

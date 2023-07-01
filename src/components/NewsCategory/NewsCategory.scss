@@ -1,0 +1,32 @@
+@use "../../util/helpers/sassHelpers.scss" as *;
+
+.news-container {
+    @include width-min-max(250px, 363px);
+    position: relative;
+    display: flex;
+    align-self: center;
+    padding: 0;
+
+    .news-heading {
+        @include font-S-W(18px, $W-600);
+        display: block;
+        color: $dark-gray;
+        line-height: 24px;
+        padding-bottom: 16px;
+    }
+}
+
+@media screen and (min-width: 794px) {
+    .news-container {
+        align-items: flex-start;
+        max-width: 794px;
+        align-self: center;
+        padding: 0 19px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .news-container {
+        @include width-min-max(1135.98px, 1135.98px);
+    }
+}
