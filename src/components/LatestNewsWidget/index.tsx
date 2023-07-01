@@ -26,7 +26,7 @@ const LatestNewsWidget = () => {
                 </svg>
                 <h2>Latest news</h2>
             </div>
-            <InfiniteScroller URL={nytAPI_URL} cardClass="widget-card" containerName="widget-scroller_container"/>
+            <InfiniteScroller URL={nytAPI_URL} cardClass="widget-card" />
             <div className="see-all-news">
                 <button>See all news</button>
                 <svg

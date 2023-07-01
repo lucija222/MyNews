@@ -4,14 +4,14 @@ import "./WidgetCard.scss";
 interface WidgetCardProps {
     timestamp: string;
     title: string;
-    url: string; //add this later
+    url: string; 
 }
 
 const WidgetCard = ({ timestamp, title, url }: WidgetCardProps) => {
     return (
         <>
             <time>{timestamp}</time>
-            {title.length > 65 ? ( //OR 70?
+            {title.length > 65 ? (
                 <h3>
                     <a href={url} target="_blank" rel="noopener noreferrer">
                         {sliceString(title, 65)}
