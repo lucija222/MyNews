@@ -1,19 +1,20 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
 import "./index.scss";
 import App from "./App";
-import IsDesktopViewportProvider from "./context/IsDesktopViewportProvider";
+import ReactDOM from "react-dom/client";
 import FeaturedOrLatestTogglerProvider from "./context/FeaturedOrLatestTogglerProvider";
+import ViewportSizesProvider from "./context/ViewportSizesProvider";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
 );
+
 root.render(
     <React.StrictMode>
-        <IsDesktopViewportProvider>
+        <ViewportSizesProvider>
             <FeaturedOrLatestTogglerProvider>
                 <App />
             </FeaturedOrLatestTogglerProvider>
-        </IsDesktopViewportProvider>
+        </ViewportSizesProvider>
     </React.StrictMode>
 );

@@ -5,22 +5,23 @@ import { MouseEventHandler, useEffect, useContext } from "react";
 import SelectedCategoryProvider from "./context/SelectedCategoryProvider";
 import FeaturedOrWidgetToggler from "./components/mobile-specific/FeaturedOrWidgetToggler";
 import LatestNewsWidget from "./components/LatestNewsWidget";
-import { IsDesktopViewportContext } from "./context/IsDesktopViewportProvider";
 import { FeaturedOrLatestTogglerContext } from "./context/FeaturedOrLatestTogglerProvider";
-
+import { IsLargeViewportContext, IsMediumViewportContext, IsSmallViewportContext } from "./context/ViewportSizesProvider";
 const App = () => {
     const { featuredOrLatestToggler, setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestTogglerContext
     );
-    const isDesktopViewport = useContext(IsDesktopViewportContext);
+    const isSmallViewport = useContext(IsSmallViewportContext);
+    const isMediumViewport = useContext(IsMediumViewportContext);
+    const isLargeViewport = useContext(IsLargeViewportContext);
 
     useEffect(() => {
-        if (isDesktopViewport) {
+        if (isMediumViewport || isLargeViewport) {
             setFeaturedOrLatestToggler("none");
-        } else if (!isDesktopViewport) {
+        } else if (isSmallViewport) {
             setFeaturedOrLatestToggler("Featured");
         }
-    }, [isDesktopViewport, setFeaturedOrLatestToggler]);
+    }, [isSmallViewport, isMediumViewport, isLargeViewport, setFeaturedOrLatestToggler]);
 
     const handleFeaturedOrLatestToggle: MouseEventHandler<HTMLDivElement> = (
         e
@@ -35,16 +36,14 @@ const App = () => {
     return (
         <SelectedCategoryProvider>
             <Header />
-                {featuredOrLatestToggler !== "none" && (
-                    <FeaturedOrWidgetToggler
-                        handleFeaturedOrLatestToggle={
-                            handleFeaturedOrLatestToggle
-                        }
-                    />
-                )}
-                {featuredOrLatestToggler === "Featured" && <NewsCategory />}
-                {featuredOrLatestToggler === "Latest" && <LatestNewsWidget />}
-                {featuredOrLatestToggler === "none" && <NewsCategory />}
+            {featuredOrLatestToggler !== "none" && (
+                <FeaturedOrWidgetToggler
+                    handleFeaturedOrLatestToggle={handleFeaturedOrLatestToggle}
+                />
+            )}
+            {featuredOrLatestToggler === "Featured" && <NewsCategory />}
+            {featuredOrLatestToggler === "Latest" && <LatestNewsWidget />}
+            {featuredOrLatestToggler === "none" && <NewsCategory />}
         </SelectedCategoryProvider>
     );
 };

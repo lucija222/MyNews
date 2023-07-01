@@ -25,7 +25,7 @@ const useMatchMedia = (mediaQuery: string): boolean => {
                 handleMatchMediaChange
             );
         };
-    }, [mediaQuery]);
+    }, [mediaQuery, isMatching]);
 
     return isMatching;
 };
