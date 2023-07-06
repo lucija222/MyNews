@@ -2,6 +2,14 @@ body {
     background-color: #F2F2F2;
 }
 
+.disable-scroll {
+    overflow-y: hidden;
+}
+
+.allow-scroll {
+    overflow-y: scroll;
+}
+
 button {
     cursor: pointer;
 }

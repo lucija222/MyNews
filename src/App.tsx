@@ -1,27 +1,32 @@
 import "./App.scss";
 import Header from "./components/Header";
 import NewsCategory from "./components/NewsCategory";
+import LatestNewsWidget from "./components/LatestNewsWidget";
 import { MouseEventHandler, useEffect, useContext } from "react";
 import SelectedCategoryProvider from "./context/SelectedCategoryProvider";
+import IsBannerRenderedProvider from "./context/IsBannerRenderedProvider";
+import NumOfRenderedCardsProvider from "./context/NumOfRenderedCardsProvider";
 import FeaturedOrWidgetToggler from "./components/mobile-specific/FeaturedOrWidgetToggler";
-import LatestNewsWidget from "./components/LatestNewsWidget";
 import { FeaturedOrLatestTogglerContext } from "./context/FeaturedOrLatestTogglerProvider";
-import { IsLargeViewportContext, IsMediumViewportContext, IsSmallViewportContext } from "./context/ViewportSizesProvider";
+import {
+    IsSmallViewportContext,
+    isBigViewportContext,
+} from "./context/ViewportSizesProvider";
+
 const App = () => {
     const { featuredOrLatestToggler, setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestTogglerContext
     );
     const isSmallViewport = useContext(IsSmallViewportContext);
-    const isMediumViewport = useContext(IsMediumViewportContext);
-    const isLargeViewport = useContext(IsLargeViewportContext);
+    const isBigViewport = useContext(isBigViewportContext);
 
     useEffect(() => {
-        if (isMediumViewport || isLargeViewport) {
+        if (isBigViewport) {
             setFeaturedOrLatestToggler("none");
         } else if (isSmallViewport) {
             setFeaturedOrLatestToggler("Featured");
         }
-    }, [isSmallViewport, isMediumViewport, isLargeViewport, setFeaturedOrLatestToggler]);
+    }, [isSmallViewport, isBigViewport, setFeaturedOrLatestToggler]);
 
     const handleFeaturedOrLatestToggle: MouseEventHandler<HTMLDivElement> = (
         e
@@ -35,15 +40,23 @@ const App = () => {
 
     return (
         <SelectedCategoryProvider>
-            <Header />
-            {featuredOrLatestToggler !== "none" && (
-                <FeaturedOrWidgetToggler
-                    handleFeaturedOrLatestToggle={handleFeaturedOrLatestToggle}
-                />
-            )}
-            {featuredOrLatestToggler === "Featured" && <NewsCategory />}
-            {featuredOrLatestToggler === "Latest" && <LatestNewsWidget />}
-            {featuredOrLatestToggler === "none" && <NewsCategory />}
+            <NumOfRenderedCardsProvider>
+                <IsBannerRenderedProvider>
+                    <Header />
+                    {featuredOrLatestToggler !== "none" && (
+                        <FeaturedOrWidgetToggler
+                            handleFeaturedOrLatestToggle={
+                                handleFeaturedOrLatestToggle
+                            }
+                        />
+                    )}
+                    {(featuredOrLatestToggler === "Featured" ||
+                        featuredOrLatestToggler === "none") && <NewsCategory />}
+                    {featuredOrLatestToggler === "Latest" && (
+                        <LatestNewsWidget />
+                    )}
+                </IsBannerRenderedProvider>
+            </NumOfRenderedCardsProvider>
         </SelectedCategoryProvider>
     );
 };

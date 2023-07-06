@@ -1,24 +1,18 @@
-import { createContext } from "react";
+import { PropsWithChildren, createContext } from "react";
 import useMatchMedia from "../util/helpers/functions/useMatchMedia";
 
 export const IsSmallViewportContext = createContext(false);
-export const IsMediumViewportContext = createContext(false);
-export const IsLargeViewportContext = createContext(false);
+export const isBigViewportContext = createContext(false);
 
-const ViewportSizesProvider = ({ children }: any) => {
-    const isSmallViewport = useMatchMedia("(max-width: 793px)");
-    const isMediumViewport = useMatchMedia(
-        "(min-width: 794px) and (max-width: 1199px)"
-    );
-    const isLargeViewport = useMatchMedia("(min-width: 1200px)");
+const ViewportSizesProvider = ({ children }: PropsWithChildren) => {
+    const isSmallViewport = useMatchMedia("(max-width: 793.9px)");
+    const isBigViewport = useMatchMedia("(min-width: 794px)");
 
     return (
         <IsSmallViewportContext.Provider value={isSmallViewport}>
-            <IsMediumViewportContext.Provider value={isMediumViewport}>
-                <IsLargeViewportContext.Provider value={isLargeViewport}>
+            <isBigViewportContext.Provider value={isBigViewport}>
                     {children}
-                </IsLargeViewportContext.Provider>
-            </IsMediumViewportContext.Provider>
+            </isBigViewportContext.Provider>
         </IsSmallViewportContext.Provider>
     );
 };
