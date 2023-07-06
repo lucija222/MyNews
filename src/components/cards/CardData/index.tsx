@@ -43,7 +43,7 @@ const CardData = ({ URL, cardClass, isFavoritesCategory }: CardDataProps) => {
             }
 
             const jsonData = await response.json();
-            const filteredData = filterJsonData(jsonData);
+            const filteredData = filterJsonData(jsonData, URL);
             // console.log("Fetched", cardClass);
 
             if (filteredData) {
