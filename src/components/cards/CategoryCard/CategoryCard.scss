@@ -18,6 +18,19 @@
     }
 }
 
+.ad {
+    @include font-S-W($Px-10, $W-600);
+    position: absolute;
+    inset: 15px 0 0 15px;
+    color: white;
+    background-color: $red;
+    line-height: 16px;
+    padding: 5px;
+    width: 25px;
+    height: 24px;
+    border-radius: 4px;
+}
+
 .img_container {
     max-width: 345px;
     max-height: 260px;

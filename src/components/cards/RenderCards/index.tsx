@@ -26,9 +26,11 @@ const RenderCards = ({
 }: RenderCardsProps) => {
     const isSmallViewport = useContext(IsSmallViewportContext);
     const isBigViewport = useContext(isBigViewportContext);
-    const {isBannerRendered} = useContext(IsBannerRenderedContext);
+    const { isBannerRendered } = useContext(IsBannerRenderedContext);
     const isCategoryCard = cardClass === "category-card";
     const isCardDataEmpty = cardData.length === 0;
+    // const breakingCardData = cardData[0];
+    // const slicedCardData = cardData.slice(1);
 
     return (
         <>
@@ -46,15 +48,7 @@ const RenderCards = ({
                     {cardData.map((article, index) => {
                         return (
                             <article key={index} className={cardClass}>
-                                <CategoryCard
-                                    imgSrc={article.img_src}
-                                    category={article.section}
-                                    title={article.title}
-                                    author={article.byline}
-                                    url={article.url}
-                                    timestamp={article.timestamp}
-                                    isFavorite={article.isFavorite}
-                                />
+                                <CategoryCard {...article} />
                             </article>
                         );
                     })}
@@ -101,16 +95,8 @@ const RenderCards = ({
                             )}
                             {cardData.map((article, index) => {
                                 return (
-                                    <article key={index} className={cardClass}>
-                                        <CategoryCard
-                                            imgSrc={article.img_src}
-                                            category={article.section}
-                                            title={article.title}
-                                            author={article.byline}
-                                            url={article.url}
-                                            timestamp={article.timestamp}
-                                            isFavorite={article.isFavorite}
-                                        />
+                                    <article key={index} className={index === 4 ? `${cardClass} breaking-news-card` : cardClass}>
+                                        <CategoryCard {...article} index={index}/>
                                     </article>
                                 );
                             })}

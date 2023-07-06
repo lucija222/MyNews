@@ -4,28 +4,34 @@ import { sliceString } from "../../../util/helpers/functions/stringSlicer";
 import { FavoriteArticlesDataContext } from "../../../context/FavoriteArticlesDataProvider";
 
 interface CategoryCardProps {
-    imgSrc: string;
-    category: string;
+    img_src: string;
+    section: string;
     title: string;
-    author: string;
+    byline: string;
     url: string;
     timestamp: string;
     isFavorite: boolean;
+    index?: number;
 }
 
-const CategoryCard = ({
-    imgSrc,
-    category,
-    title,
-    author,
-    url,
-    timestamp,
-    isFavorite
-}: CategoryCardProps) => {
-    const [isArticleFavorite, setIsArticleFavorite] = useState(isFavorite ? isFavorite : false);
+const CategoryCard = (props: CategoryCardProps) => {
+    const {
+        img_src,
+        section,
+        title,
+        byline,
+        url,
+        timestamp,
+        isFavorite,
+        index,
+    } = props;
+    const [isArticleFavorite, setIsArticleFavorite] = useState(
+        isFavorite ? isFavorite : false
+    );
     const { favoriteArticlesArray, updateFavoriteArticlesArray } = useContext(
         FavoriteArticlesDataContext
     );
+    const isCardAD = index ? (index + 1) % 6 === 0 : false;
     const shortStringFiller = "xxx xxxx xxxx xxxx xxxxx xxxxx";
 
     const handleFavoriteBtnClick: MouseEventHandler<HTMLButtonElement> = (
@@ -36,19 +42,22 @@ const CategoryCard = ({
         const favoriteArticleObject = {
             url: url,
             title: title,
-            byline: author,
-            section: category,
+            byline: byline,
+            section: section,
             timestamp: timestamp,
-            img_src: imgSrc,
-            isFavorite: newIsArticleFavorite
+            img_src: img_src,
+            isFavorite: newIsArticleFavorite,
         };
-        updateFavoriteArticlesArray(favoriteArticleObject, newIsArticleFavorite);
+        updateFavoriteArticlesArray(
+            favoriteArticleObject,
+            newIsArticleFavorite
+        );
         setIsArticleFavorite(newIsArticleFavorite);
     };
 
     useEffect(() => {
         const isAlreadyInFavorites = favoriteArticlesArray.some((article) => {
-           return article.url === url
+            return article.url === url;
         });
         if (isAlreadyInFavorites !== isArticleFavorite) {
             setIsArticleFavorite(isAlreadyInFavorites);
@@ -57,18 +66,19 @@ const CategoryCard = ({
 
     return (
         <>
+            {isCardAD && <p className="ad">AD</p>}
             <div className="img_container">
                 <img
-                    src={imgSrc}
+                    src={img_src}
                     alt="Article related photograph"
                     className="category-card__img"
                 />
             </div>
             <div className="category-card__text-content">
                 <p className="category-card__category">
-                    {isArticleFavorite ? "favorite" : category}
+                    {isArticleFavorite ? "favorite" : isCardAD ? "programmatic/native ad" : section }
                 </p>
-                {title.length < 42 && (
+                {title.length < 42 ? (
                     <h3>
                         <a href={url} target="_blank" rel="noopener noreferrer">
                             {title}
@@ -77,22 +87,14 @@ const CategoryCard = ({
                             {shortStringFiller}
                         </span>
                     </h3>
-                )}
-                {title.length > 63 && (
+                ) : (
                     <h3>
                         <a href={url} target="_blank" rel="noopener noreferrer">
                             {sliceString(title, 63)}
                         </a>
                     </h3>
                 )}
-                {title.length >= 42 && title.length <= 63 && (
-                    <h3>
-                        <a href={url} target="_blank" rel="noopener noreferrer">
-                            {title}
-                        </a>
-                    </h3>
-                )}
-                <p className="author">{sliceString(author, 40, "author")}</p>
+                <p className="author">{sliceString(byline, 40, "author")}</p>
             </div>
             <button type="button" onClick={handleFavoriteBtnClick}>
                 <svg
