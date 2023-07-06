@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode, createContext, useState } from "react";
+import { PropsWithChildren, createContext, useState } from "react";
 
 type SetNumOfRenderedCards = (
     numOrCallback: number | ((prevIndex: number) => number)

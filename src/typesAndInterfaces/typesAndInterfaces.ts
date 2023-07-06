@@ -18,7 +18,7 @@ export interface filteredAPIdata {
     multimedia: Array<Multimedia>;
 }
 
-export type NewDataArray = [
+export type NewDataArray = 
     {
         url: string;
         title: string;
@@ -27,5 +27,4 @@ export type NewDataArray = [
         timestamp: string;
         img_src: string;
         isFavorite: boolean;
-    }
-];
+    }[];
