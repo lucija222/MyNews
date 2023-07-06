@@ -13,6 +13,7 @@ const SearchFilter = ({ menuFormClassName }: SearchFilterProps) => {
         e.stopPropagation();
         const target = e.target as HTMLInputElement;
         setSearchFilterInput(target.value);
+        //Mora se okinuti fetch sa odredenim linkom
     };
 
     return (

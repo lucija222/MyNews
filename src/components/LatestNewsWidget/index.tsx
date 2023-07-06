@@ -1,6 +1,6 @@
 import "./LatestNewsWidget.scss";
-import InfiniteScroller from "../InfiniteScroller";
 import { nytAPI_Key } from "../../util/helpers/constants";
+import CardData from "../cards/CardData";
 
 const LatestNewsWidget = () => {
     const nytAPI_URL = `https://api.nytimes.com/svc/news/v3/content/all/all.json?limit=50&offset=0&api-key=${nytAPI_Key}`;
@@ -26,7 +26,7 @@ const LatestNewsWidget = () => {
                 </svg>
                 <h2>Latest news</h2>
             </div>
-            <InfiniteScroller URL={nytAPI_URL} cardClass="widget-card" />
+            <CardData URL={nytAPI_URL} cardClass="widget-card" isFavoritesCategory={false} />
             <div className="see-all-news">
                 <button>See all news</button>
                 <svg

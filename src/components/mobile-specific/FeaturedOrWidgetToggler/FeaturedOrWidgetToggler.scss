@@ -2,9 +2,13 @@
 
 
 .toggler-contaier {
+    position: sticky;
+    top: 121px;
+    z-index: 111;
     display: flex;
     justify-content: center;
     padding: 32px 0 16px;
+    background-color: $background;
 
     h2 {
         @include font-S-W($Px-16, $W-600);
@@ -17,6 +21,10 @@
             color: $red;
         }
     }
+}
+
+.hide {
+    display: none;
 }
 
 .mobile-toggler {

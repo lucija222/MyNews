@@ -1,130 +1,49 @@
 import "./RenderCards.scss";
+import Nav from "../../Nav";
+import { ArticleData } from "../CardData";
 import WidgetCard from "../WidgetCard";
 import CategoryCard from "../CategoryCard";
-import {
-    useContext,
-    MutableRefObject,
-} from "react";
-import { ArticleData } from "../../InfiniteScroller";
+import { useContext, MutableRefObject } from "react";
 import LatestNewsWidget from "../../LatestNewsWidget";
-import { IsLargeViewportContext, IsMediumViewportContext, IsSmallViewportContext } from "../../../context/ViewportSizesProvider";
+import {
+    IsSmallViewportContext,
+    isBigViewportContext,
+} from "../../../context/ViewportSizesProvider";
+import { IsBannerRenderedContext } from "../../../context/IsBannerRenderedProvider";
 
 interface RenderCardsProps {
     cardClass: "category-card" | "widget-card";
-    isCategoryCard: boolean;
-    isWidgetCard: boolean;
+    isFavoritesCategory: boolean;
     cardData: ArticleData;
-    observerElemRef: MutableRefObject<HTMLDivElement | null>;
+    observerElemRef?: MutableRefObject<HTMLDivElement | null>;
 }
 
 const RenderCards = ({
     cardClass,
-    isCategoryCard,
-    isWidgetCard,
+    isFavoritesCategory,
     cardData,
-    observerElemRef
-}:
-RenderCardsProps) => {
+    observerElemRef,
+}: RenderCardsProps) => {
     const isSmallViewport = useContext(IsSmallViewportContext);
-    const isMediumViewport = useContext(IsMediumViewportContext);
-    const isLargeViewport = useContext(IsLargeViewportContext);
-
-    const firstTwoCardsData = cardData.slice(0, 2);
-    const firstFourCardsData = cardData.slice(0, 4);
-    const mediumViewportRemainderCardData = cardData.slice(2);
-    const largeViewportRemainderCardData = cardData.slice(4);
+    const isBigViewport = useContext(isBigViewportContext);
+    const {isBannerRendered} = useContext(IsBannerRenderedContext);
+    const isCategoryCard = cardClass === "category-card";
+    const isCardDataEmpty = cardData.length === 0;
 
     return (
         <>
             {isSmallViewport && isCategoryCard && (
-                    <div className="category-scroller_container">
-                        {cardData.map((article, index) => {
-                            return (
-                                <article
-                                    key={index}
-                                    className={cardClass}
-                                >
-                                    <CategoryCard
-                                        imgSrc={article.img_src}
-                                        category={article.section}
-                                        title={article.title}
-                                        author={article.byline}
-                                        url={article.url}
-                                    />
-                                </article>
-                            );
-                        })}
-                        <div
-                            ref={observerElemRef}
-                            className="observerRef"
-                        ></div>
-                    </div>
-            )}
-
-            {isMediumViewport && isCategoryCard && (
-                <div className="heading-and-scroller">
-                    <h2 className="news-heading">News</h2>
-                    <div className="category-scroller_container">
-                        <div className="two-articles_container">
-                            {firstTwoCardsData.map((article, index) => {
-                                return (
-                                    <article key={index} className={cardClass}>
-                                        <CategoryCard
-                                            imgSrc={article.img_src}
-                                            category={article.section}
-                                            title={article.title}
-                                            author={article.byline}
-                                            url={article.url}
-                                        />
-                                    </article>
-                                );
-                            })}
-                        </div>
-                        <LatestNewsWidget />
-                        {mediumViewportRemainderCardData.map(
-                            (article, index) => {
-                                return (
-                                    <article key={index} className={cardClass}>
-                                        <CategoryCard
-                                            imgSrc={article.img_src}
-                                            category={article.section}
-                                            title={article.title}
-                                            author={article.byline}
-                                            url={article.url}
-                                        />
-                                    </article>
-                                );
-                            }
-                        )}
-                        <div
-                            ref={observerElemRef}
-                            className="observerRef"
-                        ></div>
-                    </div>
-                </div>
-            )}
-
-            {isLargeViewport && isCategoryCard && (
-                <div className="heading-and-scroller">
-                <h2 className="news-heading">News</h2>
                 <div className="category-scroller_container">
-                    <div className="four-articles_container">
-                        {firstFourCardsData.map((article, index) => {
-                            return (
-                                <article key={index} className={cardClass}>
-                                    <CategoryCard
-                                        imgSrc={article.img_src}
-                                        category={article.section}
-                                        title={article.title}
-                                        author={article.byline}
-                                        url={article.url}
-                                    />
-                                </article>
-                            );
-                        })}
-                    </div>
-                    <LatestNewsWidget />
-                    {largeViewportRemainderCardData.map((article, index) => {
+                    {isFavoritesCategory && isCardDataEmpty && (
+                        <div className="no-favorites-mobile">
+                            <p>
+                                You currently have no favorite articles. Explore
+                                the news and &#10084; your favorites to save
+                                them!
+                            </p>
+                        </div>
+                    )}
+                    {cardData.map((article, index) => {
                         return (
                             <article key={index} className={cardClass}>
                                 <CategoryCard
@@ -133,16 +52,80 @@ RenderCardsProps) => {
                                     title={article.title}
                                     author={article.byline}
                                     url={article.url}
+                                    timestamp={article.timestamp}
+                                    isFavorite={article.isFavorite}
                                 />
                             </article>
                         );
                     })}
-                    <div ref={observerElemRef} className="observerRef"></div>
-                </div>
+                    {!isFavoritesCategory && (
+                        <div
+                            ref={observerElemRef}
+                            className="observerRef"
+                        ></div>
+                    )}
                 </div>
             )}
 
-            {isWidgetCard && (
+            {isBigViewport && isCategoryCard && (
+                <div className="main-grid">
+                    <div
+                        className={
+                            isBannerRendered
+                                ? "main-grid__nav banner-rendered"
+                                : "main-grid__nav banner-not-rendered"
+                        }
+                    >
+                        <Nav />
+                    </div>
+                    <div
+                        className={
+                            isBannerRendered
+                                ? "main-grid__heading banner-rendered"
+                                : "main-grid__heading banner-not-rendered"
+                        }
+                    >
+                        <h2 className="news-heading">News</h2>
+                    </div>
+                    <div className="main-grid__div3">
+                        <div className="category-scroller__grid">
+                            {!isFavoritesCategory && <LatestNewsWidget />}
+                            {isFavoritesCategory && isCardDataEmpty && (
+                                <div className="no-favorites-desktop">
+                                    <p>
+                                        You currently have no favorite articles.
+                                        Explore the news and &#10084; your
+                                        favorites to save them!
+                                    </p>
+                                </div>
+                            )}
+                            {cardData.map((article, index) => {
+                                return (
+                                    <article key={index} className={cardClass}>
+                                        <CategoryCard
+                                            imgSrc={article.img_src}
+                                            category={article.section}
+                                            title={article.title}
+                                            author={article.byline}
+                                            url={article.url}
+                                            timestamp={article.timestamp}
+                                            isFavorite={article.isFavorite}
+                                        />
+                                    </article>
+                                );
+                            })}
+                            {!isFavoritesCategory && (
+                                <div
+                                    ref={observerElemRef}
+                                    className="observerRef"
+                                ></div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {!isCategoryCard && (
                 <div className="widget-scroller_container">
                     {cardData.map((article, index) => {
                         return (

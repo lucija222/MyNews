@@ -1,16 +1,23 @@
-import { createContext, useState } from "react";
+import { PropsWithChildren, createContext, useState } from "react";
 
-export const FeaturedOrLatestTogglerContext = createContext({
-    featuredOrLatestToggler: "Featured", 
-    setFeaturedOrLatestToggler: (featuredOrLatest: string) => {}
+export const FeaturedOrLatestTogglerContext = createContext<{
+    featuredOrLatestToggler: string;
+    setFeaturedOrLatestToggler: (
+        stringOrCallback: string | ((prevIndex: string) => string)
+    ) => void;
+}>({
+    // featuredOrLatestToggler: "Featured",
+    featuredOrLatestToggler: "none",
+    setFeaturedOrLatestToggler: () => {},
 });
 
-const FeaturedOrLatestTogglerProvider = ({children}: any) => {
+const FeaturedOrLatestTogglerProvider = ({ children }: PropsWithChildren) => {
     const [featuredOrLatestToggler, setFeaturedOrLatestToggler] =
-        useState("Featured");
+        useState("none");
 
     return (
-        <FeaturedOrLatestTogglerContext.Provider value={{featuredOrLatestToggler, setFeaturedOrLatestToggler}}>
+        <FeaturedOrLatestTogglerContext.Provider
+            value={{ featuredOrLatestToggler, setFeaturedOrLatestToggler }}>
             {children}
         </FeaturedOrLatestTogglerContext.Provider>
     );

@@ -1,109 +1,88 @@
-import Loader from "../Loader";
-import ErrorMessage from "../ErrorMessage";
 import RenderCards from "../cards/RenderCards";
-// import { TESTING_jsonData } from "../../util/helpers/constants";
-import { filterJsonData } from "../../util/helpers/functions/filterJsonData";
-import {
-    useState,
-    useRef,
-    useEffect,
-    useContext,
-    useCallback
-} from "react";
+import { useRef, useEffect, useContext } from "react";
 import { IsSmallViewportContext } from "../../context/ViewportSizesProvider";
+import { ArticleData } from "../cards/CardData";
+import { numOfRenderedCardsContext } from "../../context/NumOfRenderedCardsProvider";
+import { calcIncrementForNumOfRennderedCards } from "../../util/helpers/functions/calcIncrementForNumOfRennderedCards";
 
 interface InfiniteScrollerProps {
-    URL: string;
     cardClass: "category-card" | "widget-card";
+    isLoading: boolean;
+    isFavoritesCategory: boolean;
+    articleData: ArticleData;
 }
 
-export type ArticleData = {
-    url: string;
-    title: string;
-    byline: string;
-    section: string;
-    timestamp: string;
-    img_src: string;
-}[];
-
-const InfiniteScroller = ({ URL, cardClass }: InfiniteScrollerProps) => {
-    const [articleData, setArticleData] = useState<ArticleData>([]);
-    const [indexOfLastRenderedCard, setIndexOfLastRenderedCard] = useState(1);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
-    
+const InfiniteScroller = ({
+    cardClass,
+    isLoading,
+    isFavoritesCategory,
+    articleData,
+}: InfiniteScrollerProps) => {
     const isSmallViewport = useContext(IsSmallViewportContext);
+    const {
+        numOfRenderedCategoryCards,
+        setNumOfRenderedCategoryCards,
+        numOfRenderedWidgetCards,
+        setNumOfRenderedWidgetCards,
+    } = useContext(numOfRenderedCardsContext);
+    
     const observer = useRef<IntersectionObserver | null>(null);
     const observerElemRef = useRef<HTMLDivElement | null>(null);
     const isFirstRenderRef = useRef(true);
 
-    const slicedArticleData = articleData.slice(0, indexOfLastRenderedCard);
     const isCategoryCard = cardClass === "category-card";
-    const isWidgetCard = cardClass === "widget-card";
+    const correctNumOfRenderedCards = isCategoryCard
+        ? numOfRenderedCategoryCards
+        : numOfRenderedWidgetCards;
+    const setCorrectNumOfRenderedCards = isCategoryCard
+        ? setNumOfRenderedCategoryCards
+        : setNumOfRenderedWidgetCards;
+    const slicedArticleData = articleData.slice(0, correctNumOfRenderedCards);
+    const isThereMoreData = articleData.length > correctNumOfRenderedCards;
+    const remainingDataLength = articleData.length - 1 - (slicedArticleData.length - 1);
 
-    const fetchData = useCallback(
-        async (URL: string) => {
-            setIsLoading(true);
-            try {
-                const response = await fetch(URL);
-
-                if (!response.ok) {
-                    console.error("Error: !response.ok");
-                    setIsError(true);
-                    return;
-                }
-
-                const jsonData = await response.json();
-                const filteredData = filterJsonData(jsonData);
-                console.log("Fetched data");
-
-                if (filteredData) {
-                    setArticleData(filteredData);
-                }
-            } catch (error) {
-                console.error("Error in fetchData:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        },
-        []
-    );
-
-    useEffect(() => {
-        fetchData(URL);
-    }, [fetchData, URL]);
 
     useEffect(() => {
         observer.current = new IntersectionObserver(
             ([entry]: IntersectionObserverEntry[]) => {
-                // console.log("isIntersecting:", entry.isIntersecting);
-
-                const isThereMoreData =
-                    articleData.length > indexOfLastRenderedCard;
-
                 if (entry.isIntersecting && !isLoading) {
                     switch (isSmallViewport) {
                         case true:
                             if (isThereMoreData) {
-                                setIndexOfLastRenderedCard((prevIndex) => {
-                                    return prevIndex + 8;
+                                setCorrectNumOfRenderedCards((prevIndex) => {
+                                    let incrementNum =
+                                        calcIncrementForNumOfRennderedCards(
+                                            remainingDataLength,
+                                            7
+                                        );
+                                    return prevIndex + incrementNum;
                                 });
                             }
                             break;
 
                         case false:
-                            switch (indexOfLastRenderedCard) {
+                            switch (correctNumOfRenderedCards) {
                                 case 1:
-                                    setIndexOfLastRenderedCard((prevIndex) => {
-                                        return prevIndex + 15;
-                                    });
+                                    setCorrectNumOfRenderedCards(
+                                        (prevIndex) => {
+                                            return prevIndex + 15;
+                                        }
+                                    );
                                     break;
 
                                 default:
                                     if (isThereMoreData) {
-                                        setIndexOfLastRenderedCard(
+                                        setCorrectNumOfRenderedCards(
                                             (prevIndex) => {
-                                                return prevIndex + 12;
+                                                
+                                                let incrementNumber =
+                                                    calcIncrementForNumOfRennderedCards(
+                                                        remainingDataLength,
+                                                        12
+                                                    );
+                                                return (
+                                                    prevIndex + incrementNumber!
+                                                );
                                             }
                                         );
                                     }
@@ -136,24 +115,22 @@ const InfiniteScroller = ({ URL, cardClass }: InfiniteScrollerProps) => {
         return () => {
             if (observerConst) {
                 observerConst.disconnect();
-                console.log("Unobserving");
+                // console.log("Unobserving");
             }
         };
     }, [
         isLoading,
         isSmallViewport,
-        indexOfLastRenderedCard,
-        articleData.length
+        isThereMoreData,
+        correctNumOfRenderedCards,
+        setCorrectNumOfRenderedCards,
     ]);
 
     return (
         <>
-            {isLoading && <Loader />}
-            {isError && <ErrorMessage />}
             <RenderCards
                 cardClass={cardClass}
-                isCategoryCard={isCategoryCard}
-                isWidgetCard={isWidgetCard}
+                isFavoritesCategory={isFavoritesCategory}
                 cardData={slicedArticleData}
                 observerElemRef={observerElemRef}
             />

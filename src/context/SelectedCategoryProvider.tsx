@@ -1,16 +1,17 @@
-import { createContext , useState, useEffect} from "react";
+import { createContext , useState, PropsWithChildren} from "react";
 
-export const SelectedCategoryContext = createContext({
+export const SelectedCategoryContext = createContext<{
+    selectedCategory: string,
+    setSelectedCategory: (
+        stringOrCallback: string | ((prevIndex: string) => string)
+    ) => void;
+}>({
     selectedCategory: "home",
-    setSelectedCategory: (categoryName: string) => {}
+    setSelectedCategory: () => {}
 });
 
-const SelectedCategoryProvider = ({children}: any) => {
+const SelectedCategoryProvider = ({children}: PropsWithChildren) => {
     const [selectedCategory, setSelectedCategory] = useState("home");
-
-    useEffect(() => {
-        console.log("SCP context = ", selectedCategory);
-    }, [selectedCategory])
     
     return (
         <SelectedCategoryContext.Provider value={{selectedCategory, setSelectedCategory}}>

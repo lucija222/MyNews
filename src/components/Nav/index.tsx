@@ -4,26 +4,35 @@ import { ToggleMenuContext } from "../../context/context";
 import { SelectedCategoryContext } from "../../context/SelectedCategoryProvider";
 import { FeaturedOrLatestTogglerContext } from "../../context/FeaturedOrLatestTogglerProvider";
 import { IsSmallViewportContext } from "../../context/ViewportSizesProvider";
-
+import { numOfRenderedCardsContext } from "../../context/NumOfRenderedCardsProvider";
 
 interface NavProps {
-    menuClassName?: string
+    menuClassName?: string;
 }
 
-const Nav = ({menuClassName}: NavProps) => {
-    const { selectedCategory, setSelectedCategory } = useContext(SelectedCategoryContext);
-    const { setIsMenuOpen, setIsHamburgerClicked } = useContext(ToggleMenuContext);
+const Nav = ({ menuClassName }: NavProps) => {
+    const { selectedCategory, setSelectedCategory } = useContext(
+        SelectedCategoryContext
+    );
+    const { setIsMenuOpen, setIsHamburgerClicked } =
+        useContext(ToggleMenuContext);
     const { featuredOrLatestToggler, setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestTogglerContext
     );
     const isSmallViewport = useContext(IsSmallViewportContext);
-    const selectedLiClassName = isSmallViewport ? "selected-li-mobile" : "selected-li-desktop";
+    const selectedLiClassName = isSmallViewport
+        ? "selected-li-mobile"
+        : "selected-li-desktop";
+    const { setNumOfRenderedCategoryCards } = useContext(
+        numOfRenderedCardsContext
+    );
 
     const handleNavClick: MouseEventHandler<HTMLLIElement> = (e) => {
         e.stopPropagation();
         setIsMenuOpen(false);
         setIsHamburgerClicked(false);
         setSelectedCategory(e.currentTarget.id);
+        setNumOfRenderedCategoryCards(1);
 
         if (featuredOrLatestToggler === "Latest") {
             setFeaturedOrLatestToggler("Featured");
@@ -31,13 +40,21 @@ const Nav = ({menuClassName}: NavProps) => {
     };
 
     return (
-        <nav className={menuClassName ? `${menuClassName} general-nav` : "desktop-nav general-nav"}>
+        <nav
+            className={
+                menuClassName
+                    ? `${menuClassName} general-nav`
+                    : "desktop-nav general-nav"
+            }
+        >
             <ul>
                 <li
                     id="home"
                     onClick={handleNavClick}
                     className={
-                        selectedCategory === "home" ? `li ${selectedLiClassName}` : "li"
+                        selectedCategory === "home"
+                            ? `li ${selectedLiClassName}`
+                            : "li"
                     }
                 >
                     <svg
@@ -61,7 +78,8 @@ const Nav = ({menuClassName}: NavProps) => {
                     onClick={handleNavClick}
                     className={
                         selectedCategory === "general"
-                        ? `li ${selectedLiClassName}` : "li"
+                            ? `li ${selectedLiClassName}`
+                            : "li"
                     }
                 >
                     <svg
@@ -86,7 +104,8 @@ const Nav = ({menuClassName}: NavProps) => {
                     onClick={handleNavClick}
                     className={
                         selectedCategory === "business"
-                        ? `li ${selectedLiClassName}` : "li"
+                            ? `li ${selectedLiClassName}`
+                            : "li"
                     }
                 >
                     <svg
@@ -109,7 +128,9 @@ const Nav = ({menuClassName}: NavProps) => {
                     id="health"
                     onClick={handleNavClick}
                     className={
-                        selectedCategory === "health" ? `li ${selectedLiClassName}` : "li"
+                        selectedCategory === "health"
+                            ? `li ${selectedLiClassName}`
+                            : "li"
                     }
                 >
                     <svg
@@ -139,7 +160,8 @@ const Nav = ({menuClassName}: NavProps) => {
                     onClick={handleNavClick}
                     className={
                         selectedCategory === "science"
-                        ? `li ${selectedLiClassName}` : "li"
+                            ? `li ${selectedLiClassName}`
+                            : "li"
                     }
                 >
                     <svg
@@ -162,7 +184,9 @@ const Nav = ({menuClassName}: NavProps) => {
                     id="sports"
                     onClick={handleNavClick}
                     className={
-                        selectedCategory === "sports" ? `li ${selectedLiClassName}` : "li"
+                        selectedCategory === "sports"
+                            ? `li ${selectedLiClassName}`
+                            : "li"
                     }
                 >
                     <svg
@@ -186,7 +210,8 @@ const Nav = ({menuClassName}: NavProps) => {
                     onClick={handleNavClick}
                     className={
                         selectedCategory === "technology"
-                        ? `li ${selectedLiClassName}` : "li"
+                            ? `li ${selectedLiClassName}`
+                            : "li"
                     }
                 >
                     <svg
@@ -205,6 +230,30 @@ const Nav = ({menuClassName}: NavProps) => {
                         />
                     </svg>
                     <span>Technology</span>
+                </li>
+                <li
+                    id="favorites"
+                    onClick={handleNavClick}
+                    className={
+                        selectedCategory === "favorites"
+                            ? `li ${selectedLiClassName}`
+                            : "li"
+                    }
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 23 23"
+                        fill="#8d8d8c"
+                        stroke="none"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span>Favorites</span>
                 </li>
             </ul>
         </nav>

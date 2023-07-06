@@ -9,14 +9,21 @@ import {
     useEffect,
     useRef,
 } from "react";
-import { IsLargeViewportContext, IsMediumViewportContext } from "../../context/ViewportSizesProvider";
+import {
+
+    IsSmallViewportContext, isBigViewportContext,
+} from "../../context/ViewportSizesProvider";
+import { IsBannerRenderedContext } from "../../context/IsBannerRenderedProvider";
 
 const Header = () => {
     const [isHamburgerClicked, setIsHamburgerClicked] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isBannerBtnClicked, setIsBannerBtnClicked] = useState(false);
-    const isMediumViewport = useContext(IsMediumViewportContext);
-    const isLargeViewport = useContext(IsLargeViewportContext);
+
+    const isSmallViewport = useContext(IsSmallViewportContext);
+    const isBigViewport = useContext(isBigViewportContext);
+    const {setIsBannerRendered} = useContext(IsBannerRenderedContext);
+
     const bannerRef = useRef<HTMLDivElement | null>(null);
 
     const handleHamburgerClick: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -34,51 +41,63 @@ const Header = () => {
     const handleBannerBtnClick: MouseEventHandler<HTMLDivElement> = (e) => {
         e.stopPropagation();
         setIsBannerBtnClicked(true);
+        setIsBannerRendered(false);
     };
 
     useEffect(() => {
-        if (isMediumViewport || isLargeViewport) {
+        if (isBigViewport) {
             setIsMenuOpen(false);
             setIsHamburgerClicked(false);
         }
-    }, [isMediumViewport, isLargeViewport]);
+    }, [isBigViewport]);
+
+    useEffect(() => {
+        const body = document.body;
+        if (isMenuOpen) {
+            body.classList.replace("allow-scroll", "disable-scroll");
+        } else if (!isMenuOpen) {
+            body.classList.replace("disable-scroll", "allow-scroll");
+        }
+    }, [isMenuOpen]);
 
     return (
         <>
             <header
                 className={
-                    isMediumViewport || isLargeViewport
+                    isBigViewport
                         ? "header-pseudoelem"
                         : ""
                 }
             >
-                {(isMediumViewport || isLargeViewport) && !isBannerBtnClicked && (
-                    <div className="banner-container">
-                        <div
-                            ref={bannerRef}
-                            className="banner-container__content"
-                        >
-                            <h2>Make MyNews your homepage</h2>
-                            <p className="banner-p">
-                                Discover what's trending on the internet every
-                                day!
-                            </p>
+                {isBigViewport &&
+                    !isBannerBtnClicked && (
+                        <div className="banner-container">
                             <div
-                                className="banner-container__btns" onClick={handleBannerBtnClick}
+                                ref={bannerRef}
+                                className="banner-container__content"
                             >
-                                <button>GET</button>
-                                <button>No, thanks</button>
+                                <h2>Make MyNews your homepage</h2>
+                                <p className="banner-p">
+                                    Discover what's trending on the internet
+                                    every day!
+                                </p>
+                                <div
+                                    className="banner-container__btns"
+                                    onClick={handleBannerBtnClick}
+                                >
+                                    <button>GET</button>
+                                    <button>No, thanks</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
                 {!isHamburgerClicked && !isMenuOpen && (
                     <div className="header-container">
                         <div>
                             <h1>
                                 <span>My</span>News
                             </h1>
-                            {!isMediumViewport && !isLargeViewport && (
+                            {isSmallViewport && (
                                 <button
                                     className="hamburger"
                                     onClick={handleHamburgerClick}
