@@ -11,7 +11,6 @@
         position: absolute;
         left: calc(100% - 11.5%);
         top: 84%;
-        // top: calc(100% - 16%);
         z-index: 1;
         opacity: 0.7;
         cursor: pointer;
@@ -37,7 +36,7 @@
 }
 
 .category-card__img {
-    border-radius: 10px;
+    border-radius: 8px;
     object-fit: cover;
     object-position: top center;
     width: 100%;
@@ -54,7 +53,7 @@
     top: 130px;
     background-color: $white;
     padding: 17px 15px;
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 8px 8px;
 
     .category-card__category {
         @include font-S-W($Px-10, $W-700);

@@ -2,6 +2,7 @@ import "./CategoryCard.scss";
 import { useState, MouseEventHandler, useContext, useEffect } from "react";
 import { sliceString } from "../../../util/helpers/functions/stringSlicer";
 import { FavoriteArticlesDataContext } from "../../../context/FavoriteArticlesDataProvider";
+import AdjustTitleLength from "../AdjustTitleLength";
 
 interface CategoryCardProps {
     img_src: string;
@@ -32,7 +33,6 @@ const CategoryCard = (props: CategoryCardProps) => {
         FavoriteArticlesDataContext
     );
     const isCardAD = index ? (index + 1) % 6 === 0 : false;
-    const shortStringFiller = "xxx xxxx xxxx xxxx xxxxx xxxxx";
 
     const handleFavoriteBtnClick: MouseEventHandler<HTMLButtonElement> = (
         e
@@ -76,24 +76,15 @@ const CategoryCard = (props: CategoryCardProps) => {
             </div>
             <div className="category-card__text-content">
                 <p className="category-card__category">
-                    {isArticleFavorite ? "favorite" : isCardAD ? "programmatic/native ad" : section }
+                    {isArticleFavorite
+                        ? "favorite"
+                        : isCardAD
+                        ? "programmatic/native ad"
+                        : section}
                 </p>
-                {title.length < 42 ? (
-                    <h3>
-                        <a href={url} target="_blank" rel="noopener noreferrer">
-                            {title}
-                        </a>
-                        <span className="shortStringFiller">
-                            {shortStringFiller}
-                        </span>
-                    </h3>
-                ) : (
-                    <h3>
-                        <a href={url} target="_blank" rel="noopener noreferrer">
-                            {sliceString(title, 63)}
-                        </a>
-                    </h3>
-                )}
+                <h3>
+                    <AdjustTitleLength url={url} title={title} />
+                </h3>
                 <p className="author">{sliceString(byline, 40, "author")}</p>
             </div>
             <button type="button" onClick={handleFavoriteBtnClick}>
