@@ -1,27 +1,30 @@
 export const sliceString = (string: string, maxLength: number, type?: string) => {
+
+    const checkLastCharForPunctuation = (text: string) => {
+        const punctuationArray = [",", ".", ";", ":"];
+        const lastChar = text.slice(-1);
+        
+        if (punctuationArray.includes(lastChar)) {
+            text = text.slice(0, -1);
+        }
+
+        return text;
+    };
+
     if (string.length < maxLength) {
         if (type === "author") {
             const newString = string.replace(/^By\s*/, "").trim();
             return newString;
-        } else return string;
+        } else return checkLastCharForPunctuation(string);
     }
 
     let slicedString = string.slice(0, maxLength);
-    const lastWhiteSpaceIndex = slicedString.lastIndexOf(" ");
+    const finalString = checkLastCharForPunctuation(slicedString);
 
-    if (lastWhiteSpaceIndex !== -1) {
-        slicedString = slicedString.slice(0, lastWhiteSpaceIndex);
-    }
-
-    const lastCharacter = slicedString.slice(-1);
-
-    if (lastCharacter === ("," || ";" || ":")) {
-        slicedString = slicedString.slice(0, -1);
-    }
 
     if (type === "author") {
         slicedString = slicedString.replace(/^By\s*/, "").trim();
       }
 
-    return `${slicedString.trim()}...`;
+    return `${finalString.trim()}...`;
 };

@@ -10,6 +10,7 @@ import {
     isBigViewportContext,
 } from "../../../context/ViewportSizesProvider";
 import { IsBannerRenderedContext } from "../../../context/IsBannerRenderedProvider";
+import BreakingNewsCard from "../BreakingNewsCard";
 
 interface RenderCardsProps {
     cardClass: "category-card" | "widget-card";
@@ -26,9 +27,11 @@ const RenderCards = ({
 }: RenderCardsProps) => {
     const isSmallViewport = useContext(IsSmallViewportContext);
     const isBigViewport = useContext(isBigViewportContext);
-    const {isBannerRendered} = useContext(IsBannerRenderedContext);
+    const { isBannerRendered } = useContext(IsBannerRenderedContext);
     const isCategoryCard = cardClass === "category-card";
     const isCardDataEmpty = cardData.length === 0;
+    const breakingCardData = cardData[0];
+    const slicedCardData = cardData.slice(1);
 
     return (
         <>
@@ -46,15 +49,7 @@ const RenderCards = ({
                     {cardData.map((article, index) => {
                         return (
                             <article key={index} className={cardClass}>
-                                <CategoryCard
-                                    imgSrc={article.img_src}
-                                    category={article.section}
-                                    title={article.title}
-                                    author={article.byline}
-                                    url={article.url}
-                                    timestamp={article.timestamp}
-                                    isFavorite={article.isFavorite}
-                                />
+                                <CategoryCard {...article} />
                             </article>
                         );
                     })}
@@ -89,6 +84,18 @@ const RenderCards = ({
                     </div>
                     <div className="main-grid__div3">
                         <div className="category-scroller__grid">
+                            {breakingCardData && !isFavoritesCategory && (
+                                <article
+                                    key="breaking"
+                                    className={`${cardClass} breaking-news-card`}
+                                >
+                                    <BreakingNewsCard
+                                        title={breakingCardData.title}
+                                        byline={breakingCardData.byline}
+                                        url={breakingCardData.url}
+                                    />
+                                </article>
+                            )}
                             {!isFavoritesCategory && <LatestNewsWidget />}
                             {isFavoritesCategory && isCardDataEmpty && (
                                 <div className="no-favorites-desktop">
@@ -99,17 +106,12 @@ const RenderCards = ({
                                     </p>
                                 </div>
                             )}
-                            {cardData.map((article, index) => {
+                            {slicedCardData.map((article, index) => {
                                 return (
                                     <article key={index} className={cardClass}>
                                         <CategoryCard
-                                            imgSrc={article.img_src}
-                                            category={article.section}
-                                            title={article.title}
-                                            author={article.byline}
-                                            url={article.url}
-                                            timestamp={article.timestamp}
-                                            isFavorite={article.isFavorite}
+                                            {...article}
+                                            index={index}
                                         />
                                     </article>
                                 );

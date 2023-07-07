@@ -29,6 +29,7 @@ const CardData = ({ URL, cardClass, isFavoritesCategory }: CardDataProps) => {
     const [articleData, setArticleData] = useState<ArticleData>([]);
     const { favoriteArticlesArray } = useContext(FavoriteArticlesDataContext);
 
+
     const fetchData = useCallback(async (URL: string) => {
 
         setIsLoading(true);
