@@ -2,7 +2,7 @@ import React from "react";
 import "./index.scss";
 import App from "./App";
 import ReactDOM from "react-dom/client";
-import FeaturedOrLatestTogglerProvider from "./context/FeaturedOrLatestTogglerProvider";
+import FeaturedOrLatestStateProvider from "./context/FeaturedOrLatestTogglerProvider";
 import ViewportSizesProvider from "./context/ViewportSizesProvider";
 
 const root = ReactDOM.createRoot(
@@ -12,9 +12,9 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <ViewportSizesProvider>
-            <FeaturedOrLatestTogglerProvider>
+            <FeaturedOrLatestStateProvider>
                 <App />
-            </FeaturedOrLatestTogglerProvider>
+            </FeaturedOrLatestStateProvider>
         </ViewportSizesProvider>
     </React.StrictMode>
 );

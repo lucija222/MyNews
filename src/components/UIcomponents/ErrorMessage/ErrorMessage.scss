@@ -1,0 +1,30 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+.error-container {
+    @extend %flex-column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99999999;
+    min-width: 250px;
+    height: 100%;
+    width: 100%;
+    background-color:#bb1e1e;
+
+    div {
+        @extend %flex-column;
+        align-items: center;
+        row-gap: 20px;
+        padding: 30px;
+        background-color: $white;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+
+        h1 {
+            font-size: 26px;
+        }
+    }
+}

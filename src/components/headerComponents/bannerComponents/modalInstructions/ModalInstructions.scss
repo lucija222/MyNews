@@ -1,0 +1,50 @@
+@use "../../../../util/helpers/sassHelpers.scss" as *;
+
+.banner-modal__content {
+    ol {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        row-gap: 10px;
+        border: 1px solid black;
+        padding: 20px 30px 20px 20px;
+        border-radius: 5px;
+        background-color: $background;
+    }
+
+    li {
+        transform: translateX(20px);
+        padding: 0 15px;
+
+        b {
+            color: $red;
+        }
+
+        ul {
+            list-style-type: disc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            row-gap: 10px;
+            min-height: 60px;
+        }
+    }
+
+    li::marker {
+        font-weight: 700;
+    }
+}
+
+.banner-modal__content ol + p a {
+    color: black;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.hamburger-li-modal svg {
+    height: 13px;
+}
+
+.settings-li-modal b svg:nth-child(2) {
+    transform: translateY(3.3px);
+}

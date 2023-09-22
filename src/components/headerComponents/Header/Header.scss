@@ -1,0 +1,84 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+header {
+    position: sticky;
+    z-index: 11111;
+    background: $background;
+}
+
+#root header:first-child {
+    top: 0;
+}
+
+.header-container {
+    @include width-min-max(250px, 100vw);
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    padding: 24px 15px 0;
+
+    > div {
+        display: flex;
+        justify-content: space-between;
+
+        .mainHeading {
+            @include font-S-W(24px, $W-900);
+        }
+    }
+}
+
+.hamburger {
+    display: inline-block;
+    border: none;
+
+    &:hover svg rect {
+        fill: $red;
+    }
+}
+
+@media screen and (min-width: 470px) {
+    .header-container {
+        padding: {
+            top: 24px;
+            left: calc((100vw - 450px) / 2);
+            right: calc((100vw - 450px) / 2);
+        }
+    }
+}
+
+@media screen and (min-width: 722px) {
+
+    header {
+        padding: 0 15px;
+    }
+
+    .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        @include width-min-max(670px, 754px);
+        padding: 35px 0 28px 0;
+        margin: auto;
+
+        > div .mainHeading {
+            font-size: 32px;
+        }
+    }
+}
+
+@media screen and (min-width: 1030px) {
+    .header-container {
+        @include width-min-max(907px, 907px);
+        margin: 0;
+    }
+
+    .header-pseudoelem::after {
+        width: 1095px;
+    }
+}
+
+@media screen and (min-width: 1151px) {
+    .header-container, .header-pseudoelem::after {
+        margin-left: max(calc((100vw - 907px) / 2 - 120px));
+    }
+}

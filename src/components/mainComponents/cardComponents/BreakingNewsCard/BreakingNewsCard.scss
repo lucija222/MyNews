@@ -1,0 +1,45 @@
+@use "../../../../util/helpers/sassHelpers.scss" as *;
+
+.breaking-news-card {
+    background: #000;
+    padding: 0 20px;
+    justify-content: center;
+    align-items: center;
+    row-gap: 7px;
+    border-radius: 8px;
+    grid-column: 1;
+    grid-row: 2;
+
+    h4 {
+        @include font-S-W($Px-10, 700);
+        line-height: 16px;
+        width: 73px;
+        height: 17px;
+        text-align: center;
+        color: #fff;
+        background-color: $red;
+        border-radius: 1px;
+    }
+
+    h3 {
+        @include font-S-W(25px, 900);
+        line-height: 29px;
+        text-align: center;
+        text-transform: capitalize;
+
+        a {
+            color: #fff;
+        }
+    }
+
+    p {
+        font-size: 12px;
+        color: #f8f5f2;
+    }
+}
+
+@media screen and (min-width: 1030px) {
+    .breaking-news-card {
+        grid-column: 2;
+    }
+}

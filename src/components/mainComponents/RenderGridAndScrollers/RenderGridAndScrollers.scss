@@ -1,0 +1,42 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+.main-grid__nav {
+    position: sticky;
+    z-index: 111111;
+    grid-area: 1 / 1 / 6 / 2;
+    background: $background;
+    align-self: start;
+    padding-top: 25px;
+    border-top: 1px solid rgba($color: #979797, $alpha: 0.10000000149011612);
+}
+
+.main-grid__heading {
+    position: sticky;
+    z-index: 11111;
+    grid-area: 1 / 2 / 2 / 5;
+    background: $background;
+    padding: 25px 0 16px;
+    border-top: 1px solid rgba($color: #979797, $alpha: 0.10000000149011612);
+    @include font-S-W(18px, $W-600);
+    color: $dark-gray;
+    line-height: 24px;
+}
+
+#root .banner-container + header + main {
+    .main-grid__nav,
+    .main-grid__heading {
+        top: 173px;
+    }
+}
+
+#root header + main {
+    .main-grid__nav,
+    .main-grid__heading {
+        top: 113px;
+    }
+}
+
+.observerRef {
+    min-height: 2px;
+    min-width: 0.1px;
+}

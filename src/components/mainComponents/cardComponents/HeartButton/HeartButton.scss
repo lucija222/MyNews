@@ -1,0 +1,30 @@
+.heartBtn {
+    border: none;
+
+    svg {
+        position: absolute;
+        left: calc(100% - 12.5%);
+        top: 83%;
+        opacity: 0.7;
+        width: 23px;
+        height: 23px;
+    }
+}
+
+@media screen and (min-width: 290px) {
+    .heartBtn svg {
+        top: 89%;
+    }
+}
+
+@media screen and (min-width: 340px) {
+    .heartBtn svg {
+        left: calc(100% - 10%);
+    }
+}
+
+@media screen and (min-width: 722px) {
+    .heartBtn svg {
+        top: 87%;
+    }
+}

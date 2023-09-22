@@ -1,62 +1,44 @@
 import "./App.scss";
-import Header from "./components/Header";
-import NewsCategory from "./components/NewsCategory";
-import LatestNewsWidget from "./components/LatestNewsWidget";
-import { MouseEventHandler, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
+import Header from "./components/headerComponents/Header";
+import NewsCategory from "./components/mainComponents/NewsCategory";
+import { ViewportSizesContext } from "./context/ViewportSizesProvider";
 import SelectedCategoryProvider from "./context/SelectedCategoryProvider";
-import IsBannerRenderedProvider from "./context/IsBannerRenderedProvider";
 import NumOfRenderedCardsProvider from "./context/NumOfRenderedCardsProvider";
-import FeaturedOrWidgetToggler from "./components/mobile-specific/FeaturedOrWidgetToggler";
-import { FeaturedOrLatestTogglerContext } from "./context/FeaturedOrLatestTogglerProvider";
-import {
-    IsSmallViewportContext,
-    isBigViewportContext,
-} from "./context/ViewportSizesProvider";
+import { FeaturedOrLatestStateContext } from "./context/FeaturedOrLatestTogglerProvider";
+import EncodedSearchInputProvider from "./context/EncodedSearchInputProvider";
+import IsFetchDataProvider from "./context/IsFetchDataProvider";
 
 const App = () => {
-    const { featuredOrLatestToggler, setFeaturedOrLatestToggler } = useContext(
-        FeaturedOrLatestTogglerContext
+    const { isSmallViewport } = useContext(ViewportSizesContext);
+    const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
+        FeaturedOrLatestStateContext
     );
-    const isSmallViewport = useContext(IsSmallViewportContext);
-    const isBigViewport = useContext(isBigViewportContext);
-
+    
     useEffect(() => {
-        if (isBigViewport) {
+        if (!isSmallViewport) {
             setFeaturedOrLatestToggler("none");
         } else if (isSmallViewport) {
             setFeaturedOrLatestToggler("Featured");
         }
-    }, [isSmallViewport, isBigViewport, setFeaturedOrLatestToggler]);
-
-    const handleFeaturedOrLatestToggle: MouseEventHandler<HTMLDivElement> = (
-        e
-    ) => {
-        e.stopPropagation();
-        const target = e.target as HTMLHeadingElement;
-        if (target.innerText !== featuredOrLatestToggler) {
-            setFeaturedOrLatestToggler(target.innerText);
-        }
-    };
+    }, [isSmallViewport, setFeaturedOrLatestToggler]);
 
     return (
         <SelectedCategoryProvider>
-            <NumOfRenderedCardsProvider>
-                <IsBannerRenderedProvider>
-                    <Header />
-                    {featuredOrLatestToggler !== "none" && (
-                        <FeaturedOrWidgetToggler
-                            handleFeaturedOrLatestToggle={
-                                handleFeaturedOrLatestToggle
-                            }
-                        />
-                    )}
-                    {(featuredOrLatestToggler === "Featured" ||
-                        featuredOrLatestToggler === "none") && <NewsCategory />}
-                    {featuredOrLatestToggler === "Latest" && (
-                        <LatestNewsWidget />
-                    )}
-                </IsBannerRenderedProvider>
-            </NumOfRenderedCardsProvider>
+            <EncodedSearchInputProvider>
+                    <NumOfRenderedCardsProvider>
+                        <IsFetchDataProvider>
+                            <Header />
+                            {(featuredOrLatestState === "Featured" ||
+                                !isSmallViewport) && (
+                                <NewsCategory isWidget={false} />
+                            )}
+                            {featuredOrLatestState === "Latest" && (
+                                <NewsCategory isWidget={true} />
+                            )}
+                        </IsFetchDataProvider>
+                    </NumOfRenderedCardsProvider>
+            </EncodedSearchInputProvider>
         </SelectedCategoryProvider>
     );
 };

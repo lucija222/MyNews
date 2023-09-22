@@ -1,0 +1,27 @@
+@use "../../../../util/helpers/sassHelpers.scss" as *;
+
+.widget-card {
+    @extend %flex-column;
+    padding: 15px 0;
+    border-bottom: 1px solid $light-gray;
+
+    &:first-of-type {
+        padding: 0 0 15px; 
+    }
+
+    time {
+        @include font-S-W($Px-10, $W-700);
+        line-height: 16px;
+        color: $blue;
+    }
+
+    h3 {
+        @include font-S-W($Px-16, $W-500);
+        line-height: 20px;
+        text-transform: capitalize;
+
+        a {
+            color: black;
+        }
+    }
+}
