@@ -1,20 +1,27 @@
-import { createContext , useState, PropsWithChildren} from "react";
+import {
+    Dispatch, SetStateAction, createContext, useState, useRef, MutableRefObject, ReactNode,
+} from "react";
 
-export const SelectedCategoryContext = createContext<{
-    selectedCategory: string,
-    setSelectedCategory: (
-        stringOrCallback: string | ((prevIndex: string) => string)
-    ) => void;
-}>({
-    selectedCategory: "home",
-    setSelectedCategory: () => {}
+interface ISelectedCategoryContext {
+    selectedCategory: string;
+    setSelectedCategory: Dispatch<SetStateAction<string>>;
+    prevSelectedCategory: MutableRefObject<string>;
+}
+
+export const SelectedCategoryContext = createContext<ISelectedCategoryContext>({
+    selectedCategory: "Home",
+    setSelectedCategory: () => {},
+    prevSelectedCategory: {current: ""}
 });
 
-const SelectedCategoryProvider = ({children}: PropsWithChildren) => {
-    const [selectedCategory, setSelectedCategory] = useState("home");
-    
+const SelectedCategoryProvider = ({ children }: {children: ReactNode}) => {
+    const [selectedCategory, setSelectedCategory] = useState("Home");
+    const prevSelectedCategory = useRef("");
+
     return (
-        <SelectedCategoryContext.Provider value={{selectedCategory, setSelectedCategory}}>
+        <SelectedCategoryContext.Provider
+            value={{ selectedCategory, setSelectedCategory, prevSelectedCategory }}
+        >
             {children}
         </SelectedCategoryContext.Provider>
     );

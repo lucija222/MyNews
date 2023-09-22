@@ -1,27 +1,32 @@
-import { PropsWithChildren, createContext, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useState, useEffect, ReactNode } from "react";
 
-type SetNumOfRenderedCards = (
-    numOrCallback: number | ((prevIndex: number) => number)
-) => void;
-
-export const numOfRenderedCardsContext = createContext<{
+interface INumOfRenderedCardsContext {
     numOfRenderedCategoryCards: number;
-    setNumOfRenderedCategoryCards: SetNumOfRenderedCards;
+    setNumOfRenderedCategoryCards: Dispatch<SetStateAction<number>>;
     numOfRenderedWidgetCards: number;
-    setNumOfRenderedWidgetCards: SetNumOfRenderedCards;
-}>({
-    numOfRenderedCategoryCards: 1,
+    setNumOfRenderedWidgetCards: Dispatch<SetStateAction<number>>;
+};
+
+export const NumOfRenderedCardsContext = createContext<INumOfRenderedCardsContext>({
+    numOfRenderedCategoryCards: 16,
     setNumOfRenderedCategoryCards: () => {},
-    numOfRenderedWidgetCards: 1,
+    numOfRenderedWidgetCards: 16,
     setNumOfRenderedWidgetCards: () => {},
 });
 
-const NumOfRenderedCardsProvider = ({ children }: PropsWithChildren) => {
-    const [numOfRenderedCategoryCards, setNumOfRenderedCategoryCards] = useState(1);
-    const [numOfRenderedWidgetCards, setNumOfRenderedWidgetCards] = useState(1);
+const NumOfRenderedCardsProvider = ({ children }: {children: ReactNode}) => {
+    const [numOfRenderedCategoryCards, setNumOfRenderedCategoryCards] =
+        useState(16);
+    const [numOfRenderedWidgetCards, setNumOfRenderedWidgetCards] =
+        useState(16);
+
+    useEffect(() => {
+        console.log("cardNum", numOfRenderedCategoryCards);
+        console.log("widgetNum", numOfRenderedWidgetCards);
+    }, [numOfRenderedCategoryCards, numOfRenderedWidgetCards]);
 
     return (
-        <numOfRenderedCardsContext.Provider
+        <NumOfRenderedCardsContext.Provider
             value={{
                 numOfRenderedCategoryCards,
                 setNumOfRenderedCategoryCards,
@@ -30,7 +35,7 @@ const NumOfRenderedCardsProvider = ({ children }: PropsWithChildren) => {
             }}
         >
             {children}
-        </numOfRenderedCardsContext.Provider>
+        </NumOfRenderedCardsContext.Provider>
     );
 };
 
