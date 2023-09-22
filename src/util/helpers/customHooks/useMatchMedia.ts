@@ -17,8 +17,6 @@ const useMatchMedia = (mediaQuery: string): boolean => {
             isFirstRender.current = false;
         };
 
-        matchQueryList.addEventListener("change", handleMatchMediaChange);
-
         return () => {
             matchQueryList.removeEventListener(
                 "change",

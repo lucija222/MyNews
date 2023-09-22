@@ -9,5 +9,6 @@ export const calcIncrementForNumOfRennderedCards = (
     } else {
         incrementNum = remainingDataLength;
     }
+    
     return incrementNum;
 };
