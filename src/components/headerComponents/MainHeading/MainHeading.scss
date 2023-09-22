@@ -1,0 +1,10 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+.mainHeading {
+    color: $dark-gray;
+    cursor: pointer;
+
+    span {
+        color: $red;
+    }
+}

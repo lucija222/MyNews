@@ -1,0 +1,32 @@
+@use "../../../../util/helpers/sassHelpers.scss" as *;
+
+.category-scroller__grid {
+    @include width-min-max(230px, 345px);
+    grid-area: 2 / 2 / auto / 5;
+    display: grid;
+    gap: 0;
+    grid-auto-flow: row dense;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 345px));
+    grid-auto-rows: 260px;
+    padding-bottom: 30px;
+}
+
+@media screen and (min-width: 290px) {
+    .category-scroller__grid {
+        gap: 22px;
+    }
+}
+
+@media screen and (min-width: 722px) {
+    .category-scroller__grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        @include width-min-max(582px, 666px);
+        grid-auto-rows: 252px;
+    }
+}
+
+@media screen and (min-width: 1030px) {
+    .category-scroller__grid {
+        @include width-min-max(884px, 1010px);
+    }
+}

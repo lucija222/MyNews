@@ -1,0 +1,29 @@
+@use "../../../../util/helpers/sassHelpers.scss" as *;
+
+.no-card-elems {
+    @include font-S-W(16px, $W-600);
+    justify-self: center;
+    max-width: 210px;
+    color: $red;
+    line-height: 30px;
+    text-align: center;
+    transform: translateY(20px);
+}
+
+@media screen and (min-width: 722px) {
+    .no-card-elems {
+        justify-self: auto;
+        font-size: 19px;
+        min-width: 550px;
+        max-width: 666px;
+        transform: translate(10%, 100px);
+    }
+}
+
+@media screen and (min-width: 1030px) {
+    .no-card-elems {
+        min-width: 884px;
+        max-width: 1010px;
+        transform: translate(0, 100px);
+    }
+}

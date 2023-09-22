@@ -1,0 +1,117 @@
+@use "../../../../util/helpers/sassHelpers.scss" as *;
+
+.category-card {
+    @extend %flex-column;
+    @include width-min-max(230px, 345px);
+    position: relative;
+    height: 260px;
+}
+
+.ad {
+    @include font-S-W($Px-10, $W-600);
+    position: absolute;
+    inset: 15px 0 0 15px;
+    color: white;
+    background-color: $red;
+    line-height: 16px;
+    padding: 5px;
+    width: 25px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+.img_container {
+    max-width: 345px;
+    max-height: 250px;
+
+    img {
+        border-radius: 8px;
+        object-fit: cover;
+        object-position: top center;
+        width: 100%;
+        max-width: 345px;
+        height: 100%;
+        max-height: 240px;
+    }
+}
+
+.category-card__text-content {
+    @extend %flex-column;
+    @include height-min-max(110px, 120px);
+    row-gap: 5px;
+    position: absolute;
+    top: 130px;
+    width: 100%;
+    background-color: $white;
+    padding: 17px 15px;
+    border-radius: 0 0 8px 8px;
+
+    p:first-child {
+        @include font-S-W($Px-10, $W-700);
+        line-height: 16px;
+        color: $blue;
+        text-transform: uppercase;
+    }
+
+    h3 {
+        @include font-S-W($Px-16, $W-500);
+        line-height: 20px;
+        text-transform: capitalize;
+
+        a {
+            color: black;
+        }
+    }
+
+    p:last-child {
+        display: none;
+        color: $dark-gray;
+        font-size: 12px;
+    }
+}
+
+.shortStringFiller {
+    visibility: hidden;
+}
+
+@media screen and (min-width: 290px) {
+    .category-card__text-content {
+        top: 150px;
+    }
+
+    .img_container img {
+        max-height: 100%;
+    }
+}
+
+@media screen and (min-width: 722px) {
+    .category-card__text-content {
+        @include height-min-max(112px, 112px);
+        top: 138px;
+        justify-content: space-between;
+        padding: 12px;
+
+        h3 {
+            font-weight: 500;
+            font-style: normal;
+            height: 47px;
+        }
+
+        p:last-child {
+            display: block;
+        }
+    }
+
+    .img_container {
+        max-height: 245px;
+
+        img {
+            max-width: 322px;
+        }
+    }
+
+    .category-card {
+        @include width-min-max(280px, 322px);
+        height: 252px;
+    }
+}

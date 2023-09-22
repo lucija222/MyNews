@@ -1,12 +1,9 @@
-import { createContext } from "react";
-
-type setStateBoolean = (
-    booleanOrCallback: boolean | ((prevIndex: boolean) => boolean)
-) => void;
+import { Dispatch, SetStateAction, createContext } from "react";
 
 export const ToggleMenuContext = createContext<{
-    setIsMenuOpen: setStateBoolean,
-    setIsHamburgerClicked: setStateBoolean
+    setIsMenuOpen: Dispatch<SetStateAction<boolean>>,
+    setIsHamburgerClicked: Dispatch<SetStateAction<boolean>>
+
 }>({
     setIsMenuOpen: () => {},
     setIsHamburgerClicked: () => {}

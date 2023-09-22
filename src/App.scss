@@ -1,5 +1,6 @@
 body {
     background-color: #F2F2F2;
+    min-width: 250px;
 }
 
 .disable-scroll {
@@ -20,14 +21,6 @@ button {
     min-width: 250px;
 }
 
-@media screen and (min-width: 794px) {
-    #root {
-        min-width: 794px;
-    }
-}
-
-@media screen and (min-width: 1200px) {
-    #root {
-        min-width: 1200px;
-    }
+a {
+    text-decoration: none;
 }

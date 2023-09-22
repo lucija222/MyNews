@@ -1,4 +1,4 @@
-import { NewDataArray } from "../../../typesAndInterfaces/typesAndInterfaces";
+import { NewDataArray } from "../../../typesAndInterfaces/apiTandI";
 
 export const sortArticleObjectsChronologically = (articleArray: NewDataArray) => {
     return articleArray.sort((a, b) => {

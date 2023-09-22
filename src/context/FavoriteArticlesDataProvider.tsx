@@ -1,27 +1,29 @@
-import { PropsWithChildren, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 export interface FavoriteArticleData {
     url: string;
     title: string;
     byline: string;
     section: string;
-    img_src: string;
     timestamp: string;
+    img_src: string;
     isFavorite: boolean;
-}
+};
 
-export const FavoriteArticlesDataContext = createContext<{
+interface TFavoriteArticlesDataContext {
     favoriteArticlesArray: FavoriteArticleData[];
     updateFavoriteArticlesArray: (
         newFavoriteArticleObject: FavoriteArticleData,
         isArticleFavorite: boolean
     ) => void;
-}>({
+};
+
+export const FavoriteArticlesDataContext = createContext<TFavoriteArticlesDataContext>({
     favoriteArticlesArray: [],
     updateFavoriteArticlesArray: () => {},
 });
 
-const FavoriteArticlesDataProvider = ({ children }: PropsWithChildren) => {
+const FavoriteArticlesDataProvider = ({ children }: {children: ReactNode}) => {
     const [favoriteArticlesArray, setFavoriteArticlesArray] = useState<
         FavoriteArticleData[]
     >([]);
