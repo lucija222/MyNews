@@ -48,7 +48,6 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
             console.log("KEYBOARD CLOSED");
 
             setTimeout(() => {
-                //Do i need setTimeout?
                 currentInputRef?.blur();
             }, 20);
         }

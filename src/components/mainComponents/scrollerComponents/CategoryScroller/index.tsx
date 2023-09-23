@@ -30,12 +30,8 @@ const CategoryScroller = ({
     const isFavoriteOrSearchCategory = isFavoritesCategory || isSearchCategory;
     const isFavoritesNoData = isFavoritesCategory && favoriteArticlesArray.length === 0;
 
-    // const isSearchNoObserver = isSearchCategory && (articleData.length === 1 || articleData.length < 17);
-    // const isFavoritesNoObserver = isFavoritesCategory && (favoriteArticlesArray.length === 0 || favoriteArticlesArray.length < 17);
-
     const shouldObserverElemRender = () => {
         if (isAllDataRendered || isSearchCategory || isFavoritesCategory) {
-            
             console.log("***NO OBSERVER ELEM RENDERED");
             return;
         }

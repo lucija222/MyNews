@@ -4,11 +4,13 @@ import WidgetCard from "../../cardComponents/WidgetCard";
 
 interface WidgetScrollerProps {
     articleData: ArticleData;
+    isAllDataRendered: boolean;
     observerDiv?: JSX.Element | undefined;
 }
 
 const WidgetScroller = ({
     articleData,
+    isAllDataRendered,
     observerDiv,
 }: WidgetScrollerProps) => {
     
@@ -25,7 +27,7 @@ const WidgetScroller = ({
                     </article>
                 );
             })}
-            {observerDiv}
+            {!isAllDataRendered && observerDiv}
         </div>
     );
 };

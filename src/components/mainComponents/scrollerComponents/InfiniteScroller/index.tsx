@@ -10,10 +10,11 @@ interface InfiniteScrollerProps {
     isFavoritesCategory: boolean;
     isSearchCategory: boolean;
     articleData: ArticleData;
+    returnDataNumForCategory: () => number;
 }
 
 const InfiniteScroller = ({
-    isCategoryCard, isLoading, isFavoritesCategory, isSearchCategory, articleData
+    isCategoryCard, isLoading, isFavoritesCategory, isSearchCategory, articleData, returnDataNumForCategory
 }: InfiniteScrollerProps) => {
 
     const {
@@ -21,7 +22,7 @@ const InfiniteScroller = ({
         numOfRenderedWidgetCards, setNumOfRenderedWidgetCards,
     } = useContext(NumOfRenderedCardsContext);
 
-    const { changeCardURLparams, changeWidgetURLparams, isMaxFetchCalls } =
+    const { changeCardURLparams, changeWidgetURLparams, isMaxCategoryFetchCalls, isMaxWidgetFetchCalls } =
         useContext(ApiURLContext);
 
     const [intersectionNum, setIntersectionNum] = useState(0);
@@ -42,6 +43,10 @@ const InfiniteScroller = ({
         ? changeCardURLparams
         : changeWidgetURLparams;
 
+    const isMaxFetchCalls = isCategoryCard
+        ? isMaxCategoryFetchCalls
+        : isMaxWidgetFetchCalls;
+
     const slicedArticleData = articleData.slice(0, correctNumOfRenderedCards);
     const dataLength = articleData.length;
     const slicedDataLength = slicedArticleData.length;
@@ -52,8 +57,7 @@ const InfiniteScroller = ({
     const isDataLessThan18 = remainingDataLength < 18;
     const shouldNumIncrement = slicedDataLength === correctNumOfRenderedCards;
 
-    const isAllDataRendered =
-        dataLength === slicedDataLength && isMaxFetchCalls;
+    const isAllDataRendered = dataLength > returnDataNumForCategory() && dataLength === slicedDataLength && isMaxFetchCalls;
 
     const updateNumOfCardsAndURLparams = useCallback(() => {
 
@@ -97,11 +101,9 @@ const InfiniteScroller = ({
         if (isMountingRef.current) {
             observerRef.current = new IntersectionObserver(
                 ([entry]: IntersectionObserverEntry[]) => {
-
+                    
                     if (entry.isIntersecting && !isLoading) {
-                        setIntersectionNum((prevNum) => {
-                            console.log("prevNum", prevNum);
-                            
+                        setIntersectionNum((prevNum) => {                        
                             return prevNum + 1;
                         });
                     }

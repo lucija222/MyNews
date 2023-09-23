@@ -52,6 +52,19 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
         : setIsFetchWidgetData;
 
     const indexRef = useRef(0);
+
+    const returnDataNumForCategory = () => {
+        switch (selectedCategory) {
+            case "Health":
+                return 200;
+
+            case "Technology":
+                return 300;
+        
+            default:
+                return 400;
+        }
+    };
  
     const fetchData = useCallback(
         async (URL: string) => {
@@ -126,6 +139,7 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
                     isFavoritesCategory={isFavoritesCategory}
                     isSearchCategory={isSearchCategory}
                     articleData={articleData}
+                    returnDataNumForCategory={returnDataNumForCategory}
                 />
             )}
         </>

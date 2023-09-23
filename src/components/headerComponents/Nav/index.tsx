@@ -7,14 +7,8 @@ import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvid
 import { NumOfRenderedCardsContext } from "../../../context/NumOfRenderedCardsProvider";
 import { FeaturedOrLatestStateContext } from "../../../context/FeaturedOrLatestTogglerProvider";
 import {
-    HomeSvg,
-    GeneralSvg,
-    BusinessSvg,
-    HealthSvg,
-    ScienceSvg,
-    SportsSvg,
-    TechnologySvg,
-    FavoritesSvg,
+    HomeSvg, GeneralSvg, BusinessSvg, HealthSvg, 
+    ScienceSvg, SportsSvg, TechnologySvg, FavoritesSvg,
 } from "../../../assets/svg/svgImports";
 
 const Nav = () => {
@@ -41,11 +35,10 @@ const Nav = () => {
 
             return e.currentTarget.id;
         });
-        resetCardURLparams(); //Check if order is okay
+        resetCardURLparams(); 
         setNumOfRenderedCategoryCards(16);
 
         setTimeout(() => {
-            //So it doesn't update faster than SelectedCategory
             setIsFetchCategoryData(true);
         }, 50);
 

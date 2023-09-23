@@ -56,6 +56,7 @@ const RenderGridAndScrollers = ({
             {!isCategoryCard && isThereArticleData && (
                 <WidgetScroller
                     articleData={articleData}
+                    isAllDataRendered={isAllDataRendered}
                     observerDiv={observerDiv}
                 />
             )}
