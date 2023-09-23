@@ -1,8 +1,8 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Loader from "../../UIcomponents/Loader";
-import InfiniteScroller from "../scrollerComponents/InfiniteScroller";
 import ErrorMessage from "../../UIcomponents/ErrorMessage";
 import { ApiURLContext } from "../../../context/ApiURLProvider";
+import InfiniteScroller from "../scrollerComponents/InfiniteScroller";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { filterJsonData } from "../../../util/helpers/functions/filterJSON/filterJsonData";
@@ -39,6 +39,7 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
     const { API_Card_URL, API_Widget_URL } = useContext(ApiURLContext);
 
     const isFavoritesCategory = selectedCategory === "Favorites";
+    const isSearchCategory = selectedCategory === "searchResults";
     const isThereArticleData = articleData.length > 0;
     const isCategoryCard = cardClass === "category-card";
 
@@ -51,8 +52,7 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
         : setIsFetchWidgetData;
 
     const indexRef = useRef(0);
-    const newsAPItotalResultsRef = useRef(0); 
-
+ 
     const fetchData = useCallback(
         async (URL: string) => {
             setIsLoading(true);
@@ -69,14 +69,13 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
                 }
 
                 const jsonData = await response.json();
-                
+
                 const filteredData = filterJsonData(
                     jsonData,
                     selectedCategory,
-                    cardClass, 
-                    newsAPItotalResultsRef
+                    cardClass
                 );
-                
+
                 if (filteredData) {
                     setArticleData((prevData) => {
                         return replaceOrMergeArticleData(
@@ -91,17 +90,11 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
                 }
             } catch (error) {
                 console.error("Error in fetchData:", cardClass, error);
-            } finally {
-                setTimeout(() => {
-                    setIsLoading(false);
-                }, 10);
+            } finally {    
+                setIsLoading(false);
             }
         },
-        [
-            cardClass,
-            selectedCategory,
-            isThereArticleData,
-        ]
+        [cardClass, selectedCategory, isThereArticleData]
     );
 
     useEffect(() => {
@@ -109,8 +102,6 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
     }, [isError]);
 
     useEffect(() => {
-        console.log("isFetchData", cardClass, isFetchData);
-
         if (URL && (isFetchData || !isThereArticleData)) {
             setIsFetchData(false);
             fetchData(URL);
@@ -124,19 +115,16 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
         setIsFetchData,
     ]);
 
-    useEffect(() => {
-        console.log("ARTICLE DATA", cardClass, articleData);
-    }, [articleData, cardClass]);
-
     return (
         <>
-            {isLoading && <Loader />}
+            {isLoading && <Loader cardClass={cardClass} />}
             {isError && <ErrorMessage />}
             {isThereArticleData && (
                 <InfiniteScroller
-                    cardClass={cardClass}
+                    isCategoryCard={isCategoryCard}
                     isLoading={isLoading}
                     isFavoritesCategory={isFavoritesCategory}
+                    isSearchCategory={isSearchCategory}
                     articleData={articleData}
                 />
             )}

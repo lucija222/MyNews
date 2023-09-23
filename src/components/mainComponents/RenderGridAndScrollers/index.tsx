@@ -1,29 +1,29 @@
 import "./RenderGridAndScrollers.scss";
 import Nav from "../../headerComponents/Nav";
-import WidgetScroller from "../scrollerComponents/WidgetScroller";
-import CategoryScroller from "../scrollerComponents/CategoryScroller";
 import { ArticleData } from "../FetchAndFilterData";
 import { MutableRefObject, useContext } from "react";
+import WidgetScroller from "../scrollerComponents/WidgetScroller";
+import CategoryScroller from "../scrollerComponents/CategoryScroller";
 import { ViewportSizesContext } from "../../../context/ViewportSizesProvider";
 
 interface RenderCardsProps {
-    cardClass: "category-card" | "widget-card";
+    isCategoryCard: boolean;
     isFavoritesCategory: boolean;
     articleData: ArticleData;
+    isAllDataRendered: boolean;
     observerElemRef?: MutableRefObject<HTMLDivElement | null>;
 }
 
 const RenderGridAndScrollers = ({
-    cardClass,
+    isCategoryCard,
     isFavoritesCategory,
     articleData,
+    isAllDataRendered,
     observerElemRef,
 }: RenderCardsProps) => {
     const { isSmallViewport } = useContext(ViewportSizesContext);
 
-    const isCategoryCard = cardClass === "category-card";
     const isThereArticleData = articleData.length > 1;
-
     const observerDiv = observerElemRef && (
         <div
             ref={(elem) => (observerElemRef!.current = elem)}
@@ -45,9 +45,9 @@ const RenderGridAndScrollers = ({
                     )}
 
                     <CategoryScroller
-                        cardClass={cardClass}
                         isFavoritesCategory={isFavoritesCategory}
                         articleData={articleData}
+                        isAllDataRendered={isAllDataRendered}
                         observerDiv={observerDiv}
                     />
                 </>
@@ -56,7 +56,6 @@ const RenderGridAndScrollers = ({
             {!isCategoryCard && isThereArticleData && (
                 <WidgetScroller
                     articleData={articleData}
-                    cardClass={cardClass}
                     observerDiv={observerDiv}
                 />
             )}

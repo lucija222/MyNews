@@ -2,6 +2,7 @@
 
 .category-card-loader {
     position: fixed;
+    z-index: 222;
     top: 150px;
     left: 0;
     min-width: 250px;
@@ -12,6 +13,7 @@
 
 .widget-card-loader {
     position: absolute;
+    z-index: 221;
     width: 89%;
     top: 51px;
     height: 427px;
@@ -23,7 +25,6 @@
 }
 
 .loader-container {
-    z-index: 222;
     display: flex;
     justify-content: space-evenly;
 
