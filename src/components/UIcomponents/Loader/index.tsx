@@ -1,8 +1,12 @@
 import "./Loader.scss";
 
-const Loader = () => {
+interface LoaderProps {
+    cardClass: "category-card" | "widget-card";
+}
+
+const Loader = ({ cardClass }: LoaderProps) => {
     return (
-        <div className="loader-container">
+        <div className={`loader-container ${cardClass}-loader`}>
             <div className="loader-backgroud">
                 <div className="lds-default">
                     <div></div>
