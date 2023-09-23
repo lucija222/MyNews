@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, createContext, useState, useEffect, ReactNode } from "react";
+import { Dispatch, SetStateAction, createContext, useState, ReactNode } from "react";
 
 interface INumOfRenderedCardsContext {
     numOfRenderedCategoryCards: number;
@@ -19,11 +19,6 @@ const NumOfRenderedCardsProvider = ({ children }: {children: ReactNode}) => {
         useState(16);
     const [numOfRenderedWidgetCards, setNumOfRenderedWidgetCards] =
         useState(16);
-
-    useEffect(() => {
-        console.log("cardNum", numOfRenderedCategoryCards);
-        console.log("widgetNum", numOfRenderedWidgetCards);
-    }, [numOfRenderedCategoryCards, numOfRenderedWidgetCards]);
 
     return (
         <NumOfRenderedCardsContext.Provider

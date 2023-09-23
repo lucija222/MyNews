@@ -1,12 +1,9 @@
-import { MutableRefObject } from "react";
 import {
-    FilteredArticleObject,
-    NewDataArray,
-    NewsApiArticleObj,
+    FilteredArticleObject, NewDataArray, NewsApiArticleObj
 } from "../../../../typesAndInterfaces/apiTandI";
 
-export const filterNewsApiJson = (jsonData: any, newsAPItotalResultsRef: MutableRefObject<number>) => {
-    newsAPItotalResultsRef.current = jsonData.totalResults;
+export const filterNewsApiJson = (jsonData: any) => {
+    
     let newDataArray: NewDataArray = [];
 
     if (jsonData.totalResults === 0) {

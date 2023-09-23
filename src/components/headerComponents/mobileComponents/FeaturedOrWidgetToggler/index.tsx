@@ -1,5 +1,5 @@
-import { MouseEventHandler, useContext, useRef } from "react";
 import "./FeaturedOrWidgetToggler.scss";
+import { MouseEventHandler, useContext, useRef } from "react";
 import { FeaturedOrLatestStateContext } from "../../../../context/FeaturedOrLatestTogglerProvider";
 import { IsFetchDataContext } from "../../../../context/IsFetchDataProvider";
 

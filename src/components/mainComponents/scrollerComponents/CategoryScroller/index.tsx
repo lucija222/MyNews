@@ -1,7 +1,7 @@
 import "./CategoryScroller.scss";
 import { useContext } from "react";
-import { ArticleData } from "../../FetchAndFilterData";
 import WidgetContainer from "../../WidgetContainer";
+import { ArticleData } from "../../FetchAndFilterData";
 import NoCardElems from "../../cardComponents/NoCardElems";
 import CategoryCard from "../../cardComponents/CategoryCard";
 import BreakingNewsCard from "../../cardComponents/BreakingNewsCard";
@@ -10,36 +10,39 @@ import { SelectedCategoryContext } from "../../../../context/SelectedCategoryPro
 import { FavoriteArticlesDataContext } from "../../../../context/FavoriteArticlesDataProvider";
 
 interface CategoryScrollerProps {
-    cardClass: "category-card" | "widget-card";
     isFavoritesCategory: boolean;
     articleData: ArticleData;
+    isAllDataRendered: boolean;
     observerDiv?: JSX.Element | undefined;
 }
 
 const CategoryScroller = ({
-    cardClass,
-    isFavoritesCategory,
-    articleData,
-    observerDiv,
+    isFavoritesCategory, articleData, isAllDataRendered, observerDiv,
 }: CategoryScrollerProps) => {
 
     const { selectedCategory } = useContext(SelectedCategoryContext);
     const { favoriteArticlesArray } = useContext(FavoriteArticlesDataContext);
     const { isSmallViewport, isMidViewport, isBigViewport } = useContext(ViewportSizesContext);
 
-    const isSearchResultsCategory = selectedCategory === "searchResults";
-    const isSearchCategoryNoResults =
-        isSearchResultsCategory && articleData.length === 1;
+    const isSearchCategory = selectedCategory === "searchResults";
+    const isSearchNoResults = isSearchCategory && articleData.length === 1;
 
-    const isFavoriteOrSearchCategory =
-        isFavoritesCategory || isSearchResultsCategory;
-    const isFavoritesCategoryAndNoData =
-        isFavoritesCategory && favoriteArticlesArray.length === 0;
+    const isFavoriteOrSearchCategory = isFavoritesCategory || isSearchCategory;
+    const isFavoritesNoData = isFavoritesCategory && favoriteArticlesArray.length === 0;
+
+    const shouldObserverElemRender = () => {
+        if (isAllDataRendered || isSearchCategory || isFavoritesCategory) {
+            console.log("***NO OBSERVER ELEM RENDERED");
+            return;
+        }
+        
+        return observerDiv;
+    };
 
     const returnCardElems = (data: ArticleData) => {
-        if (isFavoritesCategoryAndNoData) {
+        if (isFavoritesNoData) {
             return <NoCardElems isNoFavorites={true} />;
-        } else if (isSearchCategoryNoResults) {
+        } else if (isSearchNoResults) {
             return <NoCardElems isNoFavorites={false} />;
         }
 
@@ -53,7 +56,7 @@ const CategoryScroller = ({
                 return (
                     <article
                         key={index}
-                        className={`${cardClass} breaking-news-card`}
+                        className="category-card breaking-news-card"
                     >
                         <BreakingNewsCard
                             title={articleIndex.title}
@@ -64,7 +67,7 @@ const CategoryScroller = ({
                 );
             } else {
                 return (
-                    <article key={index} className={cardClass}>
+                    <article key={index} className="category-card">
                         <CategoryCard index={index} {...article} />
                     </article>
                 );
@@ -82,7 +85,7 @@ const CategoryScroller = ({
                 ? returnCardElems(favoriteArticlesArray)
                 : returnCardElems(articleData)}
 
-            {(!isFavoritesCategory || isSearchCategoryNoResults) && observerDiv}
+            {shouldObserverElemRender()}
         </div>
     );
 };

@@ -4,13 +4,13 @@ import WidgetCard from "../../cardComponents/WidgetCard";
 
 interface WidgetScrollerProps {
     articleData: ArticleData;
-    cardClass: "category-card" | "widget-card";
+    isAllDataRendered: boolean;
     observerDiv?: JSX.Element | undefined;
 }
 
 const WidgetScroller = ({
     articleData,
-    cardClass,
+    isAllDataRendered,
     observerDiv,
 }: WidgetScrollerProps) => {
     
@@ -18,7 +18,7 @@ const WidgetScroller = ({
         <div className="widget-scroller_container">
             {articleData.map((article, index) => {
                 return (
-                    <article key={index} className={cardClass}>
+                    <article key={index} className="widget-card">
                         <WidgetCard
                             timestamp={article.timestamp}
                             title={article.title}
@@ -27,7 +27,7 @@ const WidgetScroller = ({
                     </article>
                 );
             })}
-            {observerDiv}
+            {!isAllDataRendered && observerDiv}
         </div>
     );
 };

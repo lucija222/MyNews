@@ -1,35 +1,35 @@
 import { ArticleData } from "../../FetchAndFilterData";
 import RenderGridAndScrollers from "../../RenderGridAndScrollers";
-import { useRef, useEffect, useContext, useCallback } from "react";
+import { useRef, useEffect, useContext, useCallback, useState } from "react";
 import { ApiURLContext } from "../../../../context/ApiURLProvider";
 import { NumOfRenderedCardsContext } from "../../../../context/NumOfRenderedCardsProvider";
 
 interface InfiniteScrollerProps {
-    cardClass: "category-card" | "widget-card";
+    isCategoryCard: boolean;
     isLoading: boolean;
     isFavoritesCategory: boolean;
+    isSearchCategory: boolean;
     articleData: ArticleData;
-};
+    returnDataNumForCategory: () => number;
+}
 
 const InfiniteScroller = ({
-    cardClass,
-    isLoading,
-    isFavoritesCategory,
-    articleData,
+    isCategoryCard, isLoading, isFavoritesCategory, isSearchCategory, articleData, returnDataNumForCategory
 }: InfiniteScrollerProps) => {
+
     const {
-        numOfRenderedCategoryCards,
-        setNumOfRenderedCategoryCards,
-        numOfRenderedWidgetCards,
-        setNumOfRenderedWidgetCards,
+        numOfRenderedCategoryCards, setNumOfRenderedCategoryCards,
+        numOfRenderedWidgetCards, setNumOfRenderedWidgetCards,
     } = useContext(NumOfRenderedCardsContext);
-    const { changeCardURLparams, changeWidgetURLparams } =
+
+    const { changeCardURLparams, changeWidgetURLparams, isMaxCategoryFetchCalls, isMaxWidgetFetchCalls } =
         useContext(ApiURLContext);
 
+    const [intersectionNum, setIntersectionNum] = useState(0);
+    const prevIntersectionNumRef = useRef(0);
+    const isMountingRef = useRef(true);
     const observerRef = useRef<IntersectionObserver | null>(null);
     const observerElemRef = useRef<HTMLDivElement | null>(null);
-
-    const isCategoryCard = cardClass === "category-card";
 
     const correctNumOfRenderedCards = isCategoryCard
         ? numOfRenderedCategoryCards
@@ -43,114 +43,107 @@ const InfiniteScroller = ({
         ? changeCardURLparams
         : changeWidgetURLparams;
 
+    const isMaxFetchCalls = isCategoryCard
+        ? isMaxCategoryFetchCalls
+        : isMaxWidgetFetchCalls;
+
     const slicedArticleData = articleData.slice(0, correctNumOfRenderedCards);
-    const isThereMoreData = articleData.length > correctNumOfRenderedCards;
-    const remainingDataLength =
-        articleData.length - 1 - (slicedArticleData.length - 1);
+    const dataLength = articleData.length;
+    const slicedDataLength = slicedArticleData.length;
 
-    const observerCallback = useCallback(
-        ([entry]: IntersectionObserverEntry[]) => {
-            if (entry.isIntersecting && !isLoading) {
-                if (isThereMoreData) {
-                    console.log(remainingDataLength);
+    const remainingDataLength = dataLength - slicedDataLength;
+    const isThereMoreData = remainingDataLength > 0;
 
-                    switch (remainingDataLength < 16) {
-                        case true:
-                            console.log("INCREMENT & TRIGGER FETCH");
-                            changeURLparams();
-                            setCorrectNumOfRenderedCards((prevIndex) => {
-                                return prevIndex + 16;
-                            });
-                            return;
+    const isDataLessThan18 = remainingDataLength < 18;
+    const shouldNumIncrement = slicedDataLength === correctNumOfRenderedCards;
 
-                        case false:
-                            console.log("INCREMENT RAN");
-                            setCorrectNumOfRenderedCards((prevIndex) => {
-                                return prevIndex + 16;
-                            });
-                            return;
-                    }
-                }
-                changeURLparams();
+    const isAllDataRendered = dataLength > returnDataNumForCategory() && dataLength === slicedDataLength && isMaxFetchCalls;
 
-                // if (isThereMoreData) {
-                //     console.log("INCREMENT RAN");
+    const updateNumOfCardsAndURLparams = useCallback(() => {
 
-                //     setCorrectNumOfRenderedCards((prevIndex) => {
-                //         let incrementNum = calcIncrementForNumOfRennderedCards(
-                //             remainingDataLength,
-                //             16
-                //         );
-                //         return prevIndex + incrementNum;
-                //     });
-                // } else if (!isThereMoreData) {
-                //     changeURLparams();
-                // }
-            }
-        },
-        [
-            isLoading,
-            isThereMoreData,
-            setCorrectNumOfRenderedCards,
-            remainingDataLength,
-            changeURLparams
-        ]
-    );
+        if (isThereMoreData && !isDataLessThan18 && shouldNumIncrement) {
+            setCorrectNumOfRenderedCards((prevIndex) => {
+                return prevIndex + 18;
+            });
 
-    // useEffect(() => {
-    //     console.log("SCROLLER - data", cardClass, slicedArticleData);
-    // }, [slicedArticleData]);
+            return;
+            
+        } else if (
+            !isMaxFetchCalls &&
+            ((isThereMoreData && isDataLessThan18) || !isThereMoreData)
+        ) {
+            changeURLparams();
+            setCorrectNumOfRenderedCards((prevIndex) => {
+                return prevIndex + 18;
+            });
 
-    // useEffect(() => {
-    //     console.log(
-    //         cardClass,
-    //         "Widget:",
-    //         numOfRenderedWidgetCards,
-    //         "Card:",
-    //         numOfRenderedCategoryCards,
-    //         "CorrectNum:",
-    //         correctNumOfRenderedCards,
-    //         "DataLength:",
-    //         articleData.length,
-    //         "isThereMoreData:",
-    //         isThereMoreData
-    //     );
-    // }, [
-    //     cardClass,
-    //     numOfRenderedWidgetCards,
-    //     numOfRenderedCategoryCards,
-    //     correctNumOfRenderedCards,
-    // ]);
+            return;
+
+        } else if (isThereMoreData && isDataLessThan18 && isMaxFetchCalls) {
+
+            setCorrectNumOfRenderedCards((prevIndex) => {
+                return prevIndex + remainingDataLength;
+            });
+
+            return;
+        }
+    }, [
+        isThereMoreData,
+        isDataLessThan18,
+        remainingDataLength,
+        isMaxFetchCalls,
+        shouldNumIncrement,
+        setCorrectNumOfRenderedCards,
+        changeURLparams,
+    ]);
 
     useEffect(() => {
-        observerRef.current = new IntersectionObserver(observerCallback, {
-            root: null,
-            threshold: 0.1,
-        });
+        if (isMountingRef.current) {
+            observerRef.current = new IntersectionObserver(
+                ([entry]: IntersectionObserverEntry[]) => {
+                    
+                    if (entry.isIntersecting && !isLoading) {
+                        setIntersectionNum((prevNum) => {                        
+                            return prevNum + 1;
+                        });
+                    }
+                },
+                {
+                    root: null,
+                    threshold: 0.1,
+                }
+            );
 
-        // console.log("observer created", cardClass);
+            isMountingRef.current = false;
+        }
 
         const observerConst = observerRef.current;
 
         if (observerElemRef.current && observerConst) {
             observerConst.observe(observerElemRef.current);
-            // console.log("OBSERVING", cardClass);
         }
 
         return () => {
             if (observerConst) {
                 observerConst.disconnect();
-                // console.log("UNOBSERVING", cardClass);
             }
         };
-    }, [observerCallback]);
+    }, [isLoading]);
+
+    useEffect(() => {
+        if (intersectionNum !== prevIntersectionNumRef.current) {
+            updateNumOfCardsAndURLparams();
+            prevIntersectionNumRef.current = intersectionNum;
+        }
+    }, [intersectionNum, updateNumOfCardsAndURLparams]);
 
     return (
         <>
             <RenderGridAndScrollers
-                cardClass={cardClass}
+                isCategoryCard={isCategoryCard}
                 isFavoritesCategory={isFavoritesCategory}
-                articleData={slicedArticleData}
+                articleData={isSearchCategory ? articleData : slicedArticleData}
+                isAllDataRendered={isAllDataRendered}
                 observerElemRef={observerElemRef}
             />
         </>
