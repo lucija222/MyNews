@@ -2,8 +2,10 @@
 
 .banner-container {
     position: sticky;
-    top: 0;
+    inset: 0;
     z-index: 111111;
+    width: calc(100% + 30px);
+    transform: translateX(-15px);
     height: 60px;
     background: linear-gradient(180deg, $red 71.29%, #b21919 99.95%);
     color: white;
@@ -64,6 +66,7 @@
         }
     }
 }
+
 
 @media screen and (min-width: 1030px) {
     .banner-grid {

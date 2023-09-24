@@ -1,0 +1,20 @@
+@use "../../../../util/helpers/sassHelpers.scss" as *;
+
+#root .banner-container + header + main {
+    .main-grid__nav,
+    .main-grid__heading {
+        top: 173px;
+    }
+}
+
+#root header + main {
+    .main-grid__nav,
+    .main-grid__heading {
+        top: 113px;
+    }
+}
+
+.observerRef {
+    min-height: 2px;
+    min-width: 0.1px;
+}

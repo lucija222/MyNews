@@ -1,7 +1,7 @@
 import "./App.scss";
 import { useEffect, useContext } from "react";
 import Header from "./components/headerComponents/Header";
-import NewsCategory from "./components/mainComponents/NewsCategory";
+import RenderMain from "./components/mainComponents/RenderMain";
 import { ViewportSizesContext } from "./context/ViewportSizesProvider";
 import SelectedCategoryProvider from "./context/SelectedCategoryProvider";
 import NumOfRenderedCardsProvider from "./context/NumOfRenderedCardsProvider";
@@ -31,10 +31,10 @@ const App = () => {
                             <Header />
                             {(featuredOrLatestState === "Featured" ||
                                 !isSmallViewport) && (
-                                <NewsCategory isWidget={false} />
+                                <RenderMain isWidget={false} />
                             )}
                             {featuredOrLatestState === "Latest" && (
-                                <NewsCategory isWidget={true} />
+                                <RenderMain isWidget={true} />
                             )}
                         </IsFetchDataProvider>
                     </NumOfRenderedCardsProvider>

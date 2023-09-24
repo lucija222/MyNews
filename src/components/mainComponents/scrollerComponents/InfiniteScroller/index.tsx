@@ -1,5 +1,5 @@
+import RenderScroller from "../RenderScroller";
 import { ArticleData } from "../../FetchAndFilterData";
-import RenderGridAndScrollers from "../../RenderGridAndScrollers";
 import { useRef, useEffect, useContext, useCallback, useState } from "react";
 import { ApiURLContext } from "../../../../context/ApiURLProvider";
 import { NumOfRenderedCardsContext } from "../../../../context/NumOfRenderedCardsProvider";
@@ -139,7 +139,7 @@ const InfiniteScroller = ({
 
     return (
         <>
-            <RenderGridAndScrollers
+            <RenderScroller
                 isCategoryCard={isCategoryCard}
                 isFavoritesCategory={isFavoritesCategory}
                 articleData={isSearchCategory ? articleData : slicedArticleData}

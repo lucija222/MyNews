@@ -11,11 +11,13 @@ header {
 }
 
 .header-container {
-    @include width-min-max(250px, 100vw);
+    @include width-min-max(230px, 100vw);
     display: flex;
     flex-direction: column;
     row-gap: 20px;
-    padding: 24px 15px 0;
+    padding: 24px 0;
+    max-width: 343px;
+    margin: auto;
 
     > div {
         display: flex;
@@ -36,29 +38,13 @@ header {
     }
 }
 
-@media screen and (min-width: 470px) {
-    .header-container {
-        padding: {
-            top: 24px;
-            left: calc((100vw - 450px) / 2);
-            right: calc((100vw - 450px) / 2);
-        }
-    }
-}
-
 @media screen and (min-width: 722px) {
-
-    header {
-        padding: 0 15px;
-    }
-
     .header-container {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
         @include width-min-max(670px, 754px);
         padding: 35px 0 28px 0;
-        margin: auto;
 
         > div .mainHeading {
             font-size: 32px;
