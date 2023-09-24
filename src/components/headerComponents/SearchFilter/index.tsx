@@ -1,6 +1,7 @@
 import "./SearchFilter.scss";
 import { SearchSvg } from "../../../assets/svg/svgImports";
 import { ApiURLContext } from "../../../context/ApiURLProvider";
+import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { FormEventHandler, useContext, useState, useRef, useEffect } from "react"; 
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
@@ -18,6 +19,7 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
     const { setSelectedCategory } = useContext(SelectedCategoryContext);
     const { resetCardURLparams } = useContext(ApiURLContext);
     const { setIsFetchCategoryData } = useContext(IsFetchDataContext);
+    const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
     const inputRef = useRef<null | HTMLInputElement>(null);
 
@@ -28,6 +30,8 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
         resetCardURLparams();
         setLocalSearchInput("");
         setSelectedCategory("searchResults");
+        setIsCategoryLoading(true);
+        console.log("CAT loading true");
         
         if (isMenuOpen && closeMenu) {
             closeMenu();

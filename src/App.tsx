@@ -1,20 +1,21 @@
 import "./App.scss";
 import { useEffect, useContext } from "react";
 import Header from "./components/headerComponents/Header";
-import NewsCategory from "./components/mainComponents/NewsCategory";
+import RenderMain from "./components/mainComponents/RenderMain";
 import { ViewportSizesContext } from "./context/ViewportSizesProvider";
 import SelectedCategoryProvider from "./context/SelectedCategoryProvider";
 import NumOfRenderedCardsProvider from "./context/NumOfRenderedCardsProvider";
 import { FeaturedOrLatestStateContext } from "./context/FeaturedOrLatestTogglerProvider";
 import EncodedSearchInputProvider from "./context/EncodedSearchInputProvider";
 import IsFetchDataProvider from "./context/IsFetchDataProvider";
+import IsLoadingProvider from "./context/IsLoadingProvider";
 
 const App = () => {
     const { isSmallViewport } = useContext(ViewportSizesContext);
     const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestStateContext
     );
-    
+
     useEffect(() => {
         if (!isSmallViewport) {
             setFeaturedOrLatestToggler("none");
@@ -26,18 +27,20 @@ const App = () => {
     return (
         <SelectedCategoryProvider>
             <EncodedSearchInputProvider>
-                    <NumOfRenderedCardsProvider>
+                <NumOfRenderedCardsProvider>
+                    <IsLoadingProvider>
                         <IsFetchDataProvider>
                             <Header />
                             {(featuredOrLatestState === "Featured" ||
                                 !isSmallViewport) && (
-                                <NewsCategory isWidget={false} />
+                                <RenderMain isWidget={false} />
                             )}
                             {featuredOrLatestState === "Latest" && (
-                                <NewsCategory isWidget={true} />
+                                <RenderMain isWidget={true} />
                             )}
                         </IsFetchDataProvider>
-                    </NumOfRenderedCardsProvider>
+                    </IsLoadingProvider>
+                </NumOfRenderedCardsProvider>
             </EncodedSearchInputProvider>
         </SelectedCategoryProvider>
     );

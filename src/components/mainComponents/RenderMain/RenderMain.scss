@@ -1,5 +1,23 @@
 @use "../../../util/helpers/sassHelpers.scss" as *;
 
+.main-grid {
+    display: grid;
+    grid-template-columns: 88px repeat(3, 1fr);
+    grid-template-rows: 65px 1fr;
+    gap: 0px;
+    @include width-min-max(670px, 754px);
+    position: relative;
+    align-items: start;
+    align-self: center;
+    width: 100%;
+}
+
+.main-flex {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
 .main-grid__nav {
     position: sticky;
     z-index: 111111;
@@ -22,21 +40,9 @@
     line-height: 24px;
 }
 
-#root .banner-container + header + main {
-    .main-grid__nav,
-    .main-grid__heading {
-        top: 173px;
+@media screen and (min-width: 1030px) {
+    .main-grid {
+        min-width: 972px;
+        max-width: 1098px;
     }
-}
-
-#root header + main {
-    .main-grid__nav,
-    .main-grid__heading {
-        top: 113px;
-    }
-}
-
-.observerRef {
-    min-height: 2px;
-    min-width: 0.1px;
 }

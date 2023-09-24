@@ -8,6 +8,7 @@ import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvid
 import { filterJsonData } from "../../../util/helpers/functions/filterJSON/filterJsonData";
 import { allowOrDisableScroll } from "../../../util/helpers/functions/allowOrDisableScroll";
 import { replaceOrMergeArticleData } from "../../../util/helpers/functions/replaceOrMergeArticleData";
+import { IsLoadingContext } from "../../../context/IsLoadingProvider";
 
 export type ArticleData = {
     url: string;
@@ -24,10 +25,10 @@ interface CardDataProps {
 }
 
 const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
-    const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [articleData, setArticleData] = useState<ArticleData>([]);
 
+    const { isCategoryLoading, isWidgetLoading } = useContext(IsLoadingContext);
     const { selectedCategory } = useContext(SelectedCategoryContext);
     const {
         isFetchCategoryData,
@@ -43,6 +44,7 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
     const isThereArticleData = articleData.length > 0;
     const isCategoryCard = cardClass === "category-card";
 
+    const isLoading = isCategoryCard ? isCategoryLoading : isWidgetLoading;
     const URL = isCategoryCard ? API_Card_URL : API_Widget_URL;
     const isFetchData = isCategoryCard
         ? isFetchCategoryData
@@ -53,22 +55,8 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
 
     const indexRef = useRef(0);
 
-    const returnDataNumForCategory = () => {
-        switch (selectedCategory) {
-            case "Health":
-                return 200;
-
-            case "Technology":
-                return 300;
-        
-            default:
-                return 400;
-        }
-    };
- 
     const fetchData = useCallback(
         async (URL: string) => {
-            setIsLoading(true);
             indexRef.current = indexRef.current + 1;
             console.log("Fetch ran", cardClass, indexRef.current, "URL:", URL);
 
@@ -103,9 +91,7 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
                 }
             } catch (error) {
                 console.error("Error in fetchData:", cardClass, error);
-            } finally {    
-                setIsLoading(false);
-            }
+            } 
         },
         [cardClass, selectedCategory, isThereArticleData]
     );
@@ -139,7 +125,6 @@ const FetchAndFilterData = ({ cardClass }: CardDataProps) => {
                     isFavoritesCategory={isFavoritesCategory}
                     isSearchCategory={isSearchCategory}
                     articleData={articleData}
-                    returnDataNumForCategory={returnDataNumForCategory}
                 />
             )}
         </>

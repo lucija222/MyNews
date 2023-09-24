@@ -2,6 +2,7 @@ import "./Nav.scss";
 import { useContext, MouseEventHandler } from "react";
 import { ToggleMenuContext } from "../../../context/context";
 import { ApiURLContext } from "../../../context/ApiURLProvider";
+import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { NumOfRenderedCardsContext } from "../../../context/NumOfRenderedCardsProvider";
@@ -24,6 +25,7 @@ const Nav = () => {
     );
     const { setIsFetchCategoryData } = useContext(IsFetchDataContext);
     const { resetCardURLparams } = useContext(ApiURLContext);
+    const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
     const handleNavClick: MouseEventHandler<HTMLLIElement> = (e) => {
         e.stopPropagation();
@@ -37,6 +39,9 @@ const Nav = () => {
         });
         resetCardURLparams(); 
         setNumOfRenderedCategoryCards(16);
+        if (e.currentTarget.id !== "Favorites") {
+            setIsCategoryLoading(true);
+        }
 
         setTimeout(() => {
             setIsFetchCategoryData(true);

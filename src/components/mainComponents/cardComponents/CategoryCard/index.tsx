@@ -2,13 +2,7 @@ import "./CategoryCard.scss";
 import CardTitle from "../CardTitle";
 import CardByline from "../CardByline";
 import HeartButton from "../HeartButton";
-import {
-    useState,
-    MouseEventHandler,
-    useContext,
-    useEffect,
-    ReactEventHandler,
-} from "react";
+import { useState, MouseEventHandler, useContext, useEffect, ReactEventHandler, } from "react";
 import { FavoriteArticlesDataContext } from "../../../../context/FavoriteArticlesDataProvider";
 
 interface CategoryCardProps {
@@ -19,7 +13,7 @@ interface CategoryCardProps {
     timestamp: string;
     img_src: string;
     isFavorite: boolean;
-    index?: number;
+    index: number;
 }
 
 const CategoryCard = ({ index, ...article }: CategoryCardProps) => {
@@ -31,6 +25,7 @@ const CategoryCard = ({ index, ...article }: CategoryCardProps) => {
     const { favoriteArticlesArray, updateFavoriteArticlesArray } = useContext(
         FavoriteArticlesDataContext
     );
+
     const isCardAD = index ? index % 6 === 0 : false;
 
     const handleFavoriteBtnClick: MouseEventHandler<HTMLButtonElement> = (
@@ -83,6 +78,8 @@ const CategoryCard = ({ index, ...article }: CategoryCardProps) => {
             <div className="img_container">
                 <img
                     src={img_src}
+                    key={img_src}
+                    loading="eager"
                     onError={handleImageError}
                     alt="Article related photograph"
                 />
