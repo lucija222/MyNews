@@ -33,7 +33,13 @@ export const filterNewsApiJson = (jsonData: any) => {
             return imgURL;
         }
 
-        return !imgURL.includes("biztoc") && !imgURL.includes("boingboing.net");
+        const doesImgUrlInclude = () => {
+            const stringsToCheck = ["biztoc", "boingboing.net", "cnet.com", "cdn01.dailycaller", "i.cbc.ca", "ladbible.com", "//time.com"];
+            const isValidUrl = stringsToCheck.some(string => imgURL.includes(string));
+            return !isValidUrl;
+        };
+
+        return doesImgUrlInclude();
     };
 
     jsonData.articles.forEach((articleObj: NewsApiArticleObj) => {

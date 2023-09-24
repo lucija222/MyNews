@@ -1,19 +1,30 @@
 import "./WidgetScroller.scss";
+import { useContext, useEffect } from "react";
 import { ArticleData } from "../../FetchAndFilterData";
 import WidgetCard from "../../cardComponents/WidgetCard";
+import {
+    IsLoadingContext, SetIsLoadingContext,
+} from "../../../../context/IsLoadingProvider";
 
 interface WidgetScrollerProps {
     articleData: ArticleData;
-    isAllDataRendered: boolean;
     observerDiv?: JSX.Element | undefined;
 }
 
 const WidgetScroller = ({
     articleData,
-    isAllDataRendered,
     observerDiv,
 }: WidgetScrollerProps) => {
-    
+
+    const { isWidgetLoading } = useContext(IsLoadingContext);
+    const { setIsWidgetLoading } = useContext(SetIsLoadingContext);
+
+    useEffect(() => {
+        if (isWidgetLoading) {
+            setIsWidgetLoading(false);
+        }
+    }, [isWidgetLoading]);
+
     return (
         <div className="widget-scroller_container">
             {articleData.map((article, index) => {
@@ -27,7 +38,7 @@ const WidgetScroller = ({
                     </article>
                 );
             })}
-            {!isAllDataRendered && observerDiv}
+            {observerDiv}
         </div>
     );
 };

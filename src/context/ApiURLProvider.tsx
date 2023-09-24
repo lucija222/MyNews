@@ -5,11 +5,13 @@ import { EncodedSearchInputContext } from "./EncodedSearchInputProvider";
 import {
     ReactNode, createContext, useContext, useEffect, useState,
 } from "react";
+import { SetIsLoadingContext } from "./IsLoadingProvider";
 interface IApiURLContext {
     API_Card_URL: string;
     API_Widget_URL: string;
     isMaxCategoryFetchCalls: boolean;
     isMaxWidgetFetchCalls: boolean;
+    returnMaxFetchNum: () => number;
     changeCardURLparams: () => void;
     changeWidgetURLparams: () => void;
     resetCardURLparams: () => void;
@@ -20,6 +22,7 @@ export const ApiURLContext = createContext<IApiURLContext>({
     API_Widget_URL: `https://api.nytimes.com/svc/news/v3/content/all/all.json?limit=100&offset=0&api-key=${nytAPI_Key}`,
     isMaxCategoryFetchCalls: false,
     isMaxWidgetFetchCalls: false,
+    returnMaxFetchNum: () => 400,
     changeCardURLparams: () => {},
     changeWidgetURLparams: () => {},
     resetCardURLparams: () => {},
@@ -30,6 +33,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
     const { encodedSearchInput } = useContext(EncodedSearchInputContext);
     const { setIsFetchCategoryData, setIsFetchWidgetData } =
         useContext(IsFetchDataContext);
+    const { setIsCategoryLoading, setIsWidgetLoading } = useContext(SetIsLoadingContext);
 
     const [cardURL_Offset, setCardURL_Offset] = useState(0);
     const [API_Card_URL, setAPI_Card_URL] = useState(
@@ -42,7 +46,6 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
     );
 
     const returnMaxFetchNum = () => {
-        console.log(selectedCategory);
         switch (selectedCategory) {
             case "Health":
                 return 200;
@@ -64,12 +67,15 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
 
     const changeCardURLparams = () => {
         if (
-            selectedCategory !== "favorites" &&
+            selectedCategory !== "Favorites" &&
             selectedCategory !== "searchResults"
         ) {
+            
             setCardURL_Offset((prevNum) => {
                 return prevNum + 100;
             });
+
+            setIsCategoryLoading(true);
 
             setTimeout(() => {
                 setIsFetchCategoryData(true);
@@ -81,6 +87,8 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
         setWidgetURL_Offset((prevNum) => {
             return prevNum + 100;
         });
+
+        setIsWidgetLoading(true);
 
         setTimeout(() => {
             setIsFetchWidgetData(true);
@@ -132,6 +140,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
                 API_Widget_URL,
                 isMaxCategoryFetchCalls,
                 isMaxWidgetFetchCalls,
+                returnMaxFetchNum,
                 changeCardURLparams,
                 changeWidgetURLparams,
                 resetCardURLparams,

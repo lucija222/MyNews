@@ -8,13 +8,14 @@ import NumOfRenderedCardsProvider from "./context/NumOfRenderedCardsProvider";
 import { FeaturedOrLatestStateContext } from "./context/FeaturedOrLatestTogglerProvider";
 import EncodedSearchInputProvider from "./context/EncodedSearchInputProvider";
 import IsFetchDataProvider from "./context/IsFetchDataProvider";
+import IsLoadingProvider from "./context/IsLoadingProvider";
 
 const App = () => {
     const { isSmallViewport } = useContext(ViewportSizesContext);
     const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestStateContext
     );
-    
+
     useEffect(() => {
         if (!isSmallViewport) {
             setFeaturedOrLatestToggler("none");
@@ -26,7 +27,8 @@ const App = () => {
     return (
         <SelectedCategoryProvider>
             <EncodedSearchInputProvider>
-                    <NumOfRenderedCardsProvider>
+                <NumOfRenderedCardsProvider>
+                    <IsLoadingProvider>
                         <IsFetchDataProvider>
                             <Header />
                             {(featuredOrLatestState === "Featured" ||
@@ -37,7 +39,8 @@ const App = () => {
                                 <RenderMain isWidget={true} />
                             )}
                         </IsFetchDataProvider>
-                    </NumOfRenderedCardsProvider>
+                    </IsLoadingProvider>
+                </NumOfRenderedCardsProvider>
             </EncodedSearchInputProvider>
         </SelectedCategoryProvider>
     );

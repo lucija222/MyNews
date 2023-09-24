@@ -1,6 +1,6 @@
 import RenderScroller from "../RenderScroller";
 import { ArticleData } from "../../FetchAndFilterData";
-import { useRef, useEffect, useContext, useCallback, useState } from "react";
+import { useRef, useEffect, useContext, useCallback } from "react";
 import { ApiURLContext } from "../../../../context/ApiURLProvider";
 import { NumOfRenderedCardsContext } from "../../../../context/NumOfRenderedCardsProvider";
 
@@ -10,24 +10,31 @@ interface InfiniteScrollerProps {
     isFavoritesCategory: boolean;
     isSearchCategory: boolean;
     articleData: ArticleData;
-    returnDataNumForCategory: () => number;
 }
 
 const InfiniteScroller = ({
-    isCategoryCard, isLoading, isFavoritesCategory, isSearchCategory, articleData, returnDataNumForCategory
-}: InfiniteScrollerProps) => {
-
+    isCategoryCard,
+    isLoading,
+    isFavoritesCategory,
+    isSearchCategory,
+    articleData,
+}: 
+InfiniteScrollerProps) => {
     const {
-        numOfRenderedCategoryCards, setNumOfRenderedCategoryCards,
-        numOfRenderedWidgetCards, setNumOfRenderedWidgetCards,
+        numOfRenderedCategoryCards,
+        setNumOfRenderedCategoryCards,
+        numOfRenderedWidgetCards,
+        setNumOfRenderedWidgetCards,
     } = useContext(NumOfRenderedCardsContext);
 
-    const { changeCardURLparams, changeWidgetURLparams, isMaxCategoryFetchCalls, isMaxWidgetFetchCalls } =
-        useContext(ApiURLContext);
+    const {
+        changeCardURLparams,
+        changeWidgetURLparams,
+        isMaxCategoryFetchCalls,
+        isMaxWidgetFetchCalls,
+        returnMaxFetchNum,
+    } = useContext(ApiURLContext);
 
-    const [intersectionNum, setIntersectionNum] = useState(0);
-    const prevIntersectionNumRef = useRef(0);
-    const isMountingRef = useRef(true);
     const observerRef = useRef<IntersectionObserver | null>(null);
     const observerElemRef = useRef<HTMLDivElement | null>(null);
 
@@ -53,73 +60,89 @@ const InfiniteScroller = ({
 
     const remainingDataLength = dataLength - slicedDataLength;
     const isThereMoreData = remainingDataLength > 0;
+    const isAwaitingFetch = dataLength < correctNumOfRenderedCards;
 
     const isDataLessThan18 = remainingDataLength < 18;
     const shouldNumIncrement = slicedDataLength === correctNumOfRenderedCards;
 
-    const isAllDataRendered = dataLength > returnDataNumForCategory() && dataLength === slicedDataLength && isMaxFetchCalls;
+    const isAllDataRendered =
+        dataLength > returnMaxFetchNum() &&
+        dataLength === slicedDataLength &&
+        isMaxFetchCalls;
 
-    const updateNumOfCardsAndURLparams = useCallback(() => {
+    const observerCallback = useCallback(
+        ([entry]: IntersectionObserverEntry[]) => {
 
-        if (isThereMoreData && !isDataLessThan18 && shouldNumIncrement) {
-            setCorrectNumOfRenderedCards((prevIndex) => {
-                return prevIndex + 18;
-            });
+            if (
+                entry.isIntersecting &&
+                !isLoading &&
+                !isAwaitingFetch
+            ) {
+                console.log(
+                    "%cShouldIcrement:",
+                    "background:skyblue;",
+                    shouldNumIncrement,
+                );
 
-            return;
-            
-        } else if (
-            !isMaxFetchCalls &&
-            ((isThereMoreData && isDataLessThan18) || !isThereMoreData)
-        ) {
-            changeURLparams();
-            setCorrectNumOfRenderedCards((prevIndex) => {
-                return prevIndex + 18;
-            });
+                if (
+                    isThereMoreData &&
+                    !isDataLessThan18 &&
+                    shouldNumIncrement
+                ) {
+                    console.log("INCREMENT");
 
-            return;
+                    setCorrectNumOfRenderedCards((prevIndex) => {
+                        return prevIndex + 18;
+                    });
 
-        } else if (isThereMoreData && isDataLessThan18 && isMaxFetchCalls) {
+                    return;
+                } else if (
+                    !isMaxFetchCalls &&
+                    ((isThereMoreData && isDataLessThan18) || !isThereMoreData)
+                ) {
+                    console.log("INCREMENT & FETCH");
+                    changeURLparams();
+                    setCorrectNumOfRenderedCards((prevIndex) => {
+                        return prevIndex + 18;
+                    });
 
-            setCorrectNumOfRenderedCards((prevIndex) => {
-                return prevIndex + remainingDataLength;
-            });
+                    return;
+                } else if (
+                    isThereMoreData &&
+                    isDataLessThan18 &&
+                    isMaxFetchCalls
+                ) {
+                    console.log("REMAINED INCREMENT");
+                    setCorrectNumOfRenderedCards((prevIndex) => {
+                        return prevIndex + remainingDataLength;
+                    });
 
-            return;
-        }
-    }, [
-        isThereMoreData,
-        isDataLessThan18,
-        remainingDataLength,
-        isMaxFetchCalls,
-        shouldNumIncrement,
-        setCorrectNumOfRenderedCards,
-        changeURLparams,
-    ]);
+                    return;
+                }
+            }
+        },
+        [
+            isLoading,
+            isAwaitingFetch,
+            isThereMoreData,
+            isDataLessThan18,
+            remainingDataLength,
+            isMaxFetchCalls,
+            shouldNumIncrement,
+            setCorrectNumOfRenderedCards,
+            changeURLparams,
+        ]
+    );
 
     useEffect(() => {
-        if (isMountingRef.current) {
-            observerRef.current = new IntersectionObserver(
-                ([entry]: IntersectionObserverEntry[]) => {
-                    
-                    if (entry.isIntersecting && !isLoading) {
-                        setIntersectionNum((prevNum) => {                        
-                            return prevNum + 1;
-                        });
-                    }
-                },
-                {
-                    root: null,
-                    threshold: 0.1,
-                }
-            );
-
-            isMountingRef.current = false;
-        }
+        observerRef.current = new IntersectionObserver(observerCallback, {
+            root: null,
+            threshold: 0.5,
+        });
 
         const observerConst = observerRef.current;
 
-        if (observerElemRef.current && observerConst) {
+        if (observerElemRef.current && observerConst && !isAllDataRendered) {  
             observerConst.observe(observerElemRef.current);
         }
 
@@ -128,14 +151,23 @@ const InfiniteScroller = ({
                 observerConst.disconnect();
             }
         };
-    }, [isLoading]);
+    }, [observerCallback]);
 
     useEffect(() => {
-        if (intersectionNum !== prevIntersectionNumRef.current) {
-            updateNumOfCardsAndURLparams();
-            prevIntersectionNumRef.current = intersectionNum;
-        }
-    }, [intersectionNum, updateNumOfCardsAndURLparams]);
+            console.log(
+                "Data:",
+                dataLength,
+                "Sliced:",
+                slicedDataLength,
+                "Num:",
+                numOfRenderedCategoryCards
+            );
+    }, [
+        isAllDataRendered,
+        dataLength,
+        slicedDataLength,
+        numOfRenderedCategoryCards,
+    ]);
 
     return (
         <>
@@ -143,7 +175,6 @@ const InfiniteScroller = ({
                 isCategoryCard={isCategoryCard}
                 isFavoritesCategory={isFavoritesCategory}
                 articleData={isSearchCategory ? articleData : slicedArticleData}
-                isAllDataRendered={isAllDataRendered}
                 observerElemRef={observerElemRef}
             />
         </>

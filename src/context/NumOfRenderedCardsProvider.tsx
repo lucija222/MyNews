@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, createContext, useState, ReactNode } from "react";
+import { Dispatch, SetStateAction, createContext, useState, ReactNode, useEffect } from "react";
 
 interface INumOfRenderedCardsContext {
     numOfRenderedCategoryCards: number;
