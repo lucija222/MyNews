@@ -2,23 +2,22 @@ import { NewDataArray } from "../../../../typesAndInterfaces/apiTandI";
 import { filterNewsApiJson } from "./filterNewsApiJson";
 import { filterNytNewswireApiJson } from "./filterNytNewswireApiJson";
 
-export const filterJsonData = (
+export const filterJsonData = async (
     jsonData: any,
     selectedCategory: string,
     cardClass: string,
 ) => {
     const isSearchResults = selectedCategory === "searchResults";
-    const isGeneralCategory = selectedCategory === "General";
     const isWidgetCard = cardClass === "widget-card";
 
     const newDataArray: NewDataArray =
         !isSearchResults || isWidgetCard
-            ? filterNytNewswireApiJson(
+            ? await filterNytNewswireApiJson(
                   jsonData,
                   isWidgetCard,
-                  isGeneralCategory
+                  selectedCategory
               )
-            : filterNewsApiJson(jsonData);
+            : await filterNewsApiJson(jsonData);
 
     return newDataArray;
 };

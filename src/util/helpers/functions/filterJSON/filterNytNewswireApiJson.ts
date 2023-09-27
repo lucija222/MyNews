@@ -1,19 +1,19 @@
 import {
-    FilteredArticleObject,
-    NytMultimediaObj,
-    NewDataArray,
-    NytArticleObj,
+    FilteredArticleObject, NytMultimediaObj, NewDataArray, NytArticleObj,
 } from "../../../../typesAndInterfaces/apiTandI";
-import { extractTime } from "../extractTime";
+import { filterObjNoSrc } from "./filterObjNoSrc";
+import { getDataArrWithImgObjUrl } from "./getDataArrWithImgObjUrl";
 
-export const filterNytNewswireApiJson = (
+export const filterNytNewswireApiJson = async (
     jsonData: any,
     isWidgetCard: boolean,
-    isGeneralCategory: boolean
+    selectedCategory: string
 ) => {
-    let newDataArray: NewDataArray = [];
+    const filteredArray_NoObjSrc: NewDataArray = [];
+    const pendingFetches: Promise<Response>[] = [];
+    const resultsArr: [NytArticleObj] = jsonData.results;
 
-    jsonData.results.forEach((articleObj: NytArticleObj) => {
+    for (const articleObj of resultsArr) {
         const isValidSection =
             articleObj.section && articleObj.section !== "En español";
         const isValidMultimediaArray =
@@ -36,24 +36,23 @@ export const filterNytNewswireApiJson = (
                 : "";
 
             if (multimediaURL) {
-                const mapped: FilteredArticleObject = {
-                    url: articleObj.url,
-                    title: articleObj.title,
-                    byline: articleObj.byline,
-                    section: isGeneralCategory
-                        ? "General"
-                        : articleObj.section,
-                    timestamp: !isWidgetCard
-                        ? articleObj.created_date
-                        : extractTime(articleObj.created_date),
-                    img_src: multimediaURL,
-                    isFavorite: false,
-                };
+                if (!isWidgetCard) {
+                    pendingFetches.push(fetch(multimediaURL));
+                }
 
-                newDataArray.push(mapped);
+                const filteredObj: FilteredArticleObject = filterObjNoSrc(
+                    articleObj,
+                    multimediaURL,
+                    isWidgetCard,
+                    selectedCategory
+                );
+
+                filteredArray_NoObjSrc.push(filteredObj);
             }
         }
-    });
+    }
 
-    return newDataArray;
+    const completeArray = await getDataArrWithImgObjUrl(pendingFetches, filteredArray_NoObjSrc);
+
+    return completeArray;
 };

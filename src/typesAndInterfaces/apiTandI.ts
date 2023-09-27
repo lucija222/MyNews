@@ -34,6 +34,7 @@ export type NewDataArray = {
     section: string;
     timestamp: string;
     img_src: string;
+    img_objSrc: string;
     isFavorite: boolean;
 }[];
 
@@ -44,5 +45,6 @@ export interface FilteredArticleObject {
     section: string;
     timestamp: string;
     img_src: string;
+    img_objSrc: string;
     isFavorite: boolean;
 }

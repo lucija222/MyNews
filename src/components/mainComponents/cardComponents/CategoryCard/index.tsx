@@ -2,7 +2,7 @@ import "./CategoryCard.scss";
 import CardTitle from "../CardTitle";
 import CardByline from "../CardByline";
 import HeartButton from "../HeartButton";
-import { useState, MouseEventHandler, useContext, useEffect, ReactEventHandler, } from "react";
+import { useState, MouseEventHandler, useContext, useEffect, } from "react";
 import { FavoriteArticlesDataContext } from "../../../../context/FavoriteArticlesDataProvider";
 
 interface CategoryCardProps {
@@ -12,12 +12,14 @@ interface CategoryCardProps {
     section: string;
     timestamp: string;
     img_src: string;
+    img_objSrc: string;
     isFavorite: boolean;
     index: number;
+    isFavoritesCategory: boolean;
 }
 
-const CategoryCard = ({ index, ...article }: CategoryCardProps) => {
-    const { url, title, byline, section, timestamp, img_src, isFavorite } =
+const CategoryCard = ({ index, isFavoritesCategory, ...article }: CategoryCardProps) => {
+    const { url, title, byline, section, timestamp, img_src, img_objSrc, isFavorite } =
         article;
     const [isArticleFavorite, setIsArticleFavorite] = useState(
         isFavorite ? isFavorite : false
@@ -40,6 +42,7 @@ const CategoryCard = ({ index, ...article }: CategoryCardProps) => {
             section: section,
             timestamp: timestamp,
             img_src: img_src,
+            img_objSrc: img_objSrc,
             isFavorite: newIsArticleFavorite,
         };
         updateFavoriteArticlesArray(
@@ -47,12 +50,6 @@ const CategoryCard = ({ index, ...article }: CategoryCardProps) => {
             newIsArticleFavorite
         );
         setIsArticleFavorite(newIsArticleFavorite);
-    };
-
-    const handleImageError: ReactEventHandler<HTMLImageElement> = (e) => {
-        e.stopPropagation();
-        const target = e.target as HTMLImageElement;
-        target.src = "./images/onErrorImgURL.png";
     };
 
     const correctCategoryName = () => {
@@ -77,10 +74,7 @@ const CategoryCard = ({ index, ...article }: CategoryCardProps) => {
             {isCardAD && <p className="ad">AD</p>}
             <div className="img_container">
                 <img
-                    src={img_src}
-                    key={img_src}
-                    loading="eager"
-                    onError={handleImageError}
+                    src={isFavoritesCategory ? img_src : img_objSrc}
                     alt="Article related photograph"
                 />
             </div>

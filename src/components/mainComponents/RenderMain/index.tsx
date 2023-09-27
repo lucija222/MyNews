@@ -1,8 +1,8 @@
 import "./RenderMain.scss";
 import { useContext } from "react";
+import FetchData from "../FetchData";
 import Nav from "../../headerComponents/Nav";
 import WidgetContainer from "../WidgetContainer";
-import FetchAndFilterData from "../FetchAndFilterData";
 import ApiURLProvider from "../../../context/ApiURLProvider";
 import { ViewportSizesContext } from "../../../context/ViewportSizesProvider";
 import FavoriteArticlesDataProvider from "../../../context/FavoriteArticlesDataProvider";
@@ -31,7 +31,7 @@ const RenderMain = ({ isWidget }: NewsCategoryProps) => {
                     {isWidget ? (
                         <WidgetContainer />
                     ) : (
-                        <FetchAndFilterData cardClass="category-card" />
+                        <FetchData cardClass="category-card" />
                     )}
 
                 </ApiURLProvider>

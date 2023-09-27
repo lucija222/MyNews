@@ -6,7 +6,7 @@
         flex-direction: column;
         flex-wrap: wrap;
         row-gap: 10px;
-        border: 1px solid black;
+        border: 2px solid rgba(0, 0, 0, 0.192);
         padding: 20px 30px 20px 20px;
         border-radius: 5px;
         background-color: $background;
@@ -43,6 +43,10 @@
 
 .hamburger-li-modal svg {
     height: 13px;
+
+    rect {
+        fill: $red;
+    }
 }
 
 .settings-li-modal b svg:nth-child(2) {

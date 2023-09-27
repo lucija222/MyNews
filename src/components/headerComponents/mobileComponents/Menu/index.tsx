@@ -1,9 +1,9 @@
-import Nav from "../../Nav";
-import SearchFilter from "../../SearchFilter";
-import { MouseEvent } from "react";
 import "./Menu.scss";
-import { XSvg } from "../../../../assets/svg/svgImports";
+import Nav from "../../Nav";
+import { MouseEvent } from "react";
 import MainHeading from "../../MainHeading";
+import SearchFilter from "../../SearchFilter";
+import { XSvg } from "../../../../assets/svg/svgImports";
 
 interface MenuProps {
     isMenuOpen: boolean;

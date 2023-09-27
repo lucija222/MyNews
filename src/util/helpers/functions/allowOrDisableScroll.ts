@@ -1,8 +1,8 @@
 export const allowOrDisableScroll = (condition: boolean) => {
     const body = document.body;
     if (condition) {
-        body.classList.replace("allow-scroll", "disable-scroll");
+        body.classList.add("disable-scroll");
     } else if (!condition) {
-        body.classList.replace("disable-scroll", "allow-scroll");
+        body.classList.remove("disable-scroll");
     }
 };

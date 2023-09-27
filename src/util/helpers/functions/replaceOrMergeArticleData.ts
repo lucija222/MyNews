@@ -1,4 +1,4 @@
-import { ArticleData } from "../../../components/mainComponents/FetchAndFilterData";
+import { ArticleData } from "../../../components/mainComponents/FetchData";
 import { NewDataArray } from "../../../typesAndInterfaces/apiTandI";
 import { isDataFetchedOnCategoryChange } from "./isDataFetchedOnScroll";
 
@@ -8,7 +8,7 @@ export const replaceOrMergeArticleData = (
     selectedCategory: string,
     isThereArticleData: boolean,
     filteredData: NewDataArray,
-    URL: string
+    url: string
 ) => {
 
     let newData: ArticleData = [];
@@ -18,12 +18,19 @@ export const replaceOrMergeArticleData = (
         case "category-card":
             const shouldArticleDataBeReplaced = isDataFetchedOnCategoryChange(
                 selectedCategory,
-                URL
+                url
             );
+            
+            if (shouldArticleDataBeReplaced) {
+                if (prevData) {
+                    for (const articleObj of prevData) {
+                        URL.revokeObjectURL(articleObj.img_src);
+                    }
+                }
+                return newData = filteredData;
+            }
 
-            return newData = shouldArticleDataBeReplaced
-                ? filteredData
-                : [...prevData, ...filteredData];
+            return newData = [...prevData, ...filteredData];
 
         case "widget-card":
 

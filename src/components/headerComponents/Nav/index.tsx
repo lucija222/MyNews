@@ -20,7 +20,7 @@ const Nav = () => {
     const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestStateContext
     );
-    const { setNumOfRenderedCategoryCards } = useContext(
+    const { setNumOfRenderedCategoryCards, setNumOfRenderedWidgetCards } = useContext(
         NumOfRenderedCardsContext
     );
     const { setIsFetchCategoryData } = useContext(IsFetchDataContext);
@@ -37,11 +37,10 @@ const Nav = () => {
 
             return e.currentTarget.id;
         });
+        setIsCategoryLoading(true);
         resetCardURLparams(); 
         setNumOfRenderedCategoryCards(16);
-        if (e.currentTarget.id !== "Favorites") {
-            setIsCategoryLoading(true);
-        }
+        setNumOfRenderedWidgetCards(16);
 
         setTimeout(() => {
             setIsFetchCategoryData(true);
