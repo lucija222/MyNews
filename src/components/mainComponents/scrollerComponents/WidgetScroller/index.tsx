@@ -1,10 +1,6 @@
 import "./WidgetScroller.scss";
-import { useContext, useEffect } from "react";
-import { ArticleData } from "../../FetchAndFilterData";
+import { ArticleData } from "../../FetchData";
 import WidgetCard from "../../cardComponents/WidgetCard";
-import {
-    IsLoadingContext, SetIsLoadingContext,
-} from "../../../../context/IsLoadingProvider";
 
 interface WidgetScrollerProps {
     articleData: ArticleData;
@@ -15,15 +11,6 @@ const WidgetScroller = ({
     articleData,
     observerDiv,
 }: WidgetScrollerProps) => {
-
-    const { isWidgetLoading } = useContext(IsLoadingContext);
-    const { setIsWidgetLoading } = useContext(SetIsLoadingContext);
-
-    useEffect(() => {
-        if (isWidgetLoading) {
-            setIsWidgetLoading(false);
-        }
-    }, [isWidgetLoading]);
 
     return (
         <div className="widget-scroller_container">

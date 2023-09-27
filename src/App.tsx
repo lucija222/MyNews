@@ -1,13 +1,13 @@
 import "./App.scss";
 import { useEffect, useContext } from "react";
 import Header from "./components/headerComponents/Header";
+import IsFetchDataProvider from "./context/IsFetchDataProvider";
 import RenderMain from "./components/mainComponents/RenderMain";
 import { ViewportSizesContext } from "./context/ViewportSizesProvider";
 import SelectedCategoryProvider from "./context/SelectedCategoryProvider";
+import EncodedSearchInputProvider from "./context/EncodedSearchInputProvider";
 import NumOfRenderedCardsProvider from "./context/NumOfRenderedCardsProvider";
 import { FeaturedOrLatestStateContext } from "./context/FeaturedOrLatestTogglerProvider";
-import EncodedSearchInputProvider from "./context/EncodedSearchInputProvider";
-import IsFetchDataProvider from "./context/IsFetchDataProvider";
 import IsLoadingProvider from "./context/IsLoadingProvider";
 
 const App = () => {

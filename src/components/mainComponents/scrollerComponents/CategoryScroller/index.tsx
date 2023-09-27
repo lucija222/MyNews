@@ -1,15 +1,14 @@
 import "./CategoryScroller.scss";
 import { useContext, useEffect } from "react";
+import { ArticleData } from "../../FetchData";
 import WidgetContainer from "../../WidgetContainer";
-import { ArticleData } from "../../FetchAndFilterData";
 import NoCardElems from "../../cardComponents/NoCardElems";
 import CategoryCard from "../../cardComponents/CategoryCard";
 import BreakingNewsCard from "../../cardComponents/BreakingNewsCard";
 import { ViewportSizesContext } from "../../../../context/ViewportSizesProvider";
 import { SelectedCategoryContext } from "../../../../context/SelectedCategoryProvider";
 import { FavoriteArticlesDataContext } from "../../../../context/FavoriteArticlesDataProvider";
-import { SetIsLoadingContext } from "../../../../context/IsLoadingProvider";
-import { IsLoadingContext } from "../../../../context/IsLoadingProvider";
+import { IsLoadingContext, SetIsLoadingContext } from "../../../../context/IsLoadingProvider";
 
 interface CategoryScrollerProps {
     isFavoritesCategory: boolean;
@@ -23,10 +22,10 @@ const CategoryScroller = ({
 
     const { selectedCategory } = useContext(SelectedCategoryContext);
     const { favoriteArticlesArray } = useContext(FavoriteArticlesDataContext);
-    const { isCategoryLoading } = useContext(IsLoadingContext);
-    const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
     const { isSmallViewport, isMidViewport, isBigViewport } =
         useContext(ViewportSizesContext);
+    const { isCategoryLoading } = useContext(IsLoadingContext);
+    const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
     const isSearchCategory = selectedCategory === "searchResults";
     const isSearchNoResults = isSearchCategory && articleData.length === 1;
@@ -36,14 +35,6 @@ const CategoryScroller = ({
         isFavoritesCategory && favoriteArticlesArray.length === 0;
     const dataLength = articleData.length - 1;
 
-    useEffect(() => {
-        if (isCategoryLoading) {
-            console.log("CAT loading false");
-            // setTimeout(() => {
-            setIsCategoryLoading(false);
-            // }, 1200);
-        }
-    }, [isCategoryLoading]);
 
     const returnCardElems = (data: ArticleData) => {
         if (isFavoritesNoData) {
@@ -61,7 +52,7 @@ const CategoryScroller = ({
                 const articleIndex = articleData[index];
                 return (
                     <article
-                        key={index}
+                    key={`${index}-${article.title}`}
                         className="category-card breaking-news-card"
                     >
                         <BreakingNewsCard
@@ -73,20 +64,28 @@ const CategoryScroller = ({
                 );
             } else if (!isFavoriteOrSearchCategory && dataLength === index) {
                 return (
-                    <article key={index} className="category-card">
-                        <CategoryCard index={index} {...article} />
+                    <article key={`${index}-${article.title}`} className="category-card">
+                        <CategoryCard index={index} isFavoritesCategory={isFavoritesCategory} {...article} />
                         {observerDiv}
                     </article>
                 );
             } else {
                 return (
-                    <article key={index} className="category-card">
-                        <CategoryCard index={index} {...article} />
+                    <article key={`${index}-${article.title}`} className="category-card">
+                        <CategoryCard index={index} isFavoritesCategory={isFavoritesCategory} {...article} />
                     </article>
                 );
             }
         });
     };
+
+    useEffect(() => {
+        if (isCategoryLoading && selectedCategory === "Favorites") {
+            setTimeout(() => {
+                setIsCategoryLoading(false);
+            }, 1000);
+        }
+    });
 
     return (
         <div className="category-scroller__grid">

@@ -5,7 +5,6 @@ import { EncodedSearchInputContext } from "./EncodedSearchInputProvider";
 import {
     ReactNode, createContext, useContext, useEffect, useState,
 } from "react";
-import { SetIsLoadingContext } from "./IsLoadingProvider";
 interface IApiURLContext {
     API_Card_URL: string;
     API_Widget_URL: string;
@@ -33,7 +32,6 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
     const { encodedSearchInput } = useContext(EncodedSearchInputContext);
     const { setIsFetchCategoryData, setIsFetchWidgetData } =
         useContext(IsFetchDataContext);
-    const { setIsCategoryLoading, setIsWidgetLoading } = useContext(SetIsLoadingContext);
 
     const [cardURL_Offset, setCardURL_Offset] = useState(0);
     const [API_Card_URL, setAPI_Card_URL] = useState(
@@ -75,8 +73,6 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
                 return prevNum + 100;
             });
 
-            setIsCategoryLoading(true);
-
             setTimeout(() => {
                 setIsFetchCategoryData(true);
             }, 10);
@@ -87,8 +83,6 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
         setWidgetURL_Offset((prevNum) => {
             return prevNum + 100;
         });
-
-        setIsWidgetLoading(true);
 
         setTimeout(() => {
             setIsFetchWidgetData(true);

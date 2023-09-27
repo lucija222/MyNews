@@ -1,5 +1,5 @@
 import "./RenderScroller.scss";
-import { ArticleData } from "../../FetchAndFilterData";
+import { ArticleData } from "../../FetchData";
 import { MutableRefObject } from "react";
 import WidgetScroller from "../WidgetScroller";
 import CategoryScroller from "../CategoryScroller";

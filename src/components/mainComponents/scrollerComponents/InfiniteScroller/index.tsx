@@ -1,5 +1,5 @@
 import RenderScroller from "../RenderScroller";
-import { ArticleData } from "../../FetchAndFilterData";
+import { ArticleData } from "../../FetchData";
 import { useRef, useEffect, useContext, useCallback } from "react";
 import { ApiURLContext } from "../../../../context/ApiURLProvider";
 import { NumOfRenderedCardsContext } from "../../../../context/NumOfRenderedCardsProvider";
@@ -151,7 +151,7 @@ InfiniteScrollerProps) => {
                 observerConst.disconnect();
             }
         };
-    }, [observerCallback]);
+    }, [observerCallback, isAllDataRendered]);
 
     useEffect(() => {
             console.log(

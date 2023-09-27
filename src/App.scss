@@ -1,14 +1,11 @@
 body {
     background-color: #F2F2F2;
     min-width: 250px;
+    overflow-y: scroll;
 }
 
 .disable-scroll {
     overflow-y: hidden;
-}
-
-.allow-scroll {
-    overflow-y: scroll;
 }
 
 button {

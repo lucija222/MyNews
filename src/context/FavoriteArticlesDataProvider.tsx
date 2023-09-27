@@ -7,6 +7,7 @@ export interface FavoriteArticleData {
     section: string;
     timestamp: string;
     img_src: string;
+    img_objSrc: string;
     isFavorite: boolean;
 };
 

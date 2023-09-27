@@ -1,5 +1,5 @@
 import "./WidgetContainer.scss";
-import FetchAndFilterData from "../FetchAndFilterData";
+import FetchData from "../FetchData";
 import { RedCircleSvg, RightArrowSvg } from "../../../assets/svg/svgImports";
 
 const WidgetContainer = () => {
@@ -9,7 +9,7 @@ const WidgetContainer = () => {
                 <RedCircleSvg />
                 <h2>Latest news</h2>
             </div>
-            <FetchAndFilterData cardClass="widget-card" />
+            <FetchData cardClass="widget-card" />
             <div className="see-all-news">
                 <a href="https://www.nytimes.com/" target="_blank" rel="noopener noreferrer">See all news</a>
                 <RightArrowSvg />
