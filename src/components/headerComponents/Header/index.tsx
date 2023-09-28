@@ -41,7 +41,6 @@ const Header = () => {
         e.stopPropagation();
         setIsBannerBtnClicked(true);
         const target = e.target as HTMLButtonElement;
-        console.log();
         
         if (target.innerText === "GET") {
             setIsBannerModalOpen(true);

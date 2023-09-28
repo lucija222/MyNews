@@ -13,26 +13,16 @@ interface InfiniteScrollerProps {
 }
 
 const InfiniteScroller = ({
-    isCategoryCard,
-    isLoading,
-    isFavoritesCategory,
-    isSearchCategory,
-    articleData,
-}: 
-InfiniteScrollerProps) => {
+    isCategoryCard, isLoading, isFavoritesCategory, isSearchCategory, articleData,
+}: InfiniteScrollerProps) => {
     const {
-        numOfRenderedCategoryCards,
-        setNumOfRenderedCategoryCards,
-        numOfRenderedWidgetCards,
-        setNumOfRenderedWidgetCards,
+        numOfRenderedCategoryCards, setNumOfRenderedCategoryCards,
+        numOfRenderedWidgetCards, setNumOfRenderedWidgetCards,
     } = useContext(NumOfRenderedCardsContext);
 
     const {
-        changeCardURLparams,
-        changeWidgetURLparams,
-        isMaxCategoryFetchCalls,
-        isMaxWidgetFetchCalls,
-        maxFetchNum,
+        changeCardURLparams, changeWidgetURLparams,
+        isMaxCategoryFetchCalls, isMaxWidgetFetchCalls, maxFetchNum,
     } = useContext(ApiURLContext);
 
     const observerRef = useRef<IntersectionObserver | null>(null);
@@ -41,17 +31,14 @@ InfiniteScrollerProps) => {
     const correctNumOfRenderedCards = isCategoryCard
         ? numOfRenderedCategoryCards
         : numOfRenderedWidgetCards;
-
     const setCorrectNumOfRenderedCards = isCategoryCard
         ? setNumOfRenderedCategoryCards
         : setNumOfRenderedWidgetCards;
-
-    const changeURLparams = isCategoryCard
-        ? changeCardURLparams
+    const changeURLparams = isCategoryCard 
+        ? changeCardURLparams 
         : changeWidgetURLparams;
-
-    const isMaxFetchCalls = isCategoryCard
-        ? isMaxCategoryFetchCalls
+    const isMaxFetchCalls = isCategoryCard 
+        ? isMaxCategoryFetchCalls 
         : isMaxWidgetFetchCalls;
 
     const slicedArticleData = articleData.slice(0, correctNumOfRenderedCards);
@@ -73,46 +60,25 @@ InfiniteScrollerProps) => {
     const observerCallback = useCallback(
         ([entry]: IntersectionObserverEntry[]) => {
 
-            if (
-                entry.isIntersecting &&
-                !isLoading &&
-                !isAwaitingFetch
-            ) {
-                console.log(
-                    "%cShouldIcrement:",
-                    "background:skyblue;",
-                    shouldNumIncrement,
-                );
+            if (entry.isIntersecting && !isLoading && !isAwaitingFetch) {
 
-                if (
-                    isThereMoreData &&
-                    !isDataLessThan18 &&
-                    shouldNumIncrement
-                ) {
-                    console.log("INCREMENT");
-
+                if (isThereMoreData && !isDataLessThan18 && shouldNumIncrement) {
                     setCorrectNumOfRenderedCards((prevIndex) => {
                         return prevIndex + 18;
                     });
-
                     return;
+
                 } else if (
                     !isMaxFetchCalls &&
                     ((isThereMoreData && isDataLessThan18) || !isThereMoreData)
                 ) {
-                    console.log("INCREMENT & FETCH");
                     changeURLparams();
                     setCorrectNumOfRenderedCards((prevIndex) => {
                         return prevIndex + 18;
                     });
-
                     return;
-                } else if (
-                    isThereMoreData &&
-                    isDataLessThan18 &&
-                    isMaxFetchCalls
-                ) {
-                    console.log("REMAINED INCREMENT");
+
+                } else if (isThereMoreData && isDataLessThan18 && isMaxFetchCalls) {
                     setCorrectNumOfRenderedCards((prevIndex) => {
                         return prevIndex + remainingDataLength;
                     });
@@ -122,15 +88,11 @@ InfiniteScrollerProps) => {
             }
         },
         [
-            isLoading,
-            isAwaitingFetch,
-            isThereMoreData,
-            isDataLessThan18,
-            remainingDataLength,
-            isMaxFetchCalls,
-            shouldNumIncrement,
+            isLoading, isAwaitingFetch,
+            isThereMoreData, isDataLessThan18,
+            remainingDataLength, isMaxFetchCalls,
+            shouldNumIncrement, changeURLparams,
             setCorrectNumOfRenderedCards,
-            changeURLparams,
         ]
     );
 
@@ -152,22 +114,6 @@ InfiniteScrollerProps) => {
             }
         };
     }, [observerCallback, isAllDataRendered]);
-
-    useEffect(() => {
-            console.log(
-                "Data:",
-                dataLength,
-                "Sliced:",
-                slicedDataLength,
-                "Num:",
-                numOfRenderedCategoryCards
-            );
-    }, [
-        isAllDataRendered,
-        dataLength,
-        slicedDataLength,
-        numOfRenderedCategoryCards,
-    ]);
 
     return (
         <>

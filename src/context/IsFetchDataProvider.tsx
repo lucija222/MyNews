@@ -1,5 +1,6 @@
 import {
-    createContext, Dispatch, ReactNode, SetStateAction, useState,
+    createContext, Dispatch, ReactNode, SetStateAction,
+    useState, useRef, useCallback,
 } from "react";
 
 interface IIsDataFetchedContext {
@@ -7,6 +8,10 @@ interface IIsDataFetchedContext {
     isFetchWidgetData: boolean;
     setIsFetchCategoryData: Dispatch<SetStateAction<boolean>>;
     setIsFetchWidgetData: Dispatch<SetStateAction<boolean>>;
+    debounceFetch: (
+        fetchStateSetter: Dispatch<SetStateAction<boolean>>,
+        isSerachResults: boolean
+    ) => void | (() => void);
 }
 
 export const IsFetchDataContext = createContext<IIsDataFetchedContext>({
@@ -14,15 +19,32 @@ export const IsFetchDataContext = createContext<IIsDataFetchedContext>({
     isFetchWidgetData: false,
     setIsFetchCategoryData: () => {},
     setIsFetchWidgetData: () => {},
+    debounceFetch: () => {},
 });
 
-const IsFetchDataProvider = ({
-    children,
-}: {
-    children: ReactNode;
-}) => {
+const IsFetchDataProvider = ({ children }: { children: ReactNode }) => {
     const [isFetchCategoryData, setIsFetchCategoryData] = useState(false);
     const [isFetchWidgetData, setIsFetchWidgetData] = useState(false);
+    const timeoutIdRef = useRef<null | NodeJS.Timeout>(null);
+
+    const debounceFetch = useCallback(
+        (
+            fetchStateSetter: Dispatch<SetStateAction<boolean>>,
+            isSerachResults: boolean
+        ) => {
+            if (timeoutIdRef.current) {
+                clearTimeout(timeoutIdRef.current);
+            }
+
+            timeoutIdRef.current = setTimeout(
+                () => {
+                    fetchStateSetter(true);
+                },
+                isSerachResults ? 50 : 500
+            );
+        },
+        []
+    );
 
     return (
         <IsFetchDataContext.Provider
@@ -31,6 +53,7 @@ const IsFetchDataProvider = ({
                 isFetchWidgetData,
                 setIsFetchCategoryData,
                 setIsFetchWidgetData,
+                debounceFetch,
             }}
         >
             {children}
