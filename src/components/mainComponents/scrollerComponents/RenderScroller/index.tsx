@@ -12,10 +12,8 @@ interface RenderScrollerProps {
 }
 
 const RenderScroller = ({
-    isCategoryCard,
-    isFavoritesCategory,
-    articleData,
-    observerElemRef,
+    isCategoryCard, isFavoritesCategory,
+    articleData, observerElemRef,
 }: RenderScrollerProps) => {
     const isThereArticleData = articleData.length > 1;
     const observerDiv = observerElemRef && (

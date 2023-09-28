@@ -23,7 +23,7 @@ const Nav = () => {
     const { setNumOfRenderedCategoryCards, setNumOfRenderedWidgetCards } = useContext(
         NumOfRenderedCardsContext
     );
-    const { setIsFetchCategoryData } = useContext(IsFetchDataContext);
+    const { setIsFetchCategoryData, debounceFetch } = useContext(IsFetchDataContext);
     const { resetCardURLparams } = useContext(ApiURLContext);
     const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
@@ -33,18 +33,14 @@ const Nav = () => {
         setIsHamburgerClicked(false);
         setSelectedCategory((prevCategory) => {
             prevSelectedCategory.current = prevCategory;
-            console.log(prevCategory, e.currentTarget.id);
-
             return e.currentTarget.id;
         });
+
+        debounceFetch(setIsFetchCategoryData, false);
         setIsCategoryLoading(true);
         resetCardURLparams(); 
         setNumOfRenderedCategoryCards(16);
         setNumOfRenderedWidgetCards(16);
-
-        setTimeout(() => {
-            setIsFetchCategoryData(true);
-        }, 50);
 
         if (featuredOrLatestState === "Latest") {
             setFeaturedOrLatestToggler("Featured");

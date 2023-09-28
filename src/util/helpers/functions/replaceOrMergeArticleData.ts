@@ -29,7 +29,6 @@ export const replaceOrMergeArticleData = (
                 }
                 return newData = filteredData;
             }
-
             return newData = [...prevData, ...filteredData];
 
         case "widget-card":

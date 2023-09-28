@@ -8,8 +8,7 @@ interface WidgetScrollerProps {
 }
 
 const WidgetScroller = ({
-    articleData,
-    observerDiv,
+    articleData, observerDiv,
 }: WidgetScrollerProps) => {
 
     return (

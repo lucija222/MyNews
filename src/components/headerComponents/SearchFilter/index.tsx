@@ -18,7 +18,7 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
     const { setEncodedSearchInput } = useContext(EncodedSearchInputContext);
     const { setSelectedCategory } = useContext(SelectedCategoryContext);
     const { resetCardURLparams } = useContext(ApiURLContext);
-    const { setIsFetchCategoryData } = useContext(IsFetchDataContext);
+    const { setIsFetchCategoryData, debounceFetch } = useContext(IsFetchDataContext);
     const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
     const inputRef = useRef<null | HTMLInputElement>(null);
@@ -36,10 +36,7 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
             closeMenu();
         }
 
-        setTimeout(() => {
-            setIsFetchCategoryData(true);
-        }, 10);
-
+        debounceFetch(setIsFetchCategoryData, true);
         window.scrollTo(0, 0);
     };
 

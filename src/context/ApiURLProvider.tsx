@@ -28,7 +28,7 @@ export const ApiURLContext = createContext<IApiURLContext>({
 const ApiURLProvider = ({ children }: { children: ReactNode }) => {
     const { selectedCategory } = useContext(SelectedCategoryContext);
     const { encodedSearchInput } = useContext(EncodedSearchInputContext);
-    const { setIsFetchCategoryData, setIsFetchWidgetData } =
+    const { setIsFetchCategoryData, setIsFetchWidgetData, debounceFetch } =
         useContext(IsFetchDataContext);
 
     const [cardURL_Offset, setCardURL_Offset] = useState(0);
@@ -71,9 +71,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
                 return prevNum + 100;
             });
 
-            setTimeout(() => {
-                setIsFetchCategoryData(true);
-            }, 10);
+            debounceFetch(setIsFetchCategoryData, false);
         }
     };
 
@@ -82,9 +80,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
             return prevNum + 100;
         });
 
-        setTimeout(() => {
-            setIsFetchWidgetData(true);
-        }, 10);
+        debounceFetch(setIsFetchWidgetData, false);
     };
 
     useEffect(() => {

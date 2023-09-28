@@ -2,7 +2,7 @@ import "./CategoryCard.scss";
 import CardTitle from "../CardTitle";
 import CardByline from "../CardByline";
 import HeartButton from "../HeartButton";
-import { useState, MouseEventHandler, useContext, useEffect, } from "react";
+import { useState, MouseEventHandler, useContext, useEffect, ReactEventHandler, } from "react";
 import { FavoriteArticlesDataContext } from "../../../../context/FavoriteArticlesDataProvider";
 
 interface CategoryCardProps {
@@ -60,6 +60,12 @@ const CategoryCard = ({ index, isFavoritesCategory, ...article }: CategoryCardPr
             : section;
     };
 
+    const handleImgError: ReactEventHandler<HTMLImageElement> = (e) => {
+        e.stopPropagation();
+        const target = e.target as HTMLImageElement;
+        target.src = "./images/onErrorImgURL.png";
+    };
+
     useEffect(() => {
         const isAlreadyInFavorites = favoriteArticlesArray.some((article) => {
             return article.url === url;
@@ -75,6 +81,7 @@ const CategoryCard = ({ index, isFavoritesCategory, ...article }: CategoryCardPr
             <div className="img_container">
                 <img
                     src={isFavoritesCategory ? img_src : img_objSrc}
+                    onError={handleImgError}
                     alt="Article related photograph"
                 />
             </div>

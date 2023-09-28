@@ -1,8 +1,9 @@
+import { isValidString } from "./doesStringInclude";
+import { getDataArrWithImgObjUrl } from "./getDataArrWithImgObjUrl";
+import { authorStringsToCheck, imgStringsToCheck } from "../../constants";
 import {
     FilteredArticleObject, NewDataArray, NewsApiArticleObj,
 } from "../../../../typesAndInterfaces/apiTandI";
-import { isValidString } from "./doesStringInclude";
-import { getDataArrWithImgObjUrl } from "./getDataArrWithImgObjUrl";
 
 export const filterNewsApiJson = async (jsonData: any) => {
     const filteredArray_NoObjSrc: NewDataArray = [];
@@ -24,12 +25,6 @@ export const filterNewsApiJson = async (jsonData: any) => {
 
     const articlesArr: [NewsApiArticleObj] = jsonData.articles;
     const pendingFetches: Promise<Response>[] = [];
-    const authorStringsToCheck = [".com", "@"];
-    const imgStringsToCheck = [
-        "biztoc", "boingboing.net", "cnet.com", "cdn01.dailycaller", 
-        "i.cbc.ca", "ladbible.com", "//time.com", "i0.wp.com"
-    ];
-
 
     for (const articleObj of articlesArr) {
         if (
