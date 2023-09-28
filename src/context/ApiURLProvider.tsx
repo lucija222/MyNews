@@ -2,15 +2,13 @@ import { IsFetchDataContext } from "./IsFetchDataProvider";
 import { newsAPI_Key, nytAPI_Key } from "../util/helpers/constants";
 import { SelectedCategoryContext } from "./SelectedCategoryProvider";
 import { EncodedSearchInputContext } from "./EncodedSearchInputProvider";
-import {
-    ReactNode, createContext, useContext, useEffect, useState,
-} from "react";
+import { ReactNode, createContext, useContext, useEffect, useState, } from "react";
 interface IApiURLContext {
     API_Card_URL: string;
     API_Widget_URL: string;
     isMaxCategoryFetchCalls: boolean;
     isMaxWidgetFetchCalls: boolean;
-    returnMaxFetchNum: () => number;
+    maxFetchNum: () => number;
     changeCardURLparams: () => void;
     changeWidgetURLparams: () => void;
     resetCardURLparams: () => void;
@@ -21,7 +19,7 @@ export const ApiURLContext = createContext<IApiURLContext>({
     API_Widget_URL: `https://api.nytimes.com/svc/news/v3/content/all/all.json?limit=100&offset=0&api-key=${nytAPI_Key}`,
     isMaxCategoryFetchCalls: false,
     isMaxWidgetFetchCalls: false,
-    returnMaxFetchNum: () => 400,
+    maxFetchNum: () => 400,
     changeCardURLparams: () => {},
     changeWidgetURLparams: () => {},
     resetCardURLparams: () => {},
@@ -43,7 +41,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
         `https://api.nytimes.com/svc/news/v3/content/all/all.json?limit=100&offset=${widgetURL_Offset}&api-key=${nytAPI_Key}`
     );
 
-    const returnMaxFetchNum = () => {
+    const maxFetchNum = () => {
         switch (selectedCategory) {
             case "Health":
                 return 200;
@@ -56,7 +54,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const isMaxCategoryFetchCalls = cardURL_Offset === returnMaxFetchNum();
+    const isMaxCategoryFetchCalls = cardURL_Offset === maxFetchNum();
     const isMaxWidgetFetchCalls = widgetURL_Offset === 400;
 
     const resetCardURLparams = () => {
@@ -134,7 +132,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
                 API_Widget_URL,
                 isMaxCategoryFetchCalls,
                 isMaxWidgetFetchCalls,
-                returnMaxFetchNum,
+                maxFetchNum,
                 changeCardURLparams,
                 changeWidgetURLparams,
                 resetCardURLparams,

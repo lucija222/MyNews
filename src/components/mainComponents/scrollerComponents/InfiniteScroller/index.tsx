@@ -32,7 +32,7 @@ InfiniteScrollerProps) => {
         changeWidgetURLparams,
         isMaxCategoryFetchCalls,
         isMaxWidgetFetchCalls,
-        returnMaxFetchNum,
+        maxFetchNum,
     } = useContext(ApiURLContext);
 
     const observerRef = useRef<IntersectionObserver | null>(null);
@@ -66,7 +66,7 @@ InfiniteScrollerProps) => {
     const shouldNumIncrement = slicedDataLength === correctNumOfRenderedCards;
 
     const isAllDataRendered =
-        dataLength > returnMaxFetchNum() &&
+        dataLength > maxFetchNum() &&
         dataLength === slicedDataLength &&
         isMaxFetchCalls;
 

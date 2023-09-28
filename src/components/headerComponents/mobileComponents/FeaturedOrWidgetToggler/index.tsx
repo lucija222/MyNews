@@ -2,6 +2,7 @@ import "./FeaturedOrWidgetToggler.scss";
 import { MouseEventHandler, useContext, useRef } from "react";
 import { FeaturedOrLatestStateContext } from "../../../../context/FeaturedOrLatestTogglerProvider";
 import { IsFetchDataContext } from "../../../../context/IsFetchDataProvider";
+import { SetIsLoadingContext } from "../../../../context/IsLoadingProvider";
 
 const FeaturedOrWidgetToggler = () => {
     const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
@@ -10,6 +11,7 @@ const FeaturedOrWidgetToggler = () => {
     const { setIsFetchCategoryData, setIsFetchWidgetData } =
         useContext(IsFetchDataContext);
     const numOfClicksOnLatest = useRef(0);
+    const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
     const handleFeaturedOrLatestToggle: MouseEventHandler<HTMLButtonElement> = (
         e
@@ -20,6 +22,7 @@ const FeaturedOrWidgetToggler = () => {
 
         if (targetInnerText !== featuredOrLatestState) {
             setFeaturedOrLatestToggler(target.innerText);
+            setIsCategoryLoading(true);
 
             if (targetInnerText === "Featured") {
                 setIsFetchCategoryData(true);

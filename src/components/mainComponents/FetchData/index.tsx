@@ -3,12 +3,12 @@ import ErrorMessage from "../../UIcomponents/ErrorMessage";
 import { ApiURLContext } from "../../../context/ApiURLProvider";
 import InfiniteScroller from "../scrollerComponents/InfiniteScroller";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useState, useRef } from "react";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
+import { IsLoadingContext, SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { filterJsonData } from "../../../util/helpers/functions/filterJSON/filterJsonData";
 import { allowOrDisableScroll } from "../../../util/helpers/functions/allowOrDisableScroll";
 import { replaceOrMergeArticleData } from "../../../util/helpers/functions/replaceOrMergeArticleData";
-import { IsLoadingContext, SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 
 export type ArticleData = {
     url: string;
@@ -33,10 +33,8 @@ const FetchData = ({ cardClass }: CardDataProps) => {
     const { isCategoryLoading, isWidgetLoading } = useContext(IsLoadingContext);
     const {setIsCategoryLoading, setIsWidgetLoading} = useContext(SetIsLoadingContext);
     const {
-        isFetchCategoryData,
-        isFetchWidgetData,
-        setIsFetchCategoryData,
-        setIsFetchWidgetData,
+        isFetchCategoryData, isFetchWidgetData,
+        setIsFetchCategoryData, setIsFetchWidgetData,
     } = useContext(IsFetchDataContext);
 
     const { API_Card_URL, API_Widget_URL } = useContext(ApiURLContext);
@@ -49,24 +47,18 @@ const FetchData = ({ cardClass }: CardDataProps) => {
     const URL = isCategoryCard ? API_Card_URL : API_Widget_URL;
     const isLoading = isCategoryCard ? isCategoryLoading : isWidgetLoading;
     const setIsLoading = isCategoryCard ? setIsCategoryLoading : setIsWidgetLoading;
-    const isFetchData = isCategoryCard
-        ? isFetchCategoryData
-        : isFetchWidgetData;
-    const setIsFetchData = isCategoryCard
-        ? setIsFetchCategoryData
-        : setIsFetchWidgetData;
+    const isFetchData = isCategoryCard ? isFetchCategoryData : isFetchWidgetData;
+    const setIsFetchData = isCategoryCard ? setIsFetchCategoryData: setIsFetchWidgetData;
 
-    const indexRef = useRef(0);
+    const fetchNumRef = useRef(0);
 
     const fetchData = useCallback(
         async (URL: string) => {
             if (!isLoading) {
                 setIsLoading(true);
             }
-
-            indexRef.current = indexRef.current + 1;
-            console.log("Fetch ran", cardClass, indexRef.current);
-
+            fetchNumRef.current = fetchNumRef.current + 1;
+            console.log("Fetch ran", cardClass, fetchNumRef.current);
             try {
                 const response = await fetch(URL);
 
@@ -99,10 +91,12 @@ const FetchData = ({ cardClass }: CardDataProps) => {
             } catch (error) {
                 console.error("Error in fetchData:", cardClass, error);
             } finally {
-                setIsLoading(false);
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 200);  
             }
         },
-        [cardClass, selectedCategory, isThereArticleData]
+        [isLoading, setIsLoading, cardClass, selectedCategory, isThereArticleData]
     );
 
     useEffect(() => {

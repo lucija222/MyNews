@@ -8,9 +8,9 @@ import { ToggleMenuContext } from "../../../context/context";
 import { HamburgerSvg } from "../../../assets/svg/svgImports";
 import { useState, MouseEventHandler, useContext, useEffect } from "react";
 import { ViewportSizesContext } from "../../../context/ViewportSizesProvider";
-import FeaturedOrWidgetToggler from "../mobileComponents/FeaturedOrWidgetToggler";
 import { allowOrDisableScroll } from "../../../util/helpers/functions/allowOrDisableScroll";
 import { FeaturedOrLatestStateContext } from "../../../context/FeaturedOrLatestTogglerProvider";
+import FeaturedOrWidgetToggler from "../mobileComponents/FeaturedOrWidgetToggler";
 
 const Header = () => {
     const [isHamburgerClicked, setIsHamburgerClicked] = useState(false);
@@ -86,7 +86,7 @@ const Header = () => {
                                 </button>
                             )}
                         </div>
-                        {featuredOrLatestState !== "Latest" && <SearchFilter />}
+                        <SearchFilter />
                     </div>
                 )}
 
@@ -101,7 +101,7 @@ const Header = () => {
                         />
                     </ToggleMenuContext.Provider>
                 )}
-
+                
                 {featuredOrLatestState !== "none" && (
                     <FeaturedOrWidgetToggler />
                 )}

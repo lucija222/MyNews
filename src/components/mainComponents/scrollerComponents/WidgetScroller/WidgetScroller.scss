@@ -5,6 +5,10 @@
     @extend %flex-column;
     padding-right: 12px;
     overflow: auto;
+    scrollbar-width: thin;
+    @include height-min-max(300px, 431px);
+    min-height: 300px;
+    height: calc(100vh - 320px);
 
     &::-webkit-scrollbar {
         width: 0;
@@ -21,6 +25,10 @@
 }
 
 @media screen and (min-width: 722px) {
+    .widget-scroller_container{
+        height: auto;
+    }
+    
     .widget-scroller_container::-webkit-scrollbar {
         width: 4px;
     }

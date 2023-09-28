@@ -4,7 +4,8 @@
     @extend %flex-column;
     @extend %positon-relative;
     @include width-min-max(200px, 343px);
-    @include height-min-max(529px, 529px);
+    @include height-min-max(398px, 529px);
+    height: calc(100vh - 222px);
     justify-content: space-between;
     align-self: center;
     flex: 1 1 50%;
@@ -37,6 +38,7 @@
         &::before {
             content: "";
             position: absolute;
+            z-index: 3333;
             top: -1px;
             left: -15px;
             border-top: 1px solid $light-gray;
