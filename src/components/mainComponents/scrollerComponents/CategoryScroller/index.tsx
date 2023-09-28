@@ -89,7 +89,7 @@ const CategoryScroller = ({
 
     return (
         <div className="category-scroller__grid">
-            {!isSmallViewport && !isFavoritesCategory && <WidgetContainer />}
+            {!isSmallViewport && !isFavoriteOrSearchCategory && <WidgetContainer />}
 
             {isFavoritesCategory
                 ? returnCardElems(favoriteArticlesArray)

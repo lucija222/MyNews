@@ -6,7 +6,7 @@
     z-index: 111;
     display: flex;
     justify-content: center;
-    padding: 32px 0 16px;
+    padding: 25px 0 16px;
     background-color: $background;
 
     button {
@@ -15,6 +15,7 @@
         line-height: 20px;
         padding: 10px 17.215px;
         border: none;
+        background: none;
 
         &:hover {   
             cursor: pointer;
@@ -31,7 +32,7 @@
     color: $dark-gray;
 }
 
-.selected-mobile-toggler {
+.toggler-contaier button.selected-mobile-toggler {
     color: $red;
     background: rgba(187, 30, 30, 0.1);
     border-radius: 20px;

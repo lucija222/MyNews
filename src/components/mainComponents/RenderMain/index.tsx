@@ -15,6 +15,7 @@ const RenderMain = ({ isWidget }: NewsCategoryProps) => {
     const { isSmallViewport } = useContext(ViewportSizesContext);
 
     return (
+        <>
         <main className={isSmallViewport ? "main-flex" : "main-grid"}>
             <FavoriteArticlesDataProvider>
                 <ApiURLProvider>
@@ -37,6 +38,7 @@ const RenderMain = ({ isWidget }: NewsCategoryProps) => {
                 </ApiURLProvider>
             </FavoriteArticlesDataProvider>
         </main>
+        </>
     );
 };
 
