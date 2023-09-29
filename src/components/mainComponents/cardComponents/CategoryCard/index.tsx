@@ -89,7 +89,7 @@ const CategoryCard = ({ index, isFavoritesCategory, ...article }: CategoryCardPr
                 <p>
                     {correctCategoryName()}
                 </p>
-                <CardTitle url={url} title={title} />
+                <CardTitle url={url} title={title} isWidgetCard={false}/>
                 <CardByline byline={byline} />
             </div>
             <HeartButton

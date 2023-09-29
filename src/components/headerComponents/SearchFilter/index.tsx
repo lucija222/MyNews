@@ -36,7 +36,7 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
             closeMenu();
         }
 
-        debounceFetch(setIsFetchCategoryData, true);
+        debounceFetch(setIsFetchCategoryData);
         window.scrollTo(0, 0);
     };
 
@@ -74,6 +74,7 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
                 <input
                     type="search"
                     id="search"
+                    aria-label="Input field"
                     placeholder="Search news"
                     autoComplete="off"
                     ref={inputRef}
