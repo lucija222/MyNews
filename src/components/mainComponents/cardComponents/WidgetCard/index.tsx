@@ -11,7 +11,7 @@ const WidgetCard = ({ timestamp, title, url }: WidgetCardProps) => {
     return (
         <>
             <time>{timestamp}</time>
-            <CardTitle url={url} title={title} />
+            <CardTitle url={url} title={title} isWidgetCard={true}/>
         </>
     );
 };

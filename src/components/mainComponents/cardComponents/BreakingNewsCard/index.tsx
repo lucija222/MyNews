@@ -12,7 +12,7 @@ const BreakingNewsCard = ({ title, byline, url }: BreakingNewsCardProps) => {
     return (
         <>
             <h4>BREAKING</h4>
-            <CardTitle url={url} title={title} />
+            <CardTitle url={url} title={title} isWidgetCard={false}/>
             <CardByline byline={byline} />
         </>
     );

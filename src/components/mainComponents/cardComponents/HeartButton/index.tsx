@@ -14,7 +14,7 @@ const HeartButton = ({
         <button
             type="button"
             className="heartBtn"
-            aria-label="Save article"
+            aria-label="Save article to favorites"
             onClick={handleFavoriteBtnClick}
         >
             <svg

@@ -71,7 +71,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
                 return prevNum + 100;
             });
 
-            debounceFetch(setIsFetchCategoryData, false);
+            debounceFetch(setIsFetchCategoryData);
         }
     };
 
@@ -80,7 +80,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
             return prevNum + 100;
         });
 
-        debounceFetch(setIsFetchWidgetData, false);
+        debounceFetch(setIsFetchWidgetData);
     };
 
     useEffect(() => {

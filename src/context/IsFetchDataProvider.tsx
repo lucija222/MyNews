@@ -9,8 +9,7 @@ interface IIsDataFetchedContext {
     setIsFetchCategoryData: Dispatch<SetStateAction<boolean>>;
     setIsFetchWidgetData: Dispatch<SetStateAction<boolean>>;
     debounceFetch: (
-        fetchStateSetter: Dispatch<SetStateAction<boolean>>,
-        isSerachResults: boolean
+        fetchStateSetter: Dispatch<SetStateAction<boolean>>
     ) => void | (() => void);
 }
 
@@ -30,7 +29,6 @@ const IsFetchDataProvider = ({ children }: { children: ReactNode }) => {
     const debounceFetch = useCallback(
         (
             fetchStateSetter: Dispatch<SetStateAction<boolean>>,
-            isSerachResults: boolean
         ) => {
             if (timeoutIdRef.current) {
                 clearTimeout(timeoutIdRef.current);
@@ -39,12 +37,8 @@ const IsFetchDataProvider = ({ children }: { children: ReactNode }) => {
             timeoutIdRef.current = setTimeout(
                 () => {
                     fetchStateSetter(true);
-                },
-                isSerachResults ? 50 : 500
-            );
-        },
-        []
-    );
+                }, 50);
+        }, []);
 
     return (
         <IsFetchDataContext.Provider

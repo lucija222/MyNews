@@ -36,7 +36,7 @@ const Nav = () => {
             return e.currentTarget.id;
         });
 
-        debounceFetch(setIsFetchCategoryData, false);
+        debounceFetch(setIsFetchCategoryData);
         setIsCategoryLoading(true);
         resetCardURLparams(); 
         setNumOfRenderedCategoryCards(16);
