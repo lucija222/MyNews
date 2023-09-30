@@ -62,7 +62,7 @@ const CategoryScroller = ({
                         />
                     </article>
                 );
-            } else if (!isFavoriteOrSearchCategory && dataLength === index) {
+            } else if (!isFavoritesCategory && dataLength === index) {
                 return (
                     <article key={`${index}-${article.title}`} className="category-card">
                         <CategoryCard index={index} isFavoritesCategory={isFavoritesCategory} {...article} />
@@ -89,7 +89,7 @@ const CategoryScroller = ({
 
     return (
         <div className="category-scroller__grid">
-            {!isSmallViewport && !isFavoriteOrSearchCategory && <WidgetContainer />}
+            {!isSmallViewport && !isFavoritesCategory && <WidgetContainer />}
 
             {isFavoritesCategory
                 ? returnCardElems(favoriteArticlesArray)
