@@ -6,7 +6,6 @@ import RenderMain from "./components/mainComponents/RenderMain";
 import { ViewportSizesContext } from "./context/ViewportSizesProvider";
 import SelectedCategoryProvider from "./context/SelectedCategoryProvider";
 import EncodedSearchInputProvider from "./context/EncodedSearchInputProvider";
-import NumOfRenderedCardsProvider from "./context/NumOfRenderedCardsProvider";
 import { FeaturedOrLatestStateContext } from "./context/FeaturedOrLatestTogglerProvider";
 import IsLoadingProvider from "./context/IsLoadingProvider";
 import ApiURLProvider from "./context/ApiURLProvider";
@@ -28,7 +27,6 @@ const App = () => {
     return (
         <SelectedCategoryProvider>
             <EncodedSearchInputProvider>
-                <NumOfRenderedCardsProvider>
                     <IsLoadingProvider>
                         <IsFetchDataProvider>
                             <ApiURLProvider>
@@ -43,7 +41,6 @@ const App = () => {
                             </ApiURLProvider>
                         </IsFetchDataProvider>
                     </IsLoadingProvider>
-                </NumOfRenderedCardsProvider>
             </EncodedSearchInputProvider>
         </SelectedCategoryProvider>
     );
