@@ -9,6 +9,7 @@ import EncodedSearchInputProvider from "./context/EncodedSearchInputProvider";
 import NumOfRenderedCardsProvider from "./context/NumOfRenderedCardsProvider";
 import { FeaturedOrLatestStateContext } from "./context/FeaturedOrLatestTogglerProvider";
 import IsLoadingProvider from "./context/IsLoadingProvider";
+import ApiURLProvider from "./context/ApiURLProvider";
 
 const App = () => {
     const { isSmallViewport } = useContext(ViewportSizesContext);
@@ -30,14 +31,16 @@ const App = () => {
                 <NumOfRenderedCardsProvider>
                     <IsLoadingProvider>
                         <IsFetchDataProvider>
-                            <Header />
-                            {(featuredOrLatestState === "Featured" ||
-                                !isSmallViewport) && (
-                                <RenderMain isWidget={false} />
-                            )}
-                            {featuredOrLatestState === "Latest" && (
-                                <RenderMain isWidget={true} />
-                            )}
+                            <ApiURLProvider>
+                                <Header />
+                                {(featuredOrLatestState === "Featured" ||
+                                    !isSmallViewport) && (
+                                    <RenderMain isWidget={false} />
+                                )}
+                                {featuredOrLatestState === "Latest" && (
+                                    <RenderMain isWidget={true} />
+                                )}
+                            </ApiURLProvider>
                         </IsFetchDataProvider>
                     </IsLoadingProvider>
                 </NumOfRenderedCardsProvider>

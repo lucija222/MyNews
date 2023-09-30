@@ -3,7 +3,7 @@ import ErrorMessage from "../../UIcomponents/ErrorMessage";
 import { ApiURLContext } from "../../../context/ApiURLProvider";
 import InfiniteScroller from "../scrollerComponents/InfiniteScroller";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState, } from "react";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { IsLoadingContext, SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { filterJsonData } from "../../../util/helpers/functions/filterJSON/filterJsonData";
@@ -37,10 +37,9 @@ const FetchData = ({ cardClass }: CardDataProps) => {
         setIsFetchCategoryData, setIsFetchWidgetData
     } = useContext(IsFetchDataContext);
 
-    const { API_Card_URL, API_Widget_URL } = useContext(ApiURLContext);
+    const { API_Card_URL, API_Widget_URL, setTotalSearchResultsNum } = useContext(ApiURLContext);
 
     const isFavoritesCategory = selectedCategory === "Favorites";
-    const isSearchCategory = selectedCategory === "searchResults";
     const isThereArticleData = articleData.length > 0;
     const isCategoryCard = cardClass === "category-card";
 
@@ -52,14 +51,13 @@ const FetchData = ({ cardClass }: CardDataProps) => {
 
     // const fetchNumRef = useRef(0);
 
-
     const fetchData = useCallback(
         async (URL: string) => {
             if (!isLoading) {
                 setIsLoading(true);
             }
             // fetchNumRef.current = fetchNumRef.current + 1;
-            // console.log("Fetch ran", cardClass, fetchNumRef.current, URL);
+            // console.log("Fetch ran", cardClass, fetchNumRef.current);
             try {
                 const response = await fetch(URL);
 
@@ -70,6 +68,10 @@ const FetchData = ({ cardClass }: CardDataProps) => {
                 }
 
                 const jsonData = await response.json();
+
+                if (selectedCategory === "searchResults") {
+                    setTotalSearchResultsNum(jsonData.totalResults);
+                }
 
                 const filteredData = await filterJsonData(
                     jsonData,
@@ -97,7 +99,7 @@ const FetchData = ({ cardClass }: CardDataProps) => {
                 }, 200);  
             }
         },
-        [isLoading, setIsLoading, cardClass, selectedCategory, isThereArticleData]
+        [isLoading, setIsLoading, cardClass, selectedCategory, isThereArticleData, setTotalSearchResultsNum]
     );
 
     useEffect(() => {
@@ -110,12 +112,11 @@ const FetchData = ({ cardClass }: CardDataProps) => {
             fetchData(URL);
         }
     }, [
-        isFavoritesCategory,
-        fetchData,
-        isThereArticleData,
         URL,
         isFetchData,
+        isThereArticleData,
         setIsFetchData,
+        fetchData,
     ]);
 
     return (
@@ -127,7 +128,6 @@ const FetchData = ({ cardClass }: CardDataProps) => {
                     isCategoryCard={isCategoryCard}
                     isLoading={isLoading}
                     isFavoritesCategory={isFavoritesCategory}
-                    isSearchCategory={isSearchCategory}
                     articleData={articleData}
                 />
             )}

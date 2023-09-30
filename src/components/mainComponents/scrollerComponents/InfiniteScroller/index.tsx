@@ -8,18 +8,16 @@ interface InfiniteScrollerProps {
     isCategoryCard: boolean;
     isLoading: boolean;
     isFavoritesCategory: boolean;
-    isSearchCategory: boolean;
     articleData: ArticleData;
 }
 
 const InfiniteScroller = ({
-    isCategoryCard, isLoading, isFavoritesCategory, isSearchCategory, articleData,
+    isCategoryCard, isLoading, isFavoritesCategory, articleData,
 }: InfiniteScrollerProps) => {
     const {
         numOfRenderedCategoryCards, setNumOfRenderedCategoryCards,
         numOfRenderedWidgetCards, setNumOfRenderedWidgetCards,
     } = useContext(NumOfRenderedCardsContext);
-
     const {
         changeCardURLparams, changeWidgetURLparams,
         isMaxCategoryFetchCalls, isMaxWidgetFetchCalls, maxFetchNum,
@@ -78,7 +76,7 @@ const InfiniteScroller = ({
                     });
                     return;
 
-                } else if (isThereMoreData && isDataLessThan18 && isMaxFetchCalls) {
+                } else if (isThereMoreData && isDataLessThan18 && isMaxFetchCalls) {              
                     setCorrectNumOfRenderedCards((prevIndex) => {
                         return prevIndex + remainingDataLength;
                     });
@@ -102,15 +100,16 @@ const InfiniteScroller = ({
             threshold: 0.5,
         });
 
-        const observerConst = observerRef.current;
+        const observer = observerRef.current;
+        const observerElem = observerElemRef.current;
 
-        if (observerElemRef.current && observerConst && !isAllDataRendered) {  
-            observerConst.observe(observerElemRef.current);
+        if (observerElem && observer && !isAllDataRendered) {  
+            observer.observe(observerElem);
         }
 
         return () => {
-            if (observerConst) {
-                observerConst.disconnect();
+            if (observer) {
+                observer.disconnect();
             }
         };
     }, [observerCallback, isAllDataRendered]);
@@ -120,7 +119,7 @@ const InfiniteScroller = ({
             <RenderScroller
                 isCategoryCard={isCategoryCard}
                 isFavoritesCategory={isFavoritesCategory}
-                articleData={isSearchCategory ? articleData : slicedArticleData}
+                articleData={slicedArticleData}
                 observerElemRef={observerElemRef}
             />
         </>

@@ -3,7 +3,6 @@ import { useContext } from "react";
 import FetchData from "../FetchData";
 import Nav from "../../headerComponents/Nav";
 import WidgetContainer from "../WidgetContainer";
-import ApiURLProvider from "../../../context/ApiURLProvider";
 import { ViewportSizesContext } from "../../../context/ViewportSizesProvider";
 import FavoriteArticlesDataProvider from "../../../context/FavoriteArticlesDataProvider";
 
@@ -18,8 +17,6 @@ const RenderMain = ({ isWidget }: NewsCategoryProps) => {
         <>
         <main className={isSmallViewport ? "main-flex" : "main-grid"}>
             <FavoriteArticlesDataProvider>
-                <ApiURLProvider>
-
                     {!isSmallViewport && (
                         <>
                             <div className="main-grid__nav">
@@ -34,8 +31,6 @@ const RenderMain = ({ isWidget }: NewsCategoryProps) => {
                     ) : (
                         <FetchData cardClass="category-card" />
                     )}
-
-                </ApiURLProvider>
             </FavoriteArticlesDataProvider>
         </main>
         </>

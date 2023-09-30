@@ -2,7 +2,15 @@ import { IsFetchDataContext } from "./IsFetchDataProvider";
 import { newsAPI_Key, nytAPI_Key } from "../util/helpers/constants";
 import { SelectedCategoryContext } from "./SelectedCategoryProvider";
 import { EncodedSearchInputContext } from "./EncodedSearchInputProvider";
-import { ReactNode, createContext, useContext, useEffect, useState, } from "react";
+import {
+    Dispatch,
+    SetStateAction,
+    ReactNode,
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
 interface IApiURLContext {
     API_Card_URL: string;
     API_Widget_URL: string;
@@ -11,6 +19,7 @@ interface IApiURLContext {
     maxFetchNum: () => number;
     changeCardURLparams: () => void;
     changeWidgetURLparams: () => void;
+    setTotalSearchResultsNum: Dispatch<SetStateAction<number>>;
     resetCardURLparams: () => void;
 }
 
@@ -22,6 +31,7 @@ export const ApiURLContext = createContext<IApiURLContext>({
     maxFetchNum: () => 400,
     changeCardURLparams: () => {},
     changeWidgetURLparams: () => {},
+    setTotalSearchResultsNum: () => {},
     resetCardURLparams: () => {},
 });
 
@@ -41,6 +51,10 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
         `https://api.nytimes.com/svc/news/v3/content/all/all.json?limit=100&offset=${widgetURL_Offset}&api-key=${nytAPI_Key}`
     );
 
+    const [searchURL_pageNum, setSearchURL_pageNum] = useState(1);
+    const [totalSearchResultsNum, setTotalSearchResultsNum] = useState(0);
+    const isSearchResults = selectedCategory === "searchResults";
+
     const maxFetchNum = () => {
         switch (selectedCategory) {
             case "Health":
@@ -48,6 +62,9 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
 
             case "Technology":
                 return 300;
+
+            case "searchResults":
+                return Math.floor(totalSearchResultsNum / 100);
 
             default:
                 return 400;
@@ -59,20 +76,25 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
 
     const resetCardURLparams = () => {
         setCardURL_Offset(0);
+        setSearchURL_pageNum(1);
     };
 
     const changeCardURLparams = () => {
         if (
             selectedCategory !== "Favorites" &&
-            selectedCategory !== "searchResults"
+            !isSearchResults
         ) {
-            
             setCardURL_Offset((prevNum) => {
                 return prevNum + 100;
             });
 
-            debounceFetch(setIsFetchCategoryData);
+        } else if (isSearchResults) {
+            setSearchURL_pageNum((prevNum) => {
+                return prevNum + 1;
+            });
         }
+
+        debounceFetch(setIsFetchCategoryData);
     };
 
     const changeWidgetURLparams = () => {
@@ -99,7 +121,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
 
             case "searchResults":
                 setAPI_Card_URL(
-                    `https://newsapi.org/v2/everything?q=${encodedSearchInput}&searchIn=title&language=en&page=1&apiKey=${newsAPI_Key}`
+                    `https://newsapi.org/v2/everything?q=${encodedSearchInput}&searchIn=title&language=en&page=${searchURL_pageNum}&apiKey=${newsAPI_Key}`
                 );
                 return;
 
@@ -113,7 +135,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
                 );
                 return;
         }
-    }, [selectedCategory, cardURL_Offset, encodedSearchInput]);
+    }, [selectedCategory, cardURL_Offset, encodedSearchInput, searchURL_pageNum]);
 
     useEffect(() => {
         setAPI_Widget_URL(
@@ -131,6 +153,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
                 maxFetchNum,
                 changeCardURLparams,
                 changeWidgetURLparams,
+                setTotalSearchResultsNum,
                 resetCardURLparams,
             }}
         >
