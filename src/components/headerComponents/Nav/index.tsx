@@ -5,7 +5,6 @@ import { ApiURLContext } from "../../../context/ApiURLProvider";
 import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
-import { NumOfRenderedCardsContext } from "../../../context/NumOfRenderedCardsProvider";
 import { FeaturedOrLatestStateContext } from "../../../context/FeaturedOrLatestTogglerProvider";
 import {
     HomeSvg, GeneralSvg, BusinessSvg, HealthSvg, 
@@ -19,9 +18,6 @@ const Nav = () => {
         useContext(ToggleMenuContext);
     const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestStateContext
-    );
-    const { setNumOfRenderedCategoryCards, setNumOfRenderedWidgetCards } = useContext(
-        NumOfRenderedCardsContext
     );
     const { setIsFetchCategoryData, debounceFetch } = useContext(IsFetchDataContext);
     const { resetCardURLparams } = useContext(ApiURLContext);
@@ -39,8 +35,6 @@ const Nav = () => {
         debounceFetch(setIsFetchCategoryData);
         setIsCategoryLoading(true);
         resetCardURLparams(); 
-        setNumOfRenderedCategoryCards(16);
-        setNumOfRenderedWidgetCards(16);
 
         if (featuredOrLatestState === "Latest") {
             setFeaturedOrLatestToggler("Featured");

@@ -2,7 +2,7 @@ import RenderScroller from "../RenderScroller";
 import { ArticleData } from "../../FetchData";
 import { useRef, useEffect, useContext, useCallback } from "react";
 import { ApiURLContext } from "../../../../context/ApiURLProvider";
-import { NumOfRenderedCardsContext } from "../../../../context/NumOfRenderedCardsProvider";
+import { SetIsLoadingContext } from "../../../../context/IsLoadingProvider";
 
 interface InfiniteScrollerProps {
     isCategoryCard: boolean;
@@ -15,83 +15,33 @@ const InfiniteScroller = ({
     isCategoryCard, isLoading, isFavoritesCategory, articleData,
 }: InfiniteScrollerProps) => {
     const {
-        numOfRenderedCategoryCards, setNumOfRenderedCategoryCards,
-        numOfRenderedWidgetCards, setNumOfRenderedWidgetCards,
-    } = useContext(NumOfRenderedCardsContext);
-    const {
         changeCardURLparams, changeWidgetURLparams,
-        isMaxCategoryFetchCalls, isMaxWidgetFetchCalls, maxFetchNum,
+        isMaxCategoryFetchCalls, isMaxWidgetFetchCalls
     } = useContext(ApiURLContext);
+    const { setIsCategoryLoading, setIsWidgetLoading } =
+    useContext(SetIsLoadingContext);
 
     const observerRef = useRef<IntersectionObserver | null>(null);
     const observerElemRef = useRef<HTMLDivElement | null>(null);
 
-    const correctNumOfRenderedCards = isCategoryCard
-        ? numOfRenderedCategoryCards
-        : numOfRenderedWidgetCards;
-    const setCorrectNumOfRenderedCards = isCategoryCard
-        ? setNumOfRenderedCategoryCards
-        : setNumOfRenderedWidgetCards;
-    const changeURLparams = isCategoryCard 
-        ? changeCardURLparams 
+    const changeURLparams = isCategoryCard
+        ? changeCardURLparams
         : changeWidgetURLparams;
-    const isMaxFetchCalls = isCategoryCard 
-        ? isMaxCategoryFetchCalls 
+    const isMaxFetchCalls = isCategoryCard
+        ? isMaxCategoryFetchCalls
         : isMaxWidgetFetchCalls;
-
-    const slicedArticleData = articleData.slice(0, correctNumOfRenderedCards);
-    const dataLength = articleData.length;
-    const slicedDataLength = slicedArticleData.length;
-
-    const remainingDataLength = dataLength - slicedDataLength;
-    const isThereMoreData = remainingDataLength > 0;
-    const isAwaitingFetch = dataLength < correctNumOfRenderedCards;
-
-    const isDataLessThan18 = remainingDataLength < 18;
-    const shouldNumIncrement = slicedDataLength === correctNumOfRenderedCards;
-
-    const isAllDataRendered =
-        dataLength > maxFetchNum() &&
-        dataLength === slicedDataLength &&
-        isMaxFetchCalls;
+    const setIsLoading = isCategoryCard
+        ? setIsCategoryLoading
+        : setIsWidgetLoading;
 
     const observerCallback = useCallback(
         ([entry]: IntersectionObserverEntry[]) => {
-
-            if (entry.isIntersecting && !isLoading && !isAwaitingFetch) {
-
-                if (isThereMoreData && !isDataLessThan18 && shouldNumIncrement) {
-                    setCorrectNumOfRenderedCards((prevIndex) => {
-                        return prevIndex + 18;
-                    });
-                    return;
-
-                } else if (
-                    !isMaxFetchCalls &&
-                    ((isThereMoreData && isDataLessThan18) || !isThereMoreData)
-                ) {
-                    changeURLparams();
-                    setCorrectNumOfRenderedCards((prevIndex) => {
-                        return prevIndex + 18;
-                    });
-                    return;
-
-                } else if (isThereMoreData && isDataLessThan18 && isMaxFetchCalls) {              
-                    setCorrectNumOfRenderedCards((prevIndex) => {
-                        return prevIndex + remainingDataLength;
-                    });
-
-                    return;
-                }
+            if (entry.isIntersecting && !isLoading && !isMaxFetchCalls) {
+                setIsLoading(true);
+                changeURLparams();
             }
         },
-        [
-            isLoading, isAwaitingFetch,
-            isThereMoreData, isDataLessThan18,
-            remainingDataLength, isMaxFetchCalls,
-            shouldNumIncrement, changeURLparams,
-            setCorrectNumOfRenderedCards,
-        ]
+        [isLoading, isMaxFetchCalls, setIsLoading, changeURLparams]
     );
 
     useEffect(() => {
@@ -103,7 +53,7 @@ const InfiniteScroller = ({
         const observer = observerRef.current;
         const observerElem = observerElemRef.current;
 
-        if (observerElem && observer && !isAllDataRendered) {  
+        if (observerElem && observer && !isMaxFetchCalls) {
             observer.observe(observerElem);
         }
 
@@ -112,14 +62,14 @@ const InfiniteScroller = ({
                 observer.disconnect();
             }
         };
-    }, [observerCallback, isAllDataRendered]);
+    }, [observerCallback, isMaxFetchCalls]);
 
     return (
         <>
             <RenderScroller
                 isCategoryCard={isCategoryCard}
                 isFavoritesCategory={isFavoritesCategory}
-                articleData={slicedArticleData}
+                articleData={articleData}
                 observerElemRef={observerElemRef}
             />
         </>

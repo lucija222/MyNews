@@ -2,8 +2,8 @@ import Loader from "../../UIcomponents/Loader";
 import ErrorMessage from "../../UIcomponents/ErrorMessage";
 import { ApiURLContext } from "../../../context/ApiURLProvider";
 import InfiniteScroller from "../scrollerComponents/InfiniteScroller";
-import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { useCallback, useContext, useEffect, useState, } from "react";
+import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { IsLoadingContext, SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { filterJsonData } from "../../../util/helpers/functions/filterJSON/filterJsonData";
@@ -48,7 +48,6 @@ const FetchData = ({ cardClass }: CardDataProps) => {
     const setIsLoading = isCategoryCard ? setIsCategoryLoading : setIsWidgetLoading;
     const isFetchData = isCategoryCard ? isFetchCategoryData : isFetchWidgetData;
     const setIsFetchData = isCategoryCard ? setIsFetchCategoryData: setIsFetchWidgetData;
-
     // const fetchNumRef = useRef(0);
 
     const fetchData = useCallback(
@@ -69,8 +68,8 @@ const FetchData = ({ cardClass }: CardDataProps) => {
 
                 const jsonData = await response.json();
 
-                if (selectedCategory === "searchResults") {
-                    setTotalSearchResultsNum(jsonData.totalResults);
+                if (selectedCategory === "searchResults" && URL.includes("page=1&")) {
+                    setTotalSearchResultsNum(Math.floor(jsonData.totalResults / 100));
                 }
 
                 const filteredData = await filterJsonData(
@@ -93,6 +92,7 @@ const FetchData = ({ cardClass }: CardDataProps) => {
                 }
             } catch (error) {
                 console.error("Error in fetchData:", cardClass, error);
+
             } finally {
                 setTimeout(() => {
                     setIsLoading(false);

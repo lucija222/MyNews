@@ -3,13 +3,7 @@ import { newsAPI_Key, nytAPI_Key } from "../util/helpers/constants";
 import { SelectedCategoryContext } from "./SelectedCategoryProvider";
 import { EncodedSearchInputContext } from "./EncodedSearchInputProvider";
 import {
-    Dispatch,
-    SetStateAction,
-    ReactNode,
-    createContext,
-    useContext,
-    useEffect,
-    useState,
+    Dispatch, SetStateAction, ReactNode, createContext, useContext, useEffect, useState,
 } from "react";
 interface IApiURLContext {
     API_Card_URL: string;
@@ -64,7 +58,7 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
                 return 300;
 
             case "searchResults":
-                return Math.floor(totalSearchResultsNum / 100);
+                return totalSearchResultsNum;
 
             default:
                 return 400;
