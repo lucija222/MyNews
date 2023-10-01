@@ -1,8 +1,9 @@
-import RenderScroller from "../RenderScroller";
 import { ArticleData } from "../../FetchData";
+import RenderScroller from "../RenderScroller";
 import { useRef, useEffect, useContext, useCallback } from "react";
-import { ApiURLContext } from "../../../../context/ApiURLProvider";
 import { SetIsLoadingContext } from "../../../../context/IsLoadingProvider";
+import { WidgetUrlContext } from "../../../../context/urlContexts/WidgetUrlProvider";
+import { CategoryUrlContext } from "../../../../context/urlContexts/CategoryUrlProvider";
 
 interface InfiniteScrollerProps {
     isCategoryCard: boolean;
@@ -14,12 +15,9 @@ interface InfiniteScrollerProps {
 const InfiniteScroller = ({
     isCategoryCard, isLoading, isFavoritesCategory, articleData,
 }: InfiniteScrollerProps) => {
-    const {
-        changeCardURLparams, changeWidgetURLparams,
-        isMaxCategoryFetchCalls, isMaxWidgetFetchCalls
-    } = useContext(ApiURLContext);
-    const { setIsCategoryLoading, setIsWidgetLoading } =
-    useContext(SetIsLoadingContext);
+    const { changeCardURLparams, isMaxCategoryFetchCalls } = useContext(CategoryUrlContext);
+    const { changeWidgetURLparams, isMaxWidgetFetchCalls } = useContext(WidgetUrlContext);
+    const { setIsCategoryLoading, setIsWidgetLoading } = useContext(SetIsLoadingContext);
 
     const observerRef = useRef<IntersectionObserver | null>(null);
     const observerElemRef = useRef<HTMLDivElement | null>(null);

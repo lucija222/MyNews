@@ -1,14 +1,10 @@
 import "./App.scss";
 import { useEffect, useContext } from "react";
+import ContextProviders from "./context/ContextProviders";
 import Header from "./components/headerComponents/Header";
-import IsFetchDataProvider from "./context/IsFetchDataProvider";
 import RenderMain from "./components/mainComponents/RenderMain";
 import { ViewportSizesContext } from "./context/ViewportSizesProvider";
-import SelectedCategoryProvider from "./context/SelectedCategoryProvider";
-import EncodedSearchInputProvider from "./context/EncodedSearchInputProvider";
 import { FeaturedOrLatestStateContext } from "./context/FeaturedOrLatestTogglerProvider";
-import IsLoadingProvider from "./context/IsLoadingProvider";
-import ApiURLProvider from "./context/ApiURLProvider";
 
 const App = () => {
     const { isSmallViewport } = useContext(ViewportSizesContext);
@@ -25,24 +21,15 @@ const App = () => {
     }, [isSmallViewport, setFeaturedOrLatestToggler]);
 
     return (
-        <SelectedCategoryProvider>
-            <EncodedSearchInputProvider>
-                    <IsLoadingProvider>
-                        <IsFetchDataProvider>
-                            <ApiURLProvider>
-                                <Header />
-                                {(featuredOrLatestState === "Featured" ||
-                                    !isSmallViewport) && (
-                                    <RenderMain isWidget={false} />
-                                )}
-                                {featuredOrLatestState === "Latest" && (
-                                    <RenderMain isWidget={true} />
-                                )}
-                            </ApiURLProvider>
-                        </IsFetchDataProvider>
-                    </IsLoadingProvider>
-            </EncodedSearchInputProvider>
-        </SelectedCategoryProvider>
+        <ContextProviders>
+            <Header />
+            {(featuredOrLatestState === "Featured" || !isSmallViewport) && (
+                <RenderMain isWidget={false} />
+            )}
+            {featuredOrLatestState === "Latest" && (
+                <RenderMain isWidget={true} />
+            )}
+        </ContextProviders>
     );
 };
 

@@ -1,6 +1,6 @@
 import "./SearchFilter.scss";
 import { SearchSvg } from "../../../assets/svg/svgImports";
-import { ApiURLContext } from "../../../context/ApiURLProvider";
+import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { FormEventHandler, useContext, useState, useRef, useEffect } from "react"; 
@@ -17,7 +17,7 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
 
     const { setEncodedSearchInput } = useContext(EncodedSearchInputContext);
     const { setSelectedCategory } = useContext(SelectedCategoryContext);
-    const { resetCardURLparams } = useContext(ApiURLContext);
+    const { resetCardURLparams } = useContext(CategoryUrlContext);
     const { setIsFetchCategoryData, debounceFetch } = useContext(IsFetchDataContext);
     const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
