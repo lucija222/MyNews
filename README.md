@@ -4,12 +4,12 @@
 ## Important notes
 ### APIs
 - **News API** used for search results is only free during development, meaning it only works with requests coming from "localhost:port". If you access the app on mobile, using the IP address of the PC running it in your local network combined with the port, an attempt to search the news through input will respectively throw an error. <br />
-- **NYT API** only allows 5 requests per minute, if you exceed the limit, an error will be thrown. In such a case, wait a couple of seconds before reloading the app. I haven't created a condition to omit this behaviour  for reasons I'll gladly explain given another interview :)     
+- **NYT API** only allows 5 requests per minute, if you exceed the limit, an error will be thrown. In such a case, wait a couple of seconds before reloading the app. I haven't created a condition to omit this behaviour  for reasons I'll gladly explain given another interview :&#x29; <br />     
 
 ### Testing
-- **Cross-browser testing:** Google Chrome, Mozilla Firefox, MS Edge and Opera <br />
-- **OS testing:** Windows and Android <br />
-- Safari hasn't been tested as I don't own a Mac nor iOS, but I might set up a virtual machine for testing in the upcoming days :) <br />
+- **Cross-browser testing:** Google Chrome, Mozilla Firefox, MS Edge, Opera and Safari <br />
+- **OS testing:** Windows, Android, Mac and iOS <br />
+- Safari hasn't been tested as I don't own a Mac nor iOS, but I might set up a virtual machine for testing in the upcoming days :&#x29; <br />
 - **Screen readers testing:** NVDA and Windows Narrator with both Google Chrome and Mozilla Firefox <br />
 
 ### Accessibility
@@ -40,4 +40,4 @@
     - A dropdown menu to select one of the five most used desktop browsers. The default is set to Chrome as it's currently the most popular one <br />
     - An ordered list of instructions on how to set MyNews as the homepage respective to the chosen browser   <br />
     - A link to the section of the selected browser's support page in case users encounter any issues <br />
-- All of these have been styled using colors which match the rest of the page, and I think their layout does too :)    
+- All of these have been styled using colors which match the rest of the page, and I think their layout does too :&#x29;  

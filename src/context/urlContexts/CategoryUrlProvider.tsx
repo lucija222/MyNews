@@ -1,48 +1,37 @@
-import { IsFetchDataContext } from "./IsFetchDataProvider";
-import { newsAPI_Key, nytAPI_Key } from "../util/helpers/constants";
-import { SelectedCategoryContext } from "./SelectedCategoryProvider";
-import { EncodedSearchInputContext } from "./EncodedSearchInputProvider";
+import { IsFetchDataContext } from "../IsFetchDataProvider";
+import { newsAPI_Key, nytAPI_Key } from "../../util/helpers/constants";
+import { SelectedCategoryContext } from "../SelectedCategoryProvider";
+import { EncodedSearchInputContext } from "../EncodedSearchInputProvider";
 import {
     Dispatch, SetStateAction, ReactNode, createContext, useContext, useEffect, useState,
 } from "react";
-interface IApiURLContext {
+interface ICategoryUrlContext {
     API_Card_URL: string;
-    API_Widget_URL: string;
     isMaxCategoryFetchCalls: boolean;
-    isMaxWidgetFetchCalls: boolean;
     maxFetchNum: () => number;
     changeCardURLparams: () => void;
-    changeWidgetURLparams: () => void;
     setTotalSearchResultsNum: Dispatch<SetStateAction<number>>;
     resetCardURLparams: () => void;
 }
 
-export const ApiURLContext = createContext<IApiURLContext>({
+export const CategoryUrlContext = createContext<ICategoryUrlContext>({
     API_Card_URL: `https://api.nytimes.com/svc/news/v3/content/nyt/homepage.json?limit=100&offset=0&api-key=${nytAPI_Key}`,
-    API_Widget_URL: `https://api.nytimes.com/svc/news/v3/content/all/all.json?limit=100&offset=0&api-key=${nytAPI_Key}`,
     isMaxCategoryFetchCalls: false,
-    isMaxWidgetFetchCalls: false,
     maxFetchNum: () => 400,
     changeCardURLparams: () => {},
-    changeWidgetURLparams: () => {},
     setTotalSearchResultsNum: () => {},
     resetCardURLparams: () => {},
 });
 
-const ApiURLProvider = ({ children }: { children: ReactNode }) => {
+const CategoryUrlProvider = ({ children }: { children: ReactNode }) => {
     const { selectedCategory } = useContext(SelectedCategoryContext);
     const { encodedSearchInput } = useContext(EncodedSearchInputContext);
-    const { setIsFetchCategoryData, setIsFetchWidgetData, debounceFetch } =
+    const { setIsFetchCategoryData, debounceFetch } =
         useContext(IsFetchDataContext);
 
     const [cardURL_Offset, setCardURL_Offset] = useState(0);
     const [API_Card_URL, setAPI_Card_URL] = useState(
         `https://api.nytimes.com/svc/news/v3/content/nyt/homepage.json?limit=100&offset=${cardURL_Offset}&api-key=${nytAPI_Key}`
-    );
-
-    const [widgetURL_Offset, setWidgetURL_Offset] = useState(0);
-    const [API_Widget_URL, setAPI_Widget_URL] = useState(
-        `https://api.nytimes.com/svc/news/v3/content/all/all.json?limit=100&offset=${widgetURL_Offset}&api-key=${nytAPI_Key}`
     );
 
     const [searchURL_pageNum, setSearchURL_pageNum] = useState(1);
@@ -66,7 +55,6 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const isMaxCategoryFetchCalls = cardURL_Offset === maxFetchNum();
-    const isMaxWidgetFetchCalls = widgetURL_Offset === 400;
 
     const resetCardURLparams = () => {
         setCardURL_Offset(0);
@@ -89,14 +77,6 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
         }
 
         debounceFetch(setIsFetchCategoryData);
-    };
-
-    const changeWidgetURLparams = () => {
-        setWidgetURL_Offset((prevNum) => {
-            return prevNum + 100;
-        });
-
-        debounceFetch(setIsFetchWidgetData);
     };
 
     useEffect(() => {
@@ -131,29 +111,20 @@ const ApiURLProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [selectedCategory, cardURL_Offset, encodedSearchInput, searchURL_pageNum]);
 
-    useEffect(() => {
-        setAPI_Widget_URL(
-            `https://api.nytimes.com/svc/news/v3/content/all/all.json?limit=100&offset=${widgetURL_Offset}&api-key=${nytAPI_Key}`
-        );
-    }, [widgetURL_Offset]);
-
     return (
-        <ApiURLContext.Provider
+        <CategoryUrlContext.Provider
             value={{
                 API_Card_URL,
-                API_Widget_URL,
                 isMaxCategoryFetchCalls,
-                isMaxWidgetFetchCalls,
                 maxFetchNum,
                 changeCardURLparams,
-                changeWidgetURLparams,
                 setTotalSearchResultsNum,
                 resetCardURLparams,
             }}
         >
             {children}
-        </ApiURLContext.Provider>
+        </CategoryUrlContext.Provider>
     );
 };
 
-export default ApiURLProvider;
+export default CategoryUrlProvider;

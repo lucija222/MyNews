@@ -1,6 +1,6 @@
 import Loader from "../../UIcomponents/Loader";
 import ErrorMessage from "../../UIcomponents/ErrorMessage";
-import { ApiURLContext } from "../../../context/ApiURLProvider";
+import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 import InfiniteScroller from "../scrollerComponents/InfiniteScroller";
 import { useCallback, useContext, useEffect, useState, } from "react";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
@@ -9,6 +9,7 @@ import { IsLoadingContext, SetIsLoadingContext } from "../../../context/IsLoadin
 import { filterJsonData } from "../../../util/helpers/functions/filterJSON/filterJsonData";
 import { allowOrDisableScroll } from "../../../util/helpers/functions/allowOrDisableScroll";
 import { replaceOrMergeArticleData } from "../../../util/helpers/functions/replaceOrMergeArticleData";
+import { WidgetUrlContext } from "../../../context/urlContexts/WidgetUrlProvider";
 
 export type ArticleData = {
     url: string;
@@ -37,7 +38,8 @@ const FetchData = ({ cardClass }: CardDataProps) => {
         setIsFetchCategoryData, setIsFetchWidgetData
     } = useContext(IsFetchDataContext);
 
-    const { API_Card_URL, API_Widget_URL, setTotalSearchResultsNum } = useContext(ApiURLContext);
+    const { API_Card_URL, setTotalSearchResultsNum } = useContext(CategoryUrlContext);
+    const { API_Widget_URL } = useContext(WidgetUrlContext);
 
     const isFavoritesCategory = selectedCategory === "Favorites";
     const isThereArticleData = articleData.length > 0;

@@ -19,8 +19,9 @@ export const filterNytNewswireApiJson = async (
         const isValidMultimediaArray =
             Array.isArray(articleObj.multimedia) &&
             articleObj.multimedia.length > 0;
+        const validTitleAndByline = articleObj.title && articleObj.byline;
 
-        if (isValidMultimediaArray && articleObj.byline && isValidSection) {
+        if (isValidMultimediaArray && validTitleAndByline && isValidSection) {
             const correctMultimediaObject: NytMultimediaObj | undefined =
                 articleObj.multimedia.find((multimediaObject) => {
                     if (multimediaObject.width === 440) {
