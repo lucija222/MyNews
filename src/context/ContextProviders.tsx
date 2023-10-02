@@ -5,9 +5,6 @@ import IsLoadingProvider from "./IsLoadingProvider";
 import SelectedCategoryProvider from "./SelectedCategoryProvider";
 import UrlProviders from "./urlContexts/UrlProviders";
 
-
-
-
 const ContextProviders = ({ children }: { children: ReactNode }) => {
     return (
         <SelectedCategoryProvider>
