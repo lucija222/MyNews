@@ -1,6 +1,5 @@
 import "./SearchFilter.scss";
 import { SearchSvg } from "../../../assets/svg/svgImports";
-
 import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { FormEventHandler, useContext, useState, useRef, useEffect } from "react"; 
@@ -15,6 +14,8 @@ interface SearchFilterProps {
 
 const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
     const [localSearchInput, setLocalSearchInput] = useState("");
+    const placeholders = ["Search news", "Please enter a term to search"];
+    const inputRef = useRef<null | HTMLInputElement>(null);
 
     const { setEncodedSearchInput } = useContext(EncodedSearchInputContext);
     const { setSelectedCategory } = useContext(SelectedCategoryContext);
@@ -22,23 +23,34 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
     const { setIsFetchCategoryData, debounceFetch } = useContext(IsFetchDataContext);
     const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
-    const inputRef = useRef<null | HTMLInputElement>(null);
-
     const handleFormSubmit: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        setIsCategoryLoading(true);
-        setEncodedSearchInput(encodeURIComponent(localSearchInput));
-        resetCardURLparams();
-        setLocalSearchInput("");
-        setSelectedCategory("searchResults");
-        
-        if (isMenuOpen && closeMenu) {
-            closeMenu();
-        }
+        const inputCurrent = inputRef.current;
 
-        debounceFetch(setIsFetchCategoryData);
-        window.scrollTo(0, 0);
+        if (!localSearchInput && inputCurrent?.placeholder === placeholders[0]) {
+            inputCurrent.placeholder = placeholders[1];
+            inputCurrent.classList.replace("placeholder_0", "placeholder_1");
+
+        } else if (localSearchInput) {
+            if (inputCurrent?.placeholder === placeholders[1]) {
+                inputCurrent.placeholder = placeholders[0];
+                inputCurrent.classList.replace("placeholder_1", "placeholder_0");
+            }
+
+            setIsCategoryLoading(true);
+            setEncodedSearchInput(encodeURIComponent(localSearchInput));
+            resetCardURLparams();
+            setLocalSearchInput("");
+            setSelectedCategory("searchResults");
+        
+            if (isMenuOpen && closeMenu) {
+            closeMenu();
+            }
+
+            debounceFetch(setIsFetchCategoryData);
+            window.scrollTo(0, 0);
+        }
     };
 
     const handleClosingMobileKeyboardOnEnter = (
@@ -76,10 +88,11 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
                     type="search"
                     id="search"
                     aria-label="Input field"
-                    placeholder="Search news"
+                    placeholder={placeholders[0]}
                     autoComplete="off"
                     ref={inputRef}
                     value={localSearchInput}
+                    className="placeholder_0"
                     onChange={(e) => {
                         setLocalSearchInput(e.target.value);
                     }}
