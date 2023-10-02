@@ -4,6 +4,7 @@ import CategoryUrlProvider from "./CategoryUrlProvider";
 import WidgetUrlProvider from "./WidgetUrlProvider";
 
 
+
 const UrlProviders = ({ children }: { children: ReactNode }) => {
     return (
         <>
