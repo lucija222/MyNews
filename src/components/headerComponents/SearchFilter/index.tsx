@@ -1,11 +1,12 @@
 import "./SearchFilter.scss";
 import { SearchSvg } from "../../../assets/svg/svgImports";
-import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
+
 import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { FormEventHandler, useContext, useState, useRef, useEffect } from "react"; 
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { EncodedSearchInputContext } from "../../../context/EncodedSearchInputProvider";
+import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 
 interface SearchFilterProps {
     isMenuOpen?: boolean,
