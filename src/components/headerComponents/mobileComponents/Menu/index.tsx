@@ -1,25 +1,25 @@
 import "./Menu.scss";
 import Nav from "../../Nav";
-import { MouseEvent } from "react";
+import { Dispatch, SetStateAction, MouseEvent } from "react";
 import MainHeading from "../../MainHeading";
 import SearchFilter from "../../SearchFilter";
 import { XSvg } from "../../../../assets/svg/svgImports";
 
 interface MenuProps {
     isMenuOpen: boolean;
-    closeMenu: () => void;
-    handleClosingMenu: (e: MouseEvent<HTMLButtonElement>) => void;
+    setIsMenuOpen: Dispatch<SetStateAction<boolean>>
+    handleMenuToggle: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Menu = ({ isMenuOpen, closeMenu, handleClosingMenu }: MenuProps) => {
+const Menu = ({ isMenuOpen, setIsMenuOpen, handleMenuToggle }: MenuProps) => {
     return (
         <div className="menu-container">
-            <button aria-label="Close menu" onClick={handleClosingMenu}>
+            <button aria-label="Close menu" onClick={handleMenuToggle}>
                 <XSvg />
             </button>
             <MainHeading />
-            <SearchFilter isMenuOpen={isMenuOpen} closeMenu={closeMenu}/>
-            <Nav />
+            <SearchFilter isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>
+            <Nav setIsMenuOpen={setIsMenuOpen}/>
         </div>
     );
 };

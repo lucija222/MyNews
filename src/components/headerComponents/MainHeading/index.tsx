@@ -5,14 +5,12 @@ import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 
 const MainHeading = () => {
     const { setSelectedCategory } = useContext(SelectedCategoryContext);
-    const { setIsFetchCategoryData } = useContext(IsFetchDataContext);
+    const { setIsFetchCategoryData, debounceFetch } = useContext(IsFetchDataContext);
 
     const handleHeadingClick: MouseEventHandler<HTMLHeadingElement> = (e) => {
         e.stopPropagation();
         setSelectedCategory("Home");
-        setTimeout(() => {
-            setIsFetchCategoryData(true);
-        }, 10);
+        debounceFetch(setIsFetchCategoryData);
     };
 
     return (

@@ -1,6 +1,5 @@
 import "./Nav.scss";
-import { useContext, MouseEventHandler, } from "react";
-import { ToggleMenuContext } from "../../../context/context";
+import { Dispatch, SetStateAction, useContext, MouseEventHandler, } from "react";
 import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
@@ -11,11 +10,13 @@ import {
     ScienceSvg, SportsSvg, TechnologySvg, FavoritesSvg,
 } from "../../../assets/svg/svgImports";
 
-const Nav = () => {
+interface NavProps {
+    setIsMenuOpen?: Dispatch<SetStateAction<boolean>>;
+}
+
+const Nav = ({ setIsMenuOpen }: NavProps) => {
     const { selectedCategory, setSelectedCategory, prevSelectedCategory } =
         useContext(SelectedCategoryContext);
-    const { setIsMenuOpen, setIsHamburgerClicked } =
-        useContext(ToggleMenuContext);
     const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestStateContext
     );
@@ -25,8 +26,15 @@ const Nav = () => {
 
     const handleNavClick: MouseEventHandler<HTMLLIElement> = (e) => {
         e.stopPropagation();
-        setIsMenuOpen(false);
-        setIsHamburgerClicked(false);
+
+        if (setIsMenuOpen) {
+            setIsMenuOpen(false);
+        }
+
+        if (featuredOrLatestState === "Latest") {
+            setFeaturedOrLatestToggler("Featured");
+        }
+
         setSelectedCategory((prevCategory) => {
             prevSelectedCategory.current = prevCategory;
             return e.currentTarget.id;
@@ -35,10 +43,6 @@ const Nav = () => {
         debounceFetch(setIsFetchCategoryData);
         setIsCategoryLoading(true);
         resetCardURLparams(); 
-
-        if (featuredOrLatestState === "Latest") {
-            setFeaturedOrLatestToggler("Featured");
-        }
     };
 
     const svgComponentMap = {

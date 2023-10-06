@@ -57,14 +57,10 @@ header {
         @include width-min-max(907px, 907px);
         margin: 0;
     }
-
-    .header-pseudoelem::after {
-        width: 1095px;
-    }
 }
 
 @media screen and (min-width: 1151px) {
-    .header-container, .header-pseudoelem::after {
+    .header-container {
         margin-left: max(calc((100vw - 907px) / 2 - 120px));
     }
 }

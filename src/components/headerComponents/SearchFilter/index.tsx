@@ -2,17 +2,17 @@ import "./SearchFilter.scss";
 import { SearchSvg } from "../../../assets/svg/svgImports";
 import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
-import { FormEventHandler, useContext, useState, useRef, useEffect } from "react"; 
+import { Dispatch, SetStateAction, FormEventHandler, useContext, useState, useRef, useEffect } from "react"; 
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { EncodedSearchInputContext } from "../../../context/EncodedSearchInputProvider";
 import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 
 interface SearchFilterProps {
     isMenuOpen?: boolean,
-    closeMenu?: () => void
+    setIsMenuOpen?: Dispatch<SetStateAction<boolean>>
 };
 
-const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
+const SearchFilter = ({isMenuOpen, setIsMenuOpen }: SearchFilterProps) => {
     const [localSearchInput, setLocalSearchInput] = useState("");
     const placeholders = ["Search news", "Please enter a term to search"];
     const inputRef = useRef<null | HTMLInputElement>(null);
@@ -38,16 +38,15 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
                 inputCurrent.classList.replace("placeholder_1", "placeholder_0");
             }
 
+            if (isMenuOpen && setIsMenuOpen) {
+                setIsMenuOpen(false);
+            }
+
             setIsCategoryLoading(true);
             setEncodedSearchInput(encodeURIComponent(localSearchInput));
             resetCardURLparams();
             setLocalSearchInput("");
             setSelectedCategory("searchResults");
-        
-            if (isMenuOpen && closeMenu) {
-            closeMenu();
-            }
-
             debounceFetch(setIsFetchCategoryData);
             window.scrollTo(0, 0);
         }
