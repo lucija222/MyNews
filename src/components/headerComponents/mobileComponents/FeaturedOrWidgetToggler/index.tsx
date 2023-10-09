@@ -1,17 +1,18 @@
 import "./FeaturedOrWidgetToggler.scss";
 import { MouseEventHandler, useContext, useRef } from "react";
-import { IsFetchDataContext } from "../../../../context/IsFetchDataProvider";
 import { SetIsLoadingContext } from "../../../../context/IsLoadingProvider";
 import { FeaturedOrLatestStateContext } from "../../../../context/FeaturedOrLatestTogglerProvider";
+import { CategoryUrlContext } from "../../../../context/urlContexts/CategoryUrlProvider";
+import { WidgetUrlContext } from "../../../../context/urlContexts/WidgetUrlProvider";
 
 const FeaturedOrWidgetToggler = () => {
     const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestStateContext
     );
-    const { setIsFetchCategoryData, setIsFetchWidgetData } =
-        useContext(IsFetchDataContext);
+    const { resetCardURLparams } = useContext(CategoryUrlContext);
+    const { resetWidgetURLparams } = useContext(WidgetUrlContext);
+    const { setIsCategoryLoading, setIsWidgetLoading } = useContext(SetIsLoadingContext);
     const numOfClicksOnLatest = useRef(0);
-    const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
     const handleFeaturedOrLatestToggle: MouseEventHandler<HTMLButtonElement> = (
         e
@@ -22,17 +23,18 @@ const FeaturedOrWidgetToggler = () => {
 
         if (targetInnerText !== featuredOrLatestState) {
             setFeaturedOrLatestToggler(target.innerText);
-            setIsCategoryLoading(true);
 
             if (targetInnerText === "Featured") {
-                setIsFetchCategoryData(true);
+                setIsCategoryLoading(true);
+                resetCardURLparams();
                 return;
 
             } else if (targetInnerText === "Latest") {
                 numOfClicksOnLatest.current += 1;
 
                 if (numOfClicksOnLatest.current > 1) {
-                    setIsFetchWidgetData(true);
+                    setIsWidgetLoading(true);
+                    resetWidgetURLparams();
                 }
             }
         }

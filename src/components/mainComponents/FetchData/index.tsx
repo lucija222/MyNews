@@ -2,7 +2,7 @@ import Loader from "../../UIcomponents/Loader";
 import ErrorMessage from "../../UIcomponents/ErrorMessage";
 import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 import InfiniteScroller from "../scrollerComponents/InfiniteScroller";
-import { useCallback, useContext, useEffect, useState, } from "react";
+import { useCallback, useContext, useEffect, useState, useRef } from "react";
 import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { IsLoadingContext, SetIsLoadingContext } from "../../../context/IsLoadingProvider";
@@ -32,13 +32,15 @@ const FetchData = ({ cardClass }: CardDataProps) => {
 
     const { selectedCategory } = useContext(SelectedCategoryContext);
     const { isCategoryLoading, isWidgetLoading } = useContext(IsLoadingContext);
-    const {setIsCategoryLoading, setIsWidgetLoading} = useContext(SetIsLoadingContext);
+    const { setIsCategoryLoading, setIsWidgetLoading } =
+        useContext(SetIsLoadingContext);
     const {
         isFetchCategoryData, isFetchWidgetData,
-        setIsFetchCategoryData, setIsFetchWidgetData
+        setIsFetchCategoryData, setIsFetchWidgetData,
     } = useContext(IsFetchDataContext);
 
-    const { API_Card_URL, setTotalSearchResultsNum } = useContext(CategoryUrlContext);
+    const { API_Card_URL, setTotalSearchResultsNum } =
+        useContext(CategoryUrlContext);
     const { API_Widget_URL } = useContext(WidgetUrlContext);
 
     const isFavoritesCategory = selectedCategory === "Favorites";
@@ -47,18 +49,25 @@ const FetchData = ({ cardClass }: CardDataProps) => {
 
     const URL = isCategoryCard ? API_Card_URL : API_Widget_URL;
     const isLoading = isCategoryCard ? isCategoryLoading : isWidgetLoading;
-    const setIsLoading = isCategoryCard ? setIsCategoryLoading : setIsWidgetLoading;
-    const isFetchData = isCategoryCard ? isFetchCategoryData : isFetchWidgetData;
-    const setIsFetchData = isCategoryCard ? setIsFetchCategoryData: setIsFetchWidgetData;
-    // const fetchNumRef = useRef(0);
+    const setIsLoading = isCategoryCard
+        ? setIsCategoryLoading
+        : setIsWidgetLoading;
+    const isFetchData = isCategoryCard
+        ? isFetchCategoryData
+        : isFetchWidgetData;
+    const setIsFetchData = isCategoryCard
+        ? setIsFetchCategoryData
+        : setIsFetchWidgetData;
+    const fetchNumRef = useRef(0);
+    const timeoutIdRef = useRef<null | NodeJS.Timeout>(null);
 
     const fetchData = useCallback(
         async (URL: string) => {
             if (!isLoading) {
                 setIsLoading(true);
             }
-            // fetchNumRef.current = fetchNumRef.current + 1;
-            // console.log("Fetch ran", cardClass, fetchNumRef.current);
+            fetchNumRef.current = fetchNumRef.current + 1;
+            console.log("Fetch ran", cardClass, fetchNumRef.current, URL);
             try {
                 const response = await fetch(URL);
 
@@ -70,8 +79,13 @@ const FetchData = ({ cardClass }: CardDataProps) => {
 
                 const jsonData = await response.json();
 
-                if (selectedCategory === "searchResults" && URL.includes("page=1&")) {
-                    setTotalSearchResultsNum(Math.floor(jsonData.totalResults / 100));
+                if (
+                    selectedCategory === "searchResults" &&
+                    URL.includes("page=1&")
+                ) {
+                    setTotalSearchResultsNum(
+                        Math.floor(jsonData.totalResults / 100)
+                    );
                 }
 
                 const filteredData = await filterJsonData(
@@ -96,12 +110,33 @@ const FetchData = ({ cardClass }: CardDataProps) => {
                 console.error("Error in fetchData:", cardClass, error);
 
             } finally {
+                
                 setTimeout(() => {
                     setIsLoading(false);
-                }, 200);  
+                }, 200);
             }
         },
-        [isLoading, setIsLoading, cardClass, selectedCategory, isThereArticleData, setTotalSearchResultsNum]
+        [
+            isLoading,
+            setIsLoading,
+            cardClass,
+            selectedCategory,
+            isThereArticleData,
+            setTotalSearchResultsNum,
+        ]
+    );
+
+    const debounceFetchCalls = useCallback(
+        (url: string, fetchFunc: (URL: string) => Promise<void>) => {
+            if (timeoutIdRef.current) {
+                clearTimeout(timeoutIdRef.current);
+            }
+
+            timeoutIdRef.current = setTimeout(() => {
+                fetchFunc(url);
+            }, 100);
+        },
+        []
     );
 
     useEffect(() => {
@@ -111,13 +146,14 @@ const FetchData = ({ cardClass }: CardDataProps) => {
     useEffect(() => {
         if (URL && (isFetchData || !isThereArticleData)) {
             setIsFetchData(false);
-            fetchData(URL);
+            debounceFetchCalls(URL, fetchData);
         }
     }, [
         URL,
         isFetchData,
         isThereArticleData,
         setIsFetchData,
+        debounceFetchCalls,
         fetchData,
     ]);
 

@@ -9,7 +9,6 @@
 ### Testing
 - **Cross-browser testing:** Google Chrome, Mozilla Firefox, MS Edge, Opera and Safari <br />
 - **OS testing:** Windows, Android, Mac and iOS <br />
-- Safari hasn't been tested as I don't own a Mac nor iOS, but I might set up a virtual machine for testing in the upcoming days :&#x29; <br />
 - **Screen readers testing:** NVDA and Windows Narrator with both Google Chrome and Mozilla Firefox <br />
 
 ### Accessibility
