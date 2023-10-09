@@ -44,6 +44,7 @@ const FetchData = ({ cardClass }: CardDataProps) => {
     const { API_Widget_URL } = useContext(WidgetUrlContext);
 
     const isFavoritesCategory = selectedCategory === "Favorites";
+    const isSearchCategory = selectedCategory === "searchResults";
     const isThereArticleData = articleData.length > 0;
     const isCategoryCard = cardClass === "category-card";
 
@@ -58,7 +59,7 @@ const FetchData = ({ cardClass }: CardDataProps) => {
     const setIsFetchData = isCategoryCard
         ? setIsFetchCategoryData
         : setIsFetchWidgetData;
-    const fetchNumRef = useRef(0);
+    // const fetchNumRef = useRef(0);
     const timeoutIdRef = useRef<null | NodeJS.Timeout>(null);
 
     const fetchData = useCallback(
@@ -66,8 +67,8 @@ const FetchData = ({ cardClass }: CardDataProps) => {
             if (!isLoading) {
                 setIsLoading(true);
             }
-            fetchNumRef.current = fetchNumRef.current + 1;
-            console.log("Fetch ran", cardClass, fetchNumRef.current, URL);
+            // fetchNumRef.current = fetchNumRef.current + 1;
+            // console.log("Fetch ran", cardClass, fetchNumRef.current);
             try {
                 const response = await fetch(URL);
 
@@ -110,7 +111,6 @@ const FetchData = ({ cardClass }: CardDataProps) => {
                 console.error("Error in fetchData:", cardClass, error);
 
             } finally {
-                
                 setTimeout(() => {
                     setIsLoading(false);
                 }, 200);
@@ -135,16 +135,14 @@ const FetchData = ({ cardClass }: CardDataProps) => {
             timeoutIdRef.current = setTimeout(() => {
                 fetchFunc(url);
             }, 100);
-        },
-        []
-    );
+        }, []);
 
     useEffect(() => {
         allowOrDisableScroll(isError);
     }, [isError]);
 
     useEffect(() => {
-        if (URL && (isFetchData || !isThereArticleData)) {
+        if (URL && (isFetchData || (!isThereArticleData && !isSearchCategory))) {
             setIsFetchData(false);
             debounceFetchCalls(URL, fetchData);
         }
@@ -152,23 +150,25 @@ const FetchData = ({ cardClass }: CardDataProps) => {
         URL,
         isFetchData,
         isThereArticleData,
+        isSearchCategory,
         setIsFetchData,
         debounceFetchCalls,
         fetchData,
     ]);
 
+
     return (
         <>
             {isLoading && <Loader cardClass={cardClass} />}
             {isError && <ErrorMessage />}
-            {isThereArticleData && (
+            {(isThereArticleData || isSearchCategory) && ( 
                 <InfiniteScroller
                     isCategoryCard={isCategoryCard}
                     isLoading={isLoading}
                     isFavoritesCategory={isFavoritesCategory}
                     articleData={articleData}
                 />
-            )}
+            )} 
         </>
     );
 };

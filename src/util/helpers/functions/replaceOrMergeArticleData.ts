@@ -1,6 +1,6 @@
 import { ArticleData } from "../../../components/mainComponents/FetchData";
 import { NewDataArray } from "../../../typesAndInterfaces/apiTandI";
-import { isDataFetchedOnCategoryChange } from "./isDataFetchedOnScroll";
+import { isDataFetchedOnCategoryChange } from "./isDataFetchedOnCategoryChange";
 
 export const replaceOrMergeArticleData = (
     prevData: ArticleData,
@@ -22,7 +22,7 @@ export const replaceOrMergeArticleData = (
             );
             
             if (shouldArticleDataBeReplaced) {
-                if (prevData) {
+                if (prevData.length > 0) {
                     for (const articleObj of prevData) {
                         URL.revokeObjectURL(articleObj.img_src);
                     }

@@ -8,14 +8,14 @@ interface RenderScrollerProps {
     isCategoryCard: boolean;
     isFavoritesCategory: boolean;
     articleData: ArticleData;
-    observerElemRef?: MutableRefObject<HTMLDivElement | null>;
+    observerElemRef: MutableRefObject<HTMLDivElement | null>;
 }
 
 const RenderScroller = ({
     isCategoryCard, isFavoritesCategory,
     articleData, observerElemRef,
 }: RenderScrollerProps) => {
-    const isThereArticleData = articleData.length > 1;
+
     const observerDiv = observerElemRef && (
         <div
             ref={(elem) => (observerElemRef!.current = elem)}
@@ -35,7 +35,7 @@ const RenderScroller = ({
                 </>
             )}
 
-            {!isCategoryCard && isThereArticleData && (
+            {!isCategoryCard && (
                 <WidgetScroller
                     articleData={articleData}
                     observerDiv={observerDiv}

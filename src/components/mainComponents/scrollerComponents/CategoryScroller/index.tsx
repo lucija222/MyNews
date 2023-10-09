@@ -13,7 +13,7 @@ import { IsLoadingContext, SetIsLoadingContext } from "../../../../context/IsLoa
 interface CategoryScrollerProps {
     isFavoritesCategory: boolean;
     articleData: ArticleData;
-    observerDiv?: JSX.Element | undefined;
+    observerDiv: JSX.Element | undefined;
 }
 
 const CategoryScroller = ({
@@ -22,13 +22,12 @@ const CategoryScroller = ({
 
     const { selectedCategory } = useContext(SelectedCategoryContext);
     const { favoriteArticlesArray } = useContext(FavoriteArticlesDataContext);
-    const { isSmallViewport, isMidViewport, isBigViewport } =
-        useContext(ViewportSizesContext);
+    const { isSmallViewport, isMidViewport, isBigViewport } = useContext(ViewportSizesContext);
     const { isCategoryLoading } = useContext(IsLoadingContext);
     const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
     const isSearchCategory = selectedCategory === "searchResults";
-    const isSearchNoResults = isSearchCategory && articleData.length === 1;
+    const isSearchNoResults = isSearchCategory && articleData.length === 0;
 
     const isFavoriteOrSearchCategory = isFavoritesCategory || isSearchCategory;
     const isFavoritesNoData =
@@ -49,19 +48,19 @@ const CategoryScroller = ({
                 (isBigViewport && index === 3);
 
             if (!isFavoriteOrSearchCategory && isBreakingCard) {
-                const articleIndex = articleData[index];
                 return (
                     <article
                     key={`${index}-${article.title}`}
                         className="category-card breaking-news-card"
                     >
                         <BreakingNewsCard
-                            title={articleIndex.title}
-                            byline={articleIndex.byline}
-                            url={articleIndex.url}
+                            title={article.title}
+                            byline={article.byline}
+                            url={article.url}
                         />
                     </article>
                 );
+
             } else if (!isFavoritesCategory && dataLength === index) {
                 return (
                     <article key={`${index}-${article.title}`} className="category-card">
@@ -69,6 +68,7 @@ const CategoryScroller = ({
                         {observerDiv}
                     </article>
                 );
+
             } else {
                 return (
                     <article key={`${index}-${article.title}`} className="category-card">

@@ -31,11 +31,11 @@ const FavoriteArticlesDataProvider = ({ children }: {children: ReactNode}) => {
 
     useEffect(() => {
         const localStorageData = localStorage.getItem("favoriteArticlesArray");
-        const parsedLoaclStorageData = localStorageData
+        const parsedLocalStorageData = localStorageData
             ? JSON.parse(localStorageData)
             : null;
         const initialFavoriteArticlesArray: FavoriteArticleData[] =
-            Array.isArray(parsedLoaclStorageData) ? parsedLoaclStorageData : [];
+            Array.isArray(parsedLocalStorageData) ? parsedLocalStorageData : [];
         setFavoriteArticlesArray(initialFavoriteArticlesArray);
     }, []);
 
@@ -45,6 +45,7 @@ const FavoriteArticlesDataProvider = ({ children }: {children: ReactNode}) => {
     ) => {
         setFavoriteArticlesArray((prevArray) => {
             let updatedArray;
+            
             const duplicateArticleIndex = prevArray.findIndex((article) => {
                 return (
                     article.url === newFavArticleObject.url 
@@ -67,6 +68,7 @@ const FavoriteArticlesDataProvider = ({ children }: {children: ReactNode}) => {
                 "favoriteArticlesArray",
                 JSON.stringify(updatedArray)
             );
+
             return updatedArray;
         });
     };

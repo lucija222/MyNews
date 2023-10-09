@@ -4,7 +4,7 @@ import WidgetCard from "../../cardComponents/WidgetCard";
 
 interface WidgetScrollerProps {
     articleData: ArticleData;
-    observerDiv?: JSX.Element | undefined;
+    observerDiv: JSX.Element | undefined;
 }
 
 const WidgetScroller = ({
