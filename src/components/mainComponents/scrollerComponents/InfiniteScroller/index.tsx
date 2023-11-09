@@ -1,7 +1,6 @@
 import { ArticleData } from "../../FetchData";
 import RenderScroller from "../RenderScroller";
 import { useRef, useEffect, useContext, useCallback } from "react";
-import { SetIsLoadingContext } from "../../../../context/IsLoadingProvider";
 import { WidgetUrlContext } from "../../../../context/urlContexts/WidgetUrlProvider";
 import { CategoryUrlContext } from "../../../../context/urlContexts/CategoryUrlProvider";
 
@@ -13,11 +12,15 @@ interface InfiniteScrollerProps {
 }
 
 const InfiniteScroller = ({
-    isCategoryCard, isLoading, isFavoritesCategory, articleData,
+    isCategoryCard,
+    isLoading,
+    isFavoritesCategory,
+    articleData,
 }: InfiniteScrollerProps) => {
-    const { changeCardURLparams, isMaxCategoryFetchCalls } = useContext(CategoryUrlContext);
-    const { changeWidgetURLparams, isMaxWidgetFetchCalls } = useContext(WidgetUrlContext);
-    const { setIsCategoryLoading, setIsWidgetLoading } = useContext(SetIsLoadingContext);
+    const { changeCardURLparams, isMaxCategoryFetchCalls } =
+        useContext(CategoryUrlContext);
+    const { changeWidgetURLparams, isMaxWidgetFetchCalls } =
+        useContext(WidgetUrlContext);
 
     const observerRef = useRef<IntersectionObserver | null>(null);
     const observerElemRef = useRef<HTMLDivElement | null>(null);
@@ -28,18 +31,14 @@ const InfiniteScroller = ({
     const isMaxFetchCalls = isCategoryCard
         ? isMaxCategoryFetchCalls
         : isMaxWidgetFetchCalls;
-    const setIsLoading = isCategoryCard
-        ? setIsCategoryLoading
-        : setIsWidgetLoading;
 
     const observerCallback = useCallback(
         ([entry]: IntersectionObserverEntry[]) => {
             if (entry.isIntersecting && !isLoading && !isMaxFetchCalls) {
-                setIsLoading(true);
                 changeURLparams();
             }
         },
-        [isLoading, isMaxFetchCalls, setIsLoading, changeURLparams]
+        [isLoading, isMaxFetchCalls, changeURLparams]
     );
 
     useEffect(() => {
@@ -63,14 +62,12 @@ const InfiniteScroller = ({
     }, [observerCallback, isMaxFetchCalls]);
 
     return (
-        <>
-            <RenderScroller
-                isCategoryCard={isCategoryCard}
-                isFavoritesCategory={isFavoritesCategory}
-                articleData={articleData}
-                observerElemRef={observerElemRef}
-            />
-        </>
+        <RenderScroller
+            isCategoryCard={isCategoryCard}
+            isFavoritesCategory={isFavoritesCategory}
+            articleData={articleData}
+            observerElemRef={observerElemRef}
+        />
     );
 };
 

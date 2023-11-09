@@ -1,5 +1,5 @@
 import {
-    Dispatch, SetStateAction, createContext, useState, ReactNode,
+    Dispatch, SetStateAction, createContext, useState, ReactNode, 
 } from "react";
 
 interface IIsLoadingContext {
@@ -12,8 +12,8 @@ interface ISetIsLoadingContext {
 }
 
 export const IsLoadingContext = createContext<IIsLoadingContext>({
-    isCategoryLoading: true,
-    isWidgetLoading: true,
+    isCategoryLoading: false,
+    isWidgetLoading: false,
 });
 
 export const SetIsLoadingContext = createContext<ISetIsLoadingContext>({
@@ -22,8 +22,8 @@ export const SetIsLoadingContext = createContext<ISetIsLoadingContext>({
 });
 
 const IsLoadingProvider = ({ children }: { children: ReactNode }) => {
-    const [isCategoryLoading, setIsCategoryLoading] = useState(true);
-    const [isWidgetLoading, setIsWidgetLoading] = useState(true);
+    const [isCategoryLoading, setIsCategoryLoading] = useState(false);
+    const [isWidgetLoading, setIsWidgetLoading] = useState(false);
 
     return (
         <IsLoadingContext.Provider
@@ -35,7 +35,7 @@ const IsLoadingProvider = ({ children }: { children: ReactNode }) => {
             <SetIsLoadingContext.Provider
                 value={{
                     setIsCategoryLoading,
-                    setIsWidgetLoading,
+                    setIsWidgetLoading
                 }}
             >
                 {children}

@@ -3,7 +3,6 @@ import ErrorMessage from "../../UIcomponents/ErrorMessage";
 import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 import InfiniteScroller from "../scrollerComponents/InfiniteScroller";
 import { useCallback, useContext, useEffect, useState, useRef } from "react";
-import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { IsLoadingContext, SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { filterJsonData } from "../../../util/helpers/functions/filterJSON/filterJsonData";
@@ -32,15 +31,8 @@ const FetchData = ({ cardClass }: CardDataProps) => {
 
     const { selectedCategory } = useContext(SelectedCategoryContext);
     const { isCategoryLoading, isWidgetLoading } = useContext(IsLoadingContext);
-    const { setIsCategoryLoading, setIsWidgetLoading } =
-        useContext(SetIsLoadingContext);
-    const {
-        isFetchCategoryData, isFetchWidgetData,
-        setIsFetchCategoryData, setIsFetchWidgetData,
-    } = useContext(IsFetchDataContext);
-
-    const { API_Card_URL, setTotalSearchResultsNum } =
-        useContext(CategoryUrlContext);
+    const { setIsCategoryLoading, setIsWidgetLoading } = useContext(SetIsLoadingContext);
+    const { API_Card_URL, setTotalSearchResultsNum } = useContext(CategoryUrlContext);
     const { API_Widget_URL } = useContext(WidgetUrlContext);
 
     const isFavoritesCategory = selectedCategory === "Favorites";
@@ -53,22 +45,13 @@ const FetchData = ({ cardClass }: CardDataProps) => {
     const setIsLoading = isCategoryCard
         ? setIsCategoryLoading
         : setIsWidgetLoading;
-    const isFetchData = isCategoryCard
-        ? isFetchCategoryData
-        : isFetchWidgetData;
-    const setIsFetchData = isCategoryCard
-        ? setIsFetchCategoryData
-        : setIsFetchWidgetData;
-    // const fetchNumRef = useRef(0);
+    const fetchNumRef = useRef(0);
     const timeoutIdRef = useRef<null | NodeJS.Timeout>(null);
 
     const fetchData = useCallback(
         async (URL: string) => {
-            if (!isLoading) {
-                setIsLoading(true);
-            }
-            // fetchNumRef.current = fetchNumRef.current + 1;
-            // console.log("Fetch ran", cardClass, fetchNumRef.current);
+            fetchNumRef.current = fetchNumRef.current + 1;
+            console.log("Fetch ran", cardClass, fetchNumRef.current, URL);
             try {
                 const response = await fetch(URL);
 
@@ -94,34 +77,30 @@ const FetchData = ({ cardClass }: CardDataProps) => {
                     selectedCategory,
                     cardClass
                 );
-
+                
                 if (filteredData) {
                     setArticleData((prevData) => {
                         return replaceOrMergeArticleData(
                             prevData,
                             cardClass,
                             selectedCategory,
-                            isThereArticleData,
                             filteredData,
                             URL
                         );
                     });
                 }
             } catch (error) {
+                setIsError(true);
                 console.error("Error in fetchData:", cardClass, error);
 
             } finally {
-                setTimeout(() => {
-                    setIsLoading(false);
-                }, 200);
+                setIsLoading(false);
             }
         },
         [
-            isLoading,
             setIsLoading,
             cardClass,
             selectedCategory,
-            isThereArticleData,
             setTotalSearchResultsNum,
         ]
     );
@@ -141,21 +120,16 @@ const FetchData = ({ cardClass }: CardDataProps) => {
         allowOrDisableScroll(isError);
     }, [isError]);
 
-    useEffect(() => {
-        if (URL && (isFetchData || (!isThereArticleData && !isSearchCategory))) {
-            setIsFetchData(false);
+    useEffect(() => {   
+        if (URL && isLoading) {
             debounceFetchCalls(URL, fetchData);
-        }
+        } 
     }, [
         URL,
-        isFetchData,
-        isThereArticleData,
-        isSearchCategory,
-        setIsFetchData,
+        isLoading,
         debounceFetchCalls,
         fetchData,
     ]);
-
 
     return (
         <>

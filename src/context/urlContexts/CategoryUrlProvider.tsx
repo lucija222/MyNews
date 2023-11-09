@@ -1,10 +1,10 @@
-import { IsFetchDataContext } from "../IsFetchDataProvider";
 import { newsAPI_Key, nytAPI_Key } from "../../util/helpers/constants";
 import { SelectedCategoryContext } from "../SelectedCategoryProvider";
 import { EncodedSearchInputContext } from "../EncodedSearchInputProvider";
 import {
     Dispatch, SetStateAction, ReactNode, createContext, useContext, useEffect, useState,
 } from "react";
+import { SetIsLoadingContext } from "../IsLoadingProvider";
 interface ICategoryUrlContext {
     API_Card_URL: string;
     isMaxCategoryFetchCalls: boolean;
@@ -26,8 +26,7 @@ export const CategoryUrlContext = createContext<ICategoryUrlContext>({
 const CategoryUrlProvider = ({ children }: { children: ReactNode }) => {
     const { selectedCategory } = useContext(SelectedCategoryContext);
     const { encodedSearchInput } = useContext(EncodedSearchInputContext);
-    const { setIsFetchCategoryData, debounceFetch } =
-        useContext(IsFetchDataContext);
+    const { setIsCategoryLoading } = useContext(SetIsLoadingContext); 
 
     const [cardURL_Offset, setCardURL_Offset] = useState(0);
     const [API_Card_URL, setAPI_Card_URL] = useState(
@@ -59,24 +58,27 @@ const CategoryUrlProvider = ({ children }: { children: ReactNode }) => {
     const resetCardURLparams = () => {
         setCardURL_Offset(0);
         setSearchURL_pageNum(1);
+
+        setTimeout(() => {
+            setIsCategoryLoading(true);
+        }, 20);
     };
 
     const changeCardURLparams = () => {
-        if (
-            selectedCategory !== "Favorites" &&
-            !isSearchResults
-        ) {
+        setIsCategoryLoading(true);
+
+        if (selectedCategory !== "Favorites" && !isSearchResults) {
+
             setCardURL_Offset((prevNum) => {
                 return prevNum + 100;
             });
 
         } else if (isSearchResults) {
+            
             setSearchURL_pageNum((prevNum) => {
                 return prevNum + 1;
             });
         }
-
-        debounceFetch(setIsFetchCategoryData);
     };
 
     useEffect(() => {

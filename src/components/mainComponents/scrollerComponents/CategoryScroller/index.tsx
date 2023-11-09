@@ -30,12 +30,13 @@ const CategoryScroller = ({
     const isSearchNoResults = isSearchCategory && articleData.length === 0;
 
     const isFavoriteOrSearchCategory = isFavoritesCategory || isSearchCategory;
-    const isFavoritesNoData =
-        isFavoritesCategory && favoriteArticlesArray.length === 0;
+    const isFavoritesNoData = isFavoritesCategory && favoriteArticlesArray.length === 0;
     const dataLength = articleData.length - 1;
 
 
     const returnCardElems = (data: ArticleData) => {
+        console.log();
+        
         if (isFavoritesNoData) {
             return <NoCardElems isNoFavorites={true} />;
         } else if (isSearchNoResults) {

@@ -6,21 +6,21 @@ export const replaceOrMergeArticleData = (
     prevData: ArticleData,
     cardClass: string,
     selectedCategory: string,
-    isThereArticleData: boolean,
     filteredData: NewDataArray,
     url: string
 ) => {
 
     let newData: ArticleData = [];
 
+    const shouldArticleDataBeReplaced = isDataFetchedOnCategoryChange(
+        selectedCategory,
+        url
+    );
+
     switch (cardClass) {
 
         case "category-card":
-            const shouldArticleDataBeReplaced = isDataFetchedOnCategoryChange(
-                selectedCategory,
-                url
-            );
-            
+
             if (shouldArticleDataBeReplaced) {
                 if (prevData.length > 0) {
                     for (const articleObj of prevData) {
@@ -29,13 +29,14 @@ export const replaceOrMergeArticleData = (
                 }
                 return newData = filteredData;
             }
+            
             return newData = [...prevData, ...filteredData];
 
         case "widget-card":
 
-            return newData = isThereArticleData
-                ? [...prevData, ...filteredData]
-                : filteredData;
+            return newData = shouldArticleDataBeReplaced
+                ? filteredData
+                : [...prevData, ...filteredData];
     }
 
     return newData;

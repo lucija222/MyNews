@@ -4,6 +4,7 @@ import { SetIsLoadingContext } from "../../../../context/IsLoadingProvider";
 import { FeaturedOrLatestStateContext } from "../../../../context/FeaturedOrLatestTogglerProvider";
 import { CategoryUrlContext } from "../../../../context/urlContexts/CategoryUrlProvider";
 import { WidgetUrlContext } from "../../../../context/urlContexts/WidgetUrlProvider";
+import { SelectedCategoryContext } from "../../../../context/SelectedCategoryProvider";
 
 const FeaturedOrWidgetToggler = () => {
     const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(

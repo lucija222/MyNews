@@ -1,14 +1,13 @@
 import "./Nav.scss";
 import { Dispatch, SetStateAction, useContext, MouseEventHandler, } from "react";
 import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
-import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
-import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { FeaturedOrLatestStateContext } from "../../../context/FeaturedOrLatestTogglerProvider";
 import {
     HomeSvg, GeneralSvg, BusinessSvg, HealthSvg, 
     ScienceSvg, SportsSvg, TechnologySvg, FavoritesSvg,
 } from "../../../assets/svg/svgImports";
+import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 
 interface NavProps {
     setIsMenuOpen?: Dispatch<SetStateAction<boolean>>;
@@ -20,7 +19,6 @@ const Nav = ({ setIsMenuOpen }: NavProps) => {
     const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestStateContext
     );
-    const { setIsFetchCategoryData, debounceFetch } = useContext(IsFetchDataContext);
     const { resetCardURLparams } = useContext(CategoryUrlContext);
     const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
@@ -40,9 +38,13 @@ const Nav = ({ setIsMenuOpen }: NavProps) => {
             return e.currentTarget.id;
         });
 
-        debounceFetch(setIsFetchCategoryData);
-        setIsCategoryLoading(true);
-        resetCardURLparams(); 
+        if (prevSelectedCategory.current !== "Favorites")
+        {
+            resetCardURLparams();
+            
+        } else {
+            setIsCategoryLoading(true);
+        }
     };
 
     const svgComponentMap = {

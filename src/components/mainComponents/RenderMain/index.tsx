@@ -1,10 +1,11 @@
 import "./RenderMain.scss";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import FetchData from "../FetchData";
 import Nav from "../../headerComponents/Nav";
 import WidgetContainer from "../WidgetContainer";
 import { ViewportSizesContext } from "../../../context/ViewportSizesProvider";
 import FavoriteArticlesDataProvider from "../../../context/FavoriteArticlesDataProvider";
+import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 
 interface NewsCategoryProps {
     isWidget: boolean;
@@ -12,7 +13,12 @@ interface NewsCategoryProps {
 
 const RenderMain = ({ isWidget }: NewsCategoryProps) => {
     const { isSmallViewport } = useContext(ViewportSizesContext);
+    const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
+    useEffect(() => {
+        setIsCategoryLoading(true);
+    }, [setIsCategoryLoading]);
+    
     return (
         <>
         <main className={isSmallViewport ? "main-flex" : "main-grid"}>

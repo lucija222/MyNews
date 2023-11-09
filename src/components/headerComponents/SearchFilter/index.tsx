@@ -1,11 +1,11 @@
 import "./SearchFilter.scss";
 import { SearchSvg } from "../../../assets/svg/svgImports";
 import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
-import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { Dispatch, SetStateAction, FormEventHandler, useContext, useState, useRef, useEffect } from "react"; 
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { EncodedSearchInputContext } from "../../../context/EncodedSearchInputProvider";
 import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
+import { WidgetUrlContext } from "../../../context/urlContexts/WidgetUrlProvider";
 
 interface SearchFilterProps {
     isMenuOpen?: boolean,
@@ -20,7 +20,7 @@ const SearchFilter = ({isMenuOpen, setIsMenuOpen }: SearchFilterProps) => {
     const { setEncodedSearchInput } = useContext(EncodedSearchInputContext);
     const { setSelectedCategory } = useContext(SelectedCategoryContext);
     const { resetCardURLparams } = useContext(CategoryUrlContext);
-    const { setIsFetchCategoryData, debounceFetch } = useContext(IsFetchDataContext);
+    const { resetWidgetURLparams } = useContext(WidgetUrlContext);
     const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
     const handleFormSubmit: FormEventHandler<HTMLFormElement> = (e) => {
@@ -42,12 +42,12 @@ const SearchFilter = ({isMenuOpen, setIsMenuOpen }: SearchFilterProps) => {
                 setIsMenuOpen(false);
             }
 
-            setIsCategoryLoading(true);
             setEncodedSearchInput(encodeURIComponent(localSearchInput));
             resetCardURLparams();
+            resetWidgetURLparams();
             setLocalSearchInput("");
             setSelectedCategory("searchResults");
-            debounceFetch(setIsFetchCategoryData);
+            setIsCategoryLoading(true);
             window.scrollTo(0, 0);
         }
     };
