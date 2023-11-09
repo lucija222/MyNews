@@ -1,6 +1,6 @@
-import { IsFetchDataContext } from "../IsFetchDataProvider";
 import { nytAPI_Key } from "../../util/helpers/constants";
-import {  ReactNode, createContext, useContext, useEffect, useState, } from "react";
+import {  ReactNode, createContext, useCallback, useContext, useEffect, useState, useMemo, memo } from "react";
+import { SetIsLoadingContext } from "../IsLoadingProvider";
 
 interface IWidgetUrlContext {
     API_Widget_URL: string;
@@ -17,27 +17,24 @@ export const WidgetUrlContext = createContext<IWidgetUrlContext>({
 });
 
 const WidgetUrlProvider = ({ children }: { children: ReactNode }) => {
-    const { setIsFetchWidgetData, debounceFetch } = useContext(IsFetchDataContext);
-
     const [widgetURL_Offset, setWidgetURL_Offset] = useState(0);
     const [API_Widget_URL, setAPI_Widget_URL] = useState(
         `https://api.nytimes.com/svc/news/v3/content/all/all.json?limit=100&offset=${widgetURL_Offset}&api-key=${nytAPI_Key}`
     );
+    const { setIsWidgetLoading } = useContext(SetIsLoadingContext); 
 
-    const isMaxWidgetFetchCalls = widgetURL_Offset === 400;
+    const isMaxWidgetFetchCalls = useMemo(() => widgetURL_Offset === 400, [widgetURL_Offset]);
 
-    const resetWidgetURLparams = () => {
+    const resetWidgetURLparams = useCallback(() => {
         setWidgetURL_Offset(0);
-    };
+    }, []);
 
-    const changeWidgetURLparams = () => {
-
+    const changeWidgetURLparams = useCallback(() => {
+        setIsWidgetLoading(true);
         setWidgetURL_Offset((prevNum) => {
             return prevNum + 100;
         });
-
-        debounceFetch(setIsFetchWidgetData);
-    };
+    }, [setIsWidgetLoading]);
 
     
 
@@ -61,4 +58,4 @@ const WidgetUrlProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-export default WidgetUrlProvider;
+export default memo(WidgetUrlProvider);

@@ -1,18 +1,18 @@
 import "./SearchFilter.scss";
 import { SearchSvg } from "../../../assets/svg/svgImports";
 import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
-import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
-import { FormEventHandler, useContext, useState, useRef, useEffect } from "react"; 
+import { WidgetUrlContext } from "../../../context/urlContexts/WidgetUrlProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
-import { EncodedSearchInputContext } from "../../../context/EncodedSearchInputProvider";
 import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
+import { EncodedSearchInputContext } from "../../../context/EncodedSearchInputProvider";
+import { Dispatch, SetStateAction, FormEventHandler, useContext, useState, useRef, useEffect, memo } from "react"; 
 
 interface SearchFilterProps {
     isMenuOpen?: boolean,
-    closeMenu?: () => void
+    setIsMenuOpen?: Dispatch<SetStateAction<boolean>>
 };
 
-const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
+const SearchFilter = ({isMenuOpen, setIsMenuOpen }: SearchFilterProps) => {
     const [localSearchInput, setLocalSearchInput] = useState("");
     const placeholders = ["Search news", "Please enter a term to search"];
     const inputRef = useRef<null | HTMLInputElement>(null);
@@ -20,7 +20,7 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
     const { setEncodedSearchInput } = useContext(EncodedSearchInputContext);
     const { setSelectedCategory } = useContext(SelectedCategoryContext);
     const { resetCardURLparams } = useContext(CategoryUrlContext);
-    const { setIsFetchCategoryData, debounceFetch } = useContext(IsFetchDataContext);
+    const { resetWidgetURLparams } = useContext(WidgetUrlContext);
     const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
     const handleFormSubmit: FormEventHandler<HTMLFormElement> = (e) => {
@@ -38,17 +38,16 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
                 inputCurrent.classList.replace("placeholder_1", "placeholder_0");
             }
 
-            setIsCategoryLoading(true);
-            setEncodedSearchInput(encodeURIComponent(localSearchInput));
-            resetCardURLparams();
-            setLocalSearchInput("");
-            setSelectedCategory("searchResults");
-        
-            if (isMenuOpen && closeMenu) {
-            closeMenu();
+            if (isMenuOpen && setIsMenuOpen) {
+                setIsMenuOpen(false);
             }
 
-            debounceFetch(setIsFetchCategoryData);
+            setEncodedSearchInput(encodeURIComponent(localSearchInput));
+            resetCardURLparams();
+            resetWidgetURLparams();
+            setLocalSearchInput("");
+            setSelectedCategory("searchResults");
+            setIsCategoryLoading(true);
             window.scrollTo(0, 0);
         }
     };
@@ -105,4 +104,4 @@ const SearchFilter = ({isMenuOpen, closeMenu }: SearchFilterProps) => {
     );
 };
 
-export default SearchFilter;
+export default memo(SearchFilter);

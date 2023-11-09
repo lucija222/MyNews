@@ -1,4 +1,4 @@
-import { isValidString } from "./doesStringInclude";
+import { isValidString } from "./isValidString";
 import { getDataArrWithImgObjUrl } from "./getDataArrWithImgObjUrl";
 import { authorStringsToCheck, imgStringsToCheck } from "../../constants";
 import {
@@ -9,17 +9,6 @@ export const filterNewsApiJson = async (jsonData: any) => {
     const filteredArray_NoObjSrc: NewDataArray = [];
 
     if (jsonData.totalResults === 0) {
-        const noResultsObj = {
-            url: "",
-            title: "No matches found",
-            byline: "",
-            section: "search result",
-            timestamp: "",
-            img_src: "",
-            img_objSrc: "",
-            isFavorite: false,
-        };
-        filteredArray_NoObjSrc.push(noResultsObj);
         return filteredArray_NoObjSrc;
     }
 

@@ -1,18 +1,17 @@
 import "./MainHeading.scss"
-import { MouseEventHandler, useContext } from "react";
+import { MouseEventHandler, useContext, memo } from "react";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
-import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
+import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 
 const MainHeading = () => {
     const { setSelectedCategory } = useContext(SelectedCategoryContext);
-    const { setIsFetchCategoryData } = useContext(IsFetchDataContext);
+    const { setIsCategoryLoading, setIsWidgetLoading } = useContext(SetIsLoadingContext);
 
     const handleHeadingClick: MouseEventHandler<HTMLHeadingElement> = (e) => {
         e.stopPropagation();
         setSelectedCategory("Home");
-        setTimeout(() => {
-            setIsFetchCategoryData(true);
-        }, 10);
+        setIsCategoryLoading(true);
+        setIsWidgetLoading(true);
     };
 
     return (
@@ -22,4 +21,4 @@ const MainHeading = () => {
     );
 };
 
-export default MainHeading;
+export default memo(MainHeading);

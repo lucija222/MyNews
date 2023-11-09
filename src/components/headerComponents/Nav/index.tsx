@@ -1,43 +1,49 @@
 import "./Nav.scss";
-import { useContext, MouseEventHandler, } from "react";
-import { ToggleMenuContext } from "../../../context/context";
+import { Dispatch, SetStateAction, useContext, MouseEventHandler, memo } from "react";
 import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
-import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
-import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { FeaturedOrLatestStateContext } from "../../../context/FeaturedOrLatestTogglerProvider";
 import {
     HomeSvg, GeneralSvg, BusinessSvg, HealthSvg, 
     ScienceSvg, SportsSvg, TechnologySvg, FavoritesSvg,
 } from "../../../assets/svg/svgImports";
+import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 
-const Nav = () => {
+interface NavProps {
+    setIsMenuOpen?: Dispatch<SetStateAction<boolean>>;
+}
+
+const Nav = ({ setIsMenuOpen }: NavProps) => {
     const { selectedCategory, setSelectedCategory, prevSelectedCategory } =
         useContext(SelectedCategoryContext);
-    const { setIsMenuOpen, setIsHamburgerClicked } =
-        useContext(ToggleMenuContext);
-    const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
+    const { featuredOrLatestState, setFeaturedOrLatestState: setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestStateContext
     );
-    const { setIsFetchCategoryData, debounceFetch } = useContext(IsFetchDataContext);
     const { resetCardURLparams } = useContext(CategoryUrlContext);
     const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
     const handleNavClick: MouseEventHandler<HTMLLIElement> = (e) => {
         e.stopPropagation();
-        setIsMenuOpen(false);
-        setIsHamburgerClicked(false);
+
+        if (setIsMenuOpen) {
+            setIsMenuOpen(false);
+        }
+
+        if (featuredOrLatestState === "Latest") {
+            setFeaturedOrLatestToggler("Featured");
+        }
+
         setSelectedCategory((prevCategory) => {
             prevSelectedCategory.current = prevCategory;
             return e.currentTarget.id;
         });
 
-        debounceFetch(setIsFetchCategoryData);
-        setIsCategoryLoading(true);
-        resetCardURLparams(); 
-
-        if (featuredOrLatestState === "Latest") {
-            setFeaturedOrLatestToggler("Featured");
+        if (prevSelectedCategory.current !== "Favorites")
+        {
+            resetCardURLparams();
+            
+        } else {
+            setIsCategoryLoading(true);
         }
     };
 
@@ -85,4 +91,4 @@ const Nav = () => {
     );
 };
 
-export default Nav;
+export default memo(Nav);

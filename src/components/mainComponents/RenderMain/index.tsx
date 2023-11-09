@@ -1,10 +1,11 @@
 import "./RenderMain.scss";
-import { useContext } from "react";
-import FetchData from "../FetchData";
+import { useContext, useEffect, memo } from "react";
 import Nav from "../../headerComponents/Nav";
 import WidgetContainer from "../WidgetContainer";
 import { ViewportSizesContext } from "../../../context/ViewportSizesProvider";
 import FavoriteArticlesDataProvider from "../../../context/FavoriteArticlesDataProvider";
+import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
+import CategoryData from "../CategoryData";
 
 interface NewsCategoryProps {
     isWidget: boolean;
@@ -12,7 +13,12 @@ interface NewsCategoryProps {
 
 const RenderMain = ({ isWidget }: NewsCategoryProps) => {
     const { isSmallViewport } = useContext(ViewportSizesContext);
+    const { setIsCategoryLoading } = useContext(SetIsLoadingContext);
 
+    useEffect(() => {
+        setIsCategoryLoading(true);
+    }, [setIsCategoryLoading]);
+    
     return (
         <>
         <main className={isSmallViewport ? "main-flex" : "main-grid"}>
@@ -29,7 +35,7 @@ const RenderMain = ({ isWidget }: NewsCategoryProps) => {
                     {isWidget ? (
                         <WidgetContainer />
                     ) : (
-                        <FetchData cardClass="category-card" />
+                        <CategoryData cardClass="category-card" />
                     )}
             </FavoriteArticlesDataProvider>
         </main>
@@ -37,4 +43,4 @@ const RenderMain = ({ isWidget }: NewsCategoryProps) => {
     );
 };
 
-export default RenderMain;
+export default memo(RenderMain);

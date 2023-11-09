@@ -1,5 +1,5 @@
 import "./HeartButton.scss";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, memo } from "react";
 
 interface HeartButtonProps {
     handleFavoriteBtnClick: MouseEventHandler<HTMLButtonElement>;
@@ -34,4 +34,4 @@ const HeartButton = ({
     );
 };
 
-export default HeartButton;
+export default memo(HeartButton);

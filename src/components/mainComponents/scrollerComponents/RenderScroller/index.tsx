@@ -1,6 +1,6 @@
 import "./RenderScroller.scss";
 import { ArticleData } from "../../FetchData";
-import { MutableRefObject } from "react";
+import { MutableRefObject, memo } from "react";
 import WidgetScroller from "../WidgetScroller";
 import CategoryScroller from "../CategoryScroller";
 
@@ -8,14 +8,14 @@ interface RenderScrollerProps {
     isCategoryCard: boolean;
     isFavoritesCategory: boolean;
     articleData: ArticleData;
-    observerElemRef?: MutableRefObject<HTMLDivElement | null>;
+    observerElemRef: MutableRefObject<HTMLDivElement | null>;
 }
 
 const RenderScroller = ({
     isCategoryCard, isFavoritesCategory,
     articleData, observerElemRef,
 }: RenderScrollerProps) => {
-    const isThereArticleData = articleData.length > 1;
+
     const observerDiv = observerElemRef && (
         <div
             ref={(elem) => (observerElemRef!.current = elem)}
@@ -35,7 +35,7 @@ const RenderScroller = ({
                 </>
             )}
 
-            {!isCategoryCard && isThereArticleData && (
+            {!isCategoryCard && (
                 <WidgetScroller
                     articleData={articleData}
                     observerDiv={observerDiv}
@@ -45,4 +45,4 @@ const RenderScroller = ({
     );
 };
 
-export default RenderScroller;
+export default memo(RenderScroller);

@@ -1,15 +1,11 @@
 import Loader from "../../UIcomponents/Loader";
 import ErrorMessage from "../../UIcomponents/ErrorMessage";
-import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 import InfiniteScroller from "../scrollerComponents/InfiniteScroller";
-import { useCallback, useContext, useEffect, useState, } from "react";
-import { IsFetchDataContext } from "../../../context/IsFetchDataProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
-import { IsLoadingContext, SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { filterJsonData } from "../../../util/helpers/functions/filterJSON/filterJsonData";
 import { allowOrDisableScroll } from "../../../util/helpers/functions/allowOrDisableScroll";
 import { replaceOrMergeArticleData } from "../../../util/helpers/functions/replaceOrMergeArticleData";
-import { WidgetUrlContext } from "../../../context/urlContexts/WidgetUrlProvider";
+import { useCallback, useContext, useEffect, useState, useRef, Dispatch, SetStateAction, memo } from "react";
 
 export type ArticleData = {
     url: string;
@@ -24,41 +20,32 @@ export type ArticleData = {
 
 interface CardDataProps {
     cardClass: "category-card" | "widget-card";
+    URL: string;
+    isLoading: boolean;
+    setIsLoading: Dispatch<SetStateAction<boolean>>;
+    changeURLparams: () => void; 
+    isMaxFetchCalls: boolean;
+    setTotalSearchResultsNum?: Dispatch<SetStateAction<number>>;
 }
 
-const FetchData = ({ cardClass }: CardDataProps) => {
+const FetchData = ({ cardClass, URL, isLoading, setIsLoading, changeURLparams, isMaxFetchCalls, setTotalSearchResultsNum }: CardDataProps) => {
     const [isError, setIsError] = useState(false);
     const [articleData, setArticleData] = useState<ArticleData>([]);
 
     const { selectedCategory } = useContext(SelectedCategoryContext);
-    const { isCategoryLoading, isWidgetLoading } = useContext(IsLoadingContext);
-    const {setIsCategoryLoading, setIsWidgetLoading} = useContext(SetIsLoadingContext);
-    const {
-        isFetchCategoryData, isFetchWidgetData,
-        setIsFetchCategoryData, setIsFetchWidgetData
-    } = useContext(IsFetchDataContext);
-
-    const { API_Card_URL, setTotalSearchResultsNum } = useContext(CategoryUrlContext);
-    const { API_Widget_URL } = useContext(WidgetUrlContext);
 
     const isFavoritesCategory = selectedCategory === "Favorites";
+    const isSearchCategory = selectedCategory === "searchResults";
     const isThereArticleData = articleData.length > 0;
     const isCategoryCard = cardClass === "category-card";
 
-    const URL = isCategoryCard ? API_Card_URL : API_Widget_URL;
-    const isLoading = isCategoryCard ? isCategoryLoading : isWidgetLoading;
-    const setIsLoading = isCategoryCard ? setIsCategoryLoading : setIsWidgetLoading;
-    const isFetchData = isCategoryCard ? isFetchCategoryData : isFetchWidgetData;
-    const setIsFetchData = isCategoryCard ? setIsFetchCategoryData: setIsFetchWidgetData;
-    // const fetchNumRef = useRef(0);
+    const fetchNumRef = useRef(0);
+    const timeoutIdRef = useRef<null | NodeJS.Timeout>(null);
 
     const fetchData = useCallback(
         async (URL: string) => {
-            if (!isLoading) {
-                setIsLoading(true);
-            }
-            // fetchNumRef.current = fetchNumRef.current + 1;
-            // console.log("Fetch ran", cardClass, fetchNumRef.current);
+            fetchNumRef.current = fetchNumRef.current + 1;
+            console.log("Fetch ran", cardClass, fetchNumRef.current, URL);
             try {
                 const response = await fetch(URL);
 
@@ -70,8 +57,13 @@ const FetchData = ({ cardClass }: CardDataProps) => {
 
                 const jsonData = await response.json();
 
-                if (selectedCategory === "searchResults" && URL.includes("page=1&")) {
-                    setTotalSearchResultsNum(Math.floor(jsonData.totalResults / 100));
+                if (
+                    selectedCategory === "searchResults" &&
+                    URL.includes("page=1&") && setTotalSearchResultsNum
+                ) {
+                    setTotalSearchResultsNum(
+                        Math.floor(jsonData.totalResults / 100)
+                    );
                 }
 
                 const filteredData = await filterJsonData(
@@ -79,45 +71,57 @@ const FetchData = ({ cardClass }: CardDataProps) => {
                     selectedCategory,
                     cardClass
                 );
-
+                
                 if (filteredData) {
                     setArticleData((prevData) => {
                         return replaceOrMergeArticleData(
                             prevData,
                             cardClass,
                             selectedCategory,
-                            isThereArticleData,
                             filteredData,
                             URL
                         );
                     });
                 }
             } catch (error) {
+                setIsError(true);
                 console.error("Error in fetchData:", cardClass, error);
 
             } finally {
-                setTimeout(() => {
-                    setIsLoading(false);
-                }, 200);  
+                setIsLoading(false);
             }
         },
-        [isLoading, setIsLoading, cardClass, selectedCategory, isThereArticleData, setTotalSearchResultsNum]
+        [
+            setIsLoading,
+            cardClass,
+            selectedCategory,
+            setTotalSearchResultsNum,
+        ]
     );
+
+    const debounceFetchCalls = useCallback(
+        (url: string, fetchFunc: (URL: string) => Promise<void>) => {
+            if (timeoutIdRef.current) {
+                clearTimeout(timeoutIdRef.current);
+            }
+
+            timeoutIdRef.current = setTimeout(() => {
+                fetchFunc(url);
+            }, 100);
+        }, []);
 
     useEffect(() => {
         allowOrDisableScroll(isError);
     }, [isError]);
 
-    useEffect(() => {
-        if (URL && (isFetchData || !isThereArticleData)) {
-            setIsFetchData(false);
-            fetchData(URL);
-        }
+    useEffect(() => {   
+        if (URL && isLoading) {
+            debounceFetchCalls(URL, fetchData);
+        } 
     }, [
         URL,
-        isFetchData,
-        isThereArticleData,
-        setIsFetchData,
+        isLoading,
+        debounceFetchCalls,
         fetchData,
     ]);
 
@@ -125,16 +129,18 @@ const FetchData = ({ cardClass }: CardDataProps) => {
         <>
             {isLoading && <Loader cardClass={cardClass} />}
             {isError && <ErrorMessage />}
-            {isThereArticleData && (
+            {(isThereArticleData || isSearchCategory) && ( 
                 <InfiniteScroller
                     isCategoryCard={isCategoryCard}
                     isLoading={isLoading}
                     isFavoritesCategory={isFavoritesCategory}
                     articleData={articleData}
+                    changeURLparams={changeURLparams}
+                    isMaxFetchCalls={isMaxFetchCalls}
                 />
-            )}
+            )} 
         </>
     );
 };
 
-export default FetchData;
+export default memo(FetchData);

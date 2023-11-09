@@ -1,6 +1,7 @@
+import { memo } from "react";
+import "./BreakingNewsCard.scss";
 import CardByline from "../CardByline";
 import CardTitle from "../CardTitle";
-import "./BreakingNewsCard.scss";
 
 interface BreakingNewsCardProps {
     title: string;
@@ -18,4 +19,4 @@ const BreakingNewsCard = ({ title, byline, url }: BreakingNewsCardProps) => {
     );
 };
 
-export default BreakingNewsCard;
+export default memo(BreakingNewsCard);

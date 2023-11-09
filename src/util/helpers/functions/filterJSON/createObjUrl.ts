@@ -4,9 +4,7 @@ export const createObjUrl = async (responsesArray: Response[]) => {
             return "./images/onErrorImgURL.png";
         }
 
-        const imgArrayBuffer = await response.arrayBuffer();
-        const contentType = response.headers.get("content-type") || "image/*";
-        const imgBlob = new Blob([imgArrayBuffer], { type: contentType });
+        const imgBlob = await response.blob(); 
         return URL.createObjectURL(imgBlob);
     });
 

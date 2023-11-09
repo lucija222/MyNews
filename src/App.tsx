@@ -8,7 +8,7 @@ import { FeaturedOrLatestStateContext } from "./context/FeaturedOrLatestTogglerP
 
 const App = () => {
     const { isSmallViewport } = useContext(ViewportSizesContext);
-    const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
+    const { featuredOrLatestState, setFeaturedOrLatestState: setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestStateContext
     );
 

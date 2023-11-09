@@ -53,7 +53,11 @@ export const filterNytNewswireApiJson = async (
         }
     }
 
-    const completeArray = await getDataArrWithImgObjUrl(pendingFetches, filteredArray_NoObjSrc);
-
-    return completeArray;
+    if (!isWidgetCard) {
+        const completeArray = await getDataArrWithImgObjUrl(pendingFetches, filteredArray_NoObjSrc);
+        return completeArray;
+        
+    } else { 
+        return filteredArray_NoObjSrc;
+    }
 };
