@@ -1,7 +1,7 @@
 import "./CategoryScroller.scss";
-import { useContext, useEffect } from "react";
 import { ArticleData } from "../../FetchData";
 import WidgetContainer from "../../WidgetContainer";
+import { useContext, useEffect, memo } from "react";
 import NoCardElems from "../../cardComponents/NoCardElems";
 import CategoryCard from "../../cardComponents/CategoryCard";
 import BreakingNewsCard from "../../cardComponents/BreakingNewsCard";
@@ -99,4 +99,4 @@ const CategoryScroller = ({
     );
 };
 
-export default CategoryScroller;
+export default memo(CategoryScroller);

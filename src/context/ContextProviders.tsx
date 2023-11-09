@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, memo } from "react";
 import EncodedSearchInputProvider from "./EncodedSearchInputProvider";
 import IsLoadingProvider from "./IsLoadingProvider";
 import SelectedCategoryProvider from "./SelectedCategoryProvider";
@@ -18,4 +18,4 @@ const ContextProviders = ({ children }: { children: ReactNode }) => {
     );
 };
 
-export default ContextProviders;
+export default memo(ContextProviders);

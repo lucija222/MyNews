@@ -5,11 +5,11 @@ import Menu from "../mobileComponents/Menu";
 import Banner from "../bannerComponents/Banner";
 import BannerModal from "../bannerComponents/BannerModal";
 import { HamburgerSvg } from "../../../assets/svg/svgImports";
-import { useState, MouseEventHandler, useContext, useEffect } from "react";
 import { ViewportSizesContext } from "../../../context/ViewportSizesProvider";
+import FeaturedOrWidgetToggler from "../mobileComponents/FeaturedOrWidgetToggler";
+import { useState, MouseEventHandler, useContext, useEffect, memo } from "react";
 import { allowOrDisableScroll } from "../../../util/helpers/functions/allowOrDisableScroll";
 import { FeaturedOrLatestStateContext } from "../../../context/FeaturedOrLatestTogglerProvider";
-import FeaturedOrWidgetToggler from "../mobileComponents/FeaturedOrWidgetToggler";
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -93,4 +93,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default memo(Header);

@@ -1,4 +1,5 @@
 import "./WidgetScroller.scss";
+import { memo } from "react";
 import { ArticleData } from "../../FetchData";
 import WidgetCard from "../../cardComponents/WidgetCard";
 
@@ -29,4 +30,4 @@ const WidgetScroller = ({
     );
 };
 
-export default WidgetScroller;
+export default memo(WidgetScroller);

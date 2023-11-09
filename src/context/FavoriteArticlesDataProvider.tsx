@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useEffect, useState, useCallback, memo} from "react";
 
 export interface FavoriteArticleData {
     url: string;
@@ -39,7 +39,7 @@ const FavoriteArticlesDataProvider = ({ children }: {children: ReactNode}) => {
         setFavoriteArticlesArray(initialFavoriteArticlesArray);
     }, []);
 
-    const updateFavoriteArticlesArray = (
+    const updateFavoriteArticlesArray = useCallback((
         newFavArticleObject: FavoriteArticleData,
         isArticleFavorite: boolean
     ) => {
@@ -71,7 +71,7 @@ const FavoriteArticlesDataProvider = ({ children }: {children: ReactNode}) => {
 
             return updatedArray;
         });
-    };
+    }, []);
 
     return (
         <FavoriteArticlesDataContext.Provider
@@ -82,4 +82,4 @@ const FavoriteArticlesDataProvider = ({ children }: {children: ReactNode}) => {
     );
 };
 
-export default FavoriteArticlesDataProvider;
+export default memo(FavoriteArticlesDataProvider);

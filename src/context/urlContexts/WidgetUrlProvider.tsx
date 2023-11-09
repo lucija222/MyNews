@@ -1,5 +1,5 @@
 import { nytAPI_Key } from "../../util/helpers/constants";
-import {  ReactNode, createContext, useCallback, useContext, useEffect, useState, } from "react";
+import {  ReactNode, createContext, useCallback, useContext, useEffect, useState, useMemo, memo } from "react";
 import { SetIsLoadingContext } from "../IsLoadingProvider";
 
 interface IWidgetUrlContext {
@@ -23,18 +23,18 @@ const WidgetUrlProvider = ({ children }: { children: ReactNode }) => {
     );
     const { setIsWidgetLoading } = useContext(SetIsLoadingContext); 
 
-    const isMaxWidgetFetchCalls = widgetURL_Offset === 400;
+    const isMaxWidgetFetchCalls = useMemo(() => widgetURL_Offset === 400, [widgetURL_Offset]);
 
     const resetWidgetURLparams = useCallback(() => {
         setWidgetURL_Offset(0);
-    }, [setWidgetURL_Offset]);
+    }, []);
 
     const changeWidgetURLparams = useCallback(() => {
         setIsWidgetLoading(true);
         setWidgetURL_Offset((prevNum) => {
             return prevNum + 100;
         });
-    }, [setIsWidgetLoading, setWidgetURL_Offset]);
+    }, [setIsWidgetLoading]);
 
     
 
@@ -58,4 +58,4 @@ const WidgetUrlProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-export default WidgetUrlProvider;
+export default memo(WidgetUrlProvider);

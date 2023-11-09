@@ -1,11 +1,11 @@
 import "./SearchFilter.scss";
 import { SearchSvg } from "../../../assets/svg/svgImports";
 import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
-import { Dispatch, SetStateAction, FormEventHandler, useContext, useState, useRef, useEffect } from "react"; 
-import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
-import { EncodedSearchInputContext } from "../../../context/EncodedSearchInputProvider";
-import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 import { WidgetUrlContext } from "../../../context/urlContexts/WidgetUrlProvider";
+import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
+import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
+import { EncodedSearchInputContext } from "../../../context/EncodedSearchInputProvider";
+import { Dispatch, SetStateAction, FormEventHandler, useContext, useState, useRef, useEffect, memo } from "react"; 
 
 interface SearchFilterProps {
     isMenuOpen?: boolean,
@@ -104,4 +104,4 @@ const SearchFilter = ({isMenuOpen, setIsMenuOpen }: SearchFilterProps) => {
     );
 };
 
-export default SearchFilter;
+export default memo(SearchFilter);

@@ -1,5 +1,5 @@
 import "./Nav.scss";
-import { Dispatch, SetStateAction, useContext, MouseEventHandler, } from "react";
+import { Dispatch, SetStateAction, useContext, MouseEventHandler, memo } from "react";
 import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { FeaturedOrLatestStateContext } from "../../../context/FeaturedOrLatestTogglerProvider";
@@ -16,7 +16,7 @@ interface NavProps {
 const Nav = ({ setIsMenuOpen }: NavProps) => {
     const { selectedCategory, setSelectedCategory, prevSelectedCategory } =
         useContext(SelectedCategoryContext);
-    const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
+    const { featuredOrLatestState, setFeaturedOrLatestState: setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestStateContext
     );
     const { resetCardURLparams } = useContext(CategoryUrlContext);
@@ -91,4 +91,4 @@ const Nav = ({ setIsMenuOpen }: NavProps) => {
     );
 };
 
-export default Nav;
+export default memo(Nav);

@@ -1,13 +1,12 @@
 import "./FeaturedOrWidgetToggler.scss";
-import { MouseEventHandler, useContext, useRef } from "react";
+import { MouseEventHandler, useContext, useRef, memo } from "react";
 import { SetIsLoadingContext } from "../../../../context/IsLoadingProvider";
 import { FeaturedOrLatestStateContext } from "../../../../context/FeaturedOrLatestTogglerProvider";
 import { CategoryUrlContext } from "../../../../context/urlContexts/CategoryUrlProvider";
 import { WidgetUrlContext } from "../../../../context/urlContexts/WidgetUrlProvider";
-import { SelectedCategoryContext } from "../../../../context/SelectedCategoryProvider";
 
 const FeaturedOrWidgetToggler = () => {
-    const { featuredOrLatestState, setFeaturedOrLatestToggler } = useContext(
+    const { featuredOrLatestState, setFeaturedOrLatestState: setFeaturedOrLatestToggler } = useContext(
         FeaturedOrLatestStateContext
     );
     const { resetCardURLparams } = useContext(CategoryUrlContext);
@@ -67,4 +66,4 @@ const FeaturedOrWidgetToggler = () => {
     );
 };
 
-export default FeaturedOrWidgetToggler;
+export default memo(FeaturedOrWidgetToggler);

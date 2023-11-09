@@ -2,13 +2,13 @@ import { Dispatch, SetStateAction, ReactNode, createContext, useState } from "re
 
 interface IFeaturedOrLatestStateContext {
     featuredOrLatestState: string;
-    setFeaturedOrLatestToggler: Dispatch<SetStateAction<string>>;
+    setFeaturedOrLatestState: Dispatch<SetStateAction<string>>;
 }
 
 export const FeaturedOrLatestStateContext =
     createContext<IFeaturedOrLatestStateContext>({
         featuredOrLatestState: "none",
-        setFeaturedOrLatestToggler: () => {},
+        setFeaturedOrLatestState: () => {},
     });
 
 const FeaturedOrLatestStateProvider = ({ children }: { children: ReactNode }) => {
@@ -17,8 +17,8 @@ const FeaturedOrLatestStateProvider = ({ children }: { children: ReactNode }) =>
     return (
         <FeaturedOrLatestStateContext.Provider
             value={{
-                featuredOrLatestState: featuredOrLatestState,
-                setFeaturedOrLatestToggler: setFeaturedOrLatestState,
+                featuredOrLatestState,
+                setFeaturedOrLatestState,
             }}
         >
             {children}

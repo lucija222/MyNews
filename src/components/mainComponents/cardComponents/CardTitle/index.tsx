@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { sliceStringAddElipsis } from "../../../../util/helpers/functions/titleAndByline/sliceStringAddElipsis";
 
 interface AdjustedCardTitleProps {
@@ -18,4 +19,4 @@ const CardTitle = ({ url, title, isWidgetCard }: AdjustedCardTitleProps) => {
     );
 };
 
-export default CardTitle;
+export default memo(CardTitle);

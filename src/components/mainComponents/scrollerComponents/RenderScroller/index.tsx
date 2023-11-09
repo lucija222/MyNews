@@ -1,6 +1,6 @@
 import "./RenderScroller.scss";
 import { ArticleData } from "../../FetchData";
-import { MutableRefObject } from "react";
+import { MutableRefObject, memo } from "react";
 import WidgetScroller from "../WidgetScroller";
 import CategoryScroller from "../CategoryScroller";
 
@@ -45,4 +45,4 @@ const RenderScroller = ({
     );
 };
 
-export default RenderScroller;
+export default memo(RenderScroller);

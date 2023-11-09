@@ -2,7 +2,7 @@ import "./CategoryCard.scss";
 import CardTitle from "../CardTitle";
 import CardByline from "../CardByline";
 import HeartButton from "../HeartButton";
-import { useState, MouseEventHandler, useContext, useEffect, ReactEventHandler, } from "react";
+import { useState, MouseEventHandler, useContext, useEffect, ReactEventHandler, memo } from "react";
 import { FavoriteArticlesDataContext } from "../../../../context/FavoriteArticlesDataProvider";
 
 interface CategoryCardProps {
@@ -100,4 +100,4 @@ const CategoryCard = ({ index, isFavoritesCategory, ...article }: CategoryCardPr
     );
 };
 
-export default CategoryCard;
+export default memo(CategoryCard);

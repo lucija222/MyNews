@@ -2,7 +2,7 @@ import { newsAPI_Key, nytAPI_Key } from "../../util/helpers/constants";
 import { SelectedCategoryContext } from "../SelectedCategoryProvider";
 import { EncodedSearchInputContext } from "../EncodedSearchInputProvider";
 import {
-    Dispatch, SetStateAction, ReactNode, createContext, useContext, useEffect, useState,
+    Dispatch, SetStateAction, ReactNode, createContext, useContext, useEffect, useState, useCallback, useMemo, memo
 } from "react";
 import { SetIsLoadingContext } from "../IsLoadingProvider";
 interface ICategoryUrlContext {
@@ -37,7 +37,7 @@ const CategoryUrlProvider = ({ children }: { children: ReactNode }) => {
     const [totalSearchResultsNum, setTotalSearchResultsNum] = useState(0);
     const isSearchResults = selectedCategory === "searchResults";
 
-    const maxFetchNum = () => {
+    const maxFetchNum = useCallback(() => {
         switch (selectedCategory) {
             case "Health":
                 return 200;
@@ -51,20 +51,20 @@ const CategoryUrlProvider = ({ children }: { children: ReactNode }) => {
             default:
                 return 400;
         }
-    };
+    }, [selectedCategory, totalSearchResultsNum]);
 
-    const isMaxCategoryFetchCalls = cardURL_Offset === maxFetchNum();
+    const isMaxCategoryFetchCalls = useMemo(() => cardURL_Offset === maxFetchNum(), [cardURL_Offset, maxFetchNum]);
 
-    const resetCardURLparams = () => {
+    const resetCardURLparams = useCallback(() => {
         setCardURL_Offset(0);
         setSearchURL_pageNum(1);
 
         setTimeout(() => {
             setIsCategoryLoading(true);
         }, 20);
-    };
+    }, [setIsCategoryLoading]);
 
-    const changeCardURLparams = () => {
+    const changeCardURLparams = useCallback(() => {
         setIsCategoryLoading(true);
 
         if (selectedCategory !== "Favorites" && !isSearchResults) {
@@ -79,7 +79,7 @@ const CategoryUrlProvider = ({ children }: { children: ReactNode }) => {
                 return prevNum + 1;
             });
         }
-    };
+    }, [setIsCategoryLoading, selectedCategory, isSearchResults]);
 
     useEffect(() => {
         switch (selectedCategory) {
@@ -129,4 +129,4 @@ const CategoryUrlProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-export default CategoryUrlProvider;
+export default memo(CategoryUrlProvider);

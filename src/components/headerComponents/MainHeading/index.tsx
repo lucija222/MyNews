@@ -1,5 +1,5 @@
 import "./MainHeading.scss"
-import { MouseEventHandler, useContext } from "react";
+import { MouseEventHandler, useContext, memo } from "react";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 
@@ -21,4 +21,4 @@ const MainHeading = () => {
     );
 };
 
-export default MainHeading;
+export default memo(MainHeading);

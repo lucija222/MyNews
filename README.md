@@ -4,7 +4,7 @@
 ## Important notes
 ### APIs
 - **News API** used for search results is only free during development, meaning it only works with requests coming from "localhost:port". If you access the app on mobile, using the IP address of the PC running it in your local network combined with the port, an attempt to search the news through input will respectively throw an error. <br />
-- **NYT API** only allows 5 requests per minute, if you exceed the limit, an error will be thrown. In such a case, wait a couple of seconds before reloading the app. I haven't created a condition to omit this behaviour  for reasons I'll gladly explain given another interview :&#x29; <br />     
+- **NYT API** only allows 5 requests per minute, if you exceed the limit, an error will be thrown. In such a case, wait a couple of seconds before reloading the app :&#x29; <br />     
 
 ### Testing
 - **Cross-browser testing:** Google Chrome, Mozilla Firefox, MS Edge, Opera and Safari <br />
@@ -18,7 +18,7 @@
 
 ## Design and functionality choices
 ### Layout
--  Header and navigation are in a fixed position for swift and easy access. The "News" heading is fixated as well, purely because I think the app looks better when its position is consistent. <br />
+-  Header and navigation are in a fixed position for swift and easy access. <br />
 - The main grid's columns, search filter, article cards, widget and mobile menu all have responsive widths, allowing the app to display as intended on any viewport width from 250 pixels and above <br />
 - The Latest news widget also has a responsive height, making its container fully visible without having to scroll the app <br />
 - The main grid renders from one to three columns respective to the viewport's width and mobile/desktop version of styling. <br />
@@ -34,9 +34,9 @@
 ### Other
 - The loader is used by the main grid and the widget. Its animation remains the same for both, however colors, size and placement have been adjusted to fit the instance in which it occurs. <br />
 - Custom error message <br />
+- Custom image placeholder in case of an error <br />
 - Custom modal window for setting the page as the browser's homepage <br />
   - Modal consists of: <br />
     - A dropdown menu to select one of the five most used desktop browsers. The default is set to Chrome as it's currently the most popular one <br />
     - An ordered list of instructions on how to set MyNews as the homepage respective to the chosen browser   <br />
     - A link to the section of the selected browser's support page in case users encounter any issues <br />
-- All of these have been styled using colors which match the rest of the page, and I think their layout does too :&#x29;  

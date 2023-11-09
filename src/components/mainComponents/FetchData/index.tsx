@@ -1,14 +1,11 @@
 import Loader from "../../UIcomponents/Loader";
 import ErrorMessage from "../../UIcomponents/ErrorMessage";
-import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 import InfiniteScroller from "../scrollerComponents/InfiniteScroller";
-import { useCallback, useContext, useEffect, useState, useRef } from "react";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
-import { IsLoadingContext, SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { filterJsonData } from "../../../util/helpers/functions/filterJSON/filterJsonData";
 import { allowOrDisableScroll } from "../../../util/helpers/functions/allowOrDisableScroll";
 import { replaceOrMergeArticleData } from "../../../util/helpers/functions/replaceOrMergeArticleData";
-import { WidgetUrlContext } from "../../../context/urlContexts/WidgetUrlProvider";
+import { useCallback, useContext, useEffect, useState, useRef, Dispatch, SetStateAction, memo } from "react";
 
 export type ArticleData = {
     url: string;
@@ -23,28 +20,25 @@ export type ArticleData = {
 
 interface CardDataProps {
     cardClass: "category-card" | "widget-card";
+    URL: string;
+    isLoading: boolean;
+    setIsLoading: Dispatch<SetStateAction<boolean>>;
+    changeURLparams: () => void; 
+    isMaxFetchCalls: boolean;
+    setTotalSearchResultsNum?: Dispatch<SetStateAction<number>>;
 }
 
-const FetchData = ({ cardClass }: CardDataProps) => {
+const FetchData = ({ cardClass, URL, isLoading, setIsLoading, changeURLparams, isMaxFetchCalls, setTotalSearchResultsNum }: CardDataProps) => {
     const [isError, setIsError] = useState(false);
     const [articleData, setArticleData] = useState<ArticleData>([]);
 
     const { selectedCategory } = useContext(SelectedCategoryContext);
-    const { isCategoryLoading, isWidgetLoading } = useContext(IsLoadingContext);
-    const { setIsCategoryLoading, setIsWidgetLoading } = useContext(SetIsLoadingContext);
-    const { API_Card_URL, setTotalSearchResultsNum } = useContext(CategoryUrlContext);
-    const { API_Widget_URL } = useContext(WidgetUrlContext);
 
     const isFavoritesCategory = selectedCategory === "Favorites";
     const isSearchCategory = selectedCategory === "searchResults";
     const isThereArticleData = articleData.length > 0;
     const isCategoryCard = cardClass === "category-card";
 
-    const URL = isCategoryCard ? API_Card_URL : API_Widget_URL;
-    const isLoading = isCategoryCard ? isCategoryLoading : isWidgetLoading;
-    const setIsLoading = isCategoryCard
-        ? setIsCategoryLoading
-        : setIsWidgetLoading;
     const fetchNumRef = useRef(0);
     const timeoutIdRef = useRef<null | NodeJS.Timeout>(null);
 
@@ -65,7 +59,7 @@ const FetchData = ({ cardClass }: CardDataProps) => {
 
                 if (
                     selectedCategory === "searchResults" &&
-                    URL.includes("page=1&")
+                    URL.includes("page=1&") && setTotalSearchResultsNum
                 ) {
                     setTotalSearchResultsNum(
                         Math.floor(jsonData.totalResults / 100)
@@ -141,10 +135,12 @@ const FetchData = ({ cardClass }: CardDataProps) => {
                     isLoading={isLoading}
                     isFavoritesCategory={isFavoritesCategory}
                     articleData={articleData}
+                    changeURLparams={changeURLparams}
+                    isMaxFetchCalls={isMaxFetchCalls}
                 />
             )} 
         </>
     );
 };
 
-export default FetchData;
+export default memo(FetchData);
