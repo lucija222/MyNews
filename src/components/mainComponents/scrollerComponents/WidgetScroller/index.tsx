@@ -8,15 +8,15 @@ interface WidgetScrollerProps {
     observerDiv: JSX.Element | undefined;
 }
 
-const WidgetScroller = ({
-    articleData, observerDiv,
-}: WidgetScrollerProps) => {
-
+const WidgetScroller = ({ articleData, observerDiv }: WidgetScrollerProps) => {
     return (
         <div className="widget-scroller_container">
             {articleData.map((article, index) => {
                 return (
-                    <article key={index} className="widget-card">
+                    <article
+                        key={`${index}-${article.title}`}
+                        className="widget-card"
+                    >
                         <WidgetCard
                             timestamp={article.timestamp}
                             title={article.title}

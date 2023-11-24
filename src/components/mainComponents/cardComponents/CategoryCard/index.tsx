@@ -1,7 +1,5 @@
 import "./CategoryCard.scss";
-import CardTitle from "../CardTitle";
-import CardByline from "../CardByline";
-import HeartButton from "../HeartButton";
+import { CardTitle, CardByline, HeartButton } from "../cardComponentsImports";
 import { useState, MouseEventHandler, useContext, useEffect, ReactEventHandler, memo } from "react";
 import { FavoriteArticlesDataContext } from "../../../../context/FavoriteArticlesDataProvider";
 

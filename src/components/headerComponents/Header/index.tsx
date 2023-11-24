@@ -1,23 +1,16 @@
 import "./Header.scss";
-import MainHeading from "../MainHeading";
-import SearchFilter from "../SearchFilter";
-import Menu from "../mobileComponents/Menu";
-import Banner from "../bannerComponents/Banner";
-import BannerModal from "../bannerComponents/BannerModal";
 import { HamburgerSvg } from "../../../assets/svg/svgImports";
 import { ViewportSizesContext } from "../../../context/ViewportSizesProvider";
 import FeaturedOrWidgetToggler from "../mobileComponents/FeaturedOrWidgetToggler";
 import { useState, MouseEventHandler, useContext, useEffect, memo } from "react";
+import { Banner, BannerModal, MainHeading, Menu, SearchFilter } from "../headerImports";
 import { allowOrDisableScroll } from "../../../util/helpers/functions/allowOrDisableScroll";
-import { FeaturedOrLatestStateContext } from "../../../context/FeaturedOrLatestTogglerProvider";
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isBannerBtnClicked, setIsBannerBtnClicked] = useState(false);
     const [isBannerModalOpen, setIsBannerModalOpen] = useState(false);
-
     const { isSmallViewport } = useContext(ViewportSizesContext);
-    const { featuredOrLatestState } = useContext(FeaturedOrLatestStateContext);
 
     const handleMenuToggle: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation();
@@ -77,16 +70,19 @@ const Header = () => {
                     </div>
                 )}
 
-                {isMenuOpen && isSmallViewport && (
-                    <Menu
+                 {isSmallViewport && (
+
+                    <>
+                    {isMenuOpen && (
+                        <Menu
                         isMenuOpen={isMenuOpen}
                         setIsMenuOpen={setIsMenuOpen}
                         handleMenuToggle={handleMenuToggle}
                     />
-                )}
+                    )}
 
-                {featuredOrLatestState !== "none" && (
                     <FeaturedOrWidgetToggler />
+                    </>
                 )}
             </header>
         </>

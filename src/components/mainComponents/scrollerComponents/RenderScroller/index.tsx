@@ -12,10 +12,11 @@ interface RenderScrollerProps {
 }
 
 const RenderScroller = ({
-    isCategoryCard, isFavoritesCategory,
-    articleData, observerElemRef,
+    isCategoryCard,
+    isFavoritesCategory,
+    articleData,
+    observerElemRef,
 }: RenderScrollerProps) => {
-
     const observerDiv = observerElemRef && (
         <div
             ref={(elem) => (observerElemRef!.current = elem)}
@@ -25,17 +26,13 @@ const RenderScroller = ({
 
     return (
         <>
-            {isCategoryCard && (
-                <>
-                    <CategoryScroller
-                        isFavoritesCategory={isFavoritesCategory}
-                        articleData={articleData}
-                        observerDiv={observerDiv}
-                    />
-                </>
-            )}
-
-            {!isCategoryCard && (
+            {isCategoryCard ? (
+                <CategoryScroller
+                    isFavoritesCategory={isFavoritesCategory}
+                    articleData={articleData}
+                    observerDiv={observerDiv}
+                />
+            ) : (
                 <WidgetScroller
                     articleData={articleData}
                     observerDiv={observerDiv}

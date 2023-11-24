@@ -1,4 +1,5 @@
 import "./Nav.scss";
+import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 import { Dispatch, SetStateAction, useContext, MouseEventHandler, memo } from "react";
 import { CategoryUrlContext } from "../../../context/urlContexts/CategoryUrlProvider";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
@@ -7,7 +8,6 @@ import {
     HomeSvg, GeneralSvg, BusinessSvg, HealthSvg, 
     ScienceSvg, SportsSvg, TechnologySvg, FavoritesSvg,
 } from "../../../assets/svg/svgImports";
-import { SetIsLoadingContext } from "../../../context/IsLoadingProvider";
 
 interface NavProps {
     setIsMenuOpen?: Dispatch<SetStateAction<boolean>>;
@@ -58,9 +58,21 @@ const Nav = ({ setIsMenuOpen }: NavProps) => {
         Favorites: <FavoritesSvg />,
     };
 
+    const categories: (keyof typeof svgComponentMap)[] = [
+        "Home",
+        "General",
+        "Business",
+        "Health",
+        "Science",
+        "Sports",
+        "Technology",
+        "Favorites",
+    ];
+
     const returnLiElem = (category: keyof typeof svgComponentMap) => {
         return (
             <li
+                key={category}
                 id={category}
                 onClick={handleNavClick}
                 className={
@@ -77,16 +89,7 @@ const Nav = ({ setIsMenuOpen }: NavProps) => {
 
     return (
         <nav className="general-nav">
-            <ul>
-                {returnLiElem("Home")}
-                {returnLiElem("General")}
-                {returnLiElem("Business")}
-                {returnLiElem("Health")}
-                {returnLiElem("Science")}
-                {returnLiElem("Sports")}
-                {returnLiElem("Technology")}
-                {returnLiElem("Favorites")}
-            </ul>
+            <ul>{categories.map((category) => returnLiElem(category))}</ul>
         </nav>
     );
 };
