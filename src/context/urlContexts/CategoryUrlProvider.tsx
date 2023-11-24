@@ -1,4 +1,3 @@
-import { newsAPI_Key, nytAPI_Key } from "../../util/helpers/constants";
 import { SelectedCategoryContext } from "../SelectedCategoryProvider";
 import { EncodedSearchInputContext } from "../EncodedSearchInputProvider";
 import {
@@ -15,7 +14,7 @@ interface ICategoryUrlContext {
 }
 
 export const CategoryUrlContext = createContext<ICategoryUrlContext>({
-    API_Card_URL: `https://api.nytimes.com/svc/news/v3/content/nyt/homepage.json?limit=100&offset=0&api-key=${nytAPI_Key}`,
+    API_Card_URL: `https://api.nytimes.com/svc/news/v3/content/nyt/homepage.json?limit=100&offset=0&api-key=${process.env.REACT_APP_NYT_API_KEY}`,
     isMaxCategoryFetchCalls: false,
     maxFetchNum: () => 400,
     changeCardURLparams: () => {},
@@ -29,8 +28,10 @@ const CategoryUrlProvider = ({ children }: { children: ReactNode }) => {
     const { setIsCategoryLoading } = useContext(SetIsLoadingContext); 
 
     const [cardURL_Offset, setCardURL_Offset] = useState(0);
+    const nytApiKey = process.env.REACT_APP_NYT_API_KEY;
+    const newsApiKey = process.env.REACT_APP_NEWS_API_KEY;
     const [API_Card_URL, setAPI_Card_URL] = useState(
-        `https://api.nytimes.com/svc/news/v3/content/nyt/homepage.json?limit=100&offset=${cardURL_Offset}&api-key=${nytAPI_Key}`
+        `https://api.nytimes.com/svc/news/v3/content/nyt/homepage.json?limit=100&offset=${cardURL_Offset}&api-key=${nytApiKey}`
     );
 
     const [searchURL_pageNum, setSearchURL_pageNum] = useState(1);
@@ -85,19 +86,19 @@ const CategoryUrlProvider = ({ children }: { children: ReactNode }) => {
         switch (selectedCategory) {
             case "Home":
                 setAPI_Card_URL(
-                    `https://api.nytimes.com/svc/news/v3/content/nyt/homepage.json?limit=100&offset=${cardURL_Offset}&api-key=${nytAPI_Key}`
+                    `https://api.nytimes.com/svc/news/v3/content/nyt/homepage.json?limit=100&offset=${cardURL_Offset}&api-key=${nytApiKey}`
                 );
                 return;
 
             case "General":
                 setAPI_Card_URL(
-                    `https://api.nytimes.com/svc/news/v3/content/nyt/world.json?limit=100&offset=${cardURL_Offset}&api-key=${nytAPI_Key}`
+                    `https://api.nytimes.com/svc/news/v3/content/nyt/world.json?limit=100&offset=${cardURL_Offset}&api-key=${nytApiKey}`
                 );
                 return;
 
             case "searchResults":
                 setAPI_Card_URL(
-                    `https://newsapi.org/v2/everything?q=${encodedSearchInput}&searchIn=title&language=en&page=${searchURL_pageNum}&apiKey=${newsAPI_Key}`
+                    `https://newsapi.org/v2/everything?q=${encodedSearchInput}&searchIn=title&language=en&page=${searchURL_pageNum}&apiKey=${newsApiKey}`
                 );
                 return;
 
@@ -107,7 +108,7 @@ const CategoryUrlProvider = ({ children }: { children: ReactNode }) => {
 
             default:
                 setAPI_Card_URL(
-                    `https://api.nytimes.com/svc/news/v3/content/nyt/${selectedCategory.toLowerCase()}.json?limit=100&offset=${cardURL_Offset}&api-key=${nytAPI_Key}`
+                    `https://api.nytimes.com/svc/news/v3/content/nyt/${selectedCategory.toLowerCase()}.json?limit=100&offset=${cardURL_Offset}&api-key=${nytApiKey}`
                 );
                 return;
         }

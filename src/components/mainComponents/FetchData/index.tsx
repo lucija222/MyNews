@@ -1,5 +1,4 @@
-import Loader from "../../UIcomponents/Loader";
-import ErrorMessage from "../../UIcomponents/ErrorMessage";
+import { Loader, ErrorMessage } from "../../UIcomponents/UIimports";
 import InfiniteScroller from "../scrollerComponents/InfiniteScroller";
 import { SelectedCategoryContext } from "../../../context/SelectedCategoryProvider";
 import { filterJsonData } from "../../../util/helpers/functions/filterJSON/filterJsonData";

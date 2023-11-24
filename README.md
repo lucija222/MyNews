@@ -25,10 +25,9 @@
 - Mobile styling currently always renders a single column and desktop view from two to three, but both can be easily adjusted to increase mobile up to two and add a desired maximum amount for desktop. <br /> 
 
 ### Favorites category - saving articles
-- Each article card contains a button with a heart outline SVG as a mechanism for saving favorite articles. I opted for this design because heart is a universal symbol for something we love, which makes its function apparent to the majority of users. <br />
-- An explanatory message is displayed under the "Favorites" category when there are no saved articles just in case users need clarification. <br /> 
-- Articles are being saved to a "Favorites" category placed at the bottom of the navigation for consistent application logic, due to the category name change to "favorite" upon saving. <br />
-- When a heart is clicked, its styling changes from an outline to a full heart and category to "favorite". Both of these changes will persist and display as such in any found instance of the saved article unless the user decides to revert the action by clicking on the heart button again. By making these changes consistent across all categories/article instances, spotting already saved articles becomes easy. <br />
+- Each article card contains a heart shaped button as a mechanism for saving favorite articles. 
+-  When clicked, its styling changes from an outline to a full heart and article's category name to "favorite". Both of these changes will persist and display as such in any found instance of the saved article unless the user decides to revert the action by clicking on the heart button again. By making these changes consistent across all categories/article instances, spotting already saved articles becomes easy. <br />
+- I opted for this design because heart is a universal symbol for something we love, which makes its function apparent to the majority of users. In addition, an explanatory message is displayed under the "Favorites" category when there are no saved articles just in case users need clarification. <br /> 
 - Favorites are stored and pulled from the browser's localStorage to ensure they aren't lost upon closing the app.  <br />    
 
 ### Other

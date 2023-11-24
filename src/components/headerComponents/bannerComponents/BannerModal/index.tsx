@@ -1,11 +1,7 @@
 import "./BannerModal.scss";
 import "../modalInstructions/ModalInstructions.scss";
 import { Dispatch, SetStateAction, ChangeEventHandler, useState, MouseEventHandler } from "react";
-import ChromeInstructions from "../modalInstructions/ChromeInstructions";
-import EdgeInstructions from "../modalInstructions/EdgeInstructions";
-import FirefoxInstructions from "../modalInstructions/FirefoxInstructions";
-import SafariInstructions from "../modalInstructions/SafariInstructions";
-import OperaInstructions from "../modalInstructions/OperaInstructions";
+import { ChromeInstructions, EdgeInstructions, FirefoxInstructions, SafariInstructions, OperaInstructions } from "../modalInstructions/imports";
 
 interface BannerModalProps {
     setIsBannerModalOpen: Dispatch<SetStateAction<boolean>>

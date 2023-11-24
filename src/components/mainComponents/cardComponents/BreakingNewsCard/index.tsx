@@ -1,7 +1,6 @@
 import { memo } from "react";
 import "./BreakingNewsCard.scss";
-import CardByline from "../CardByline";
-import CardTitle from "../CardTitle";
+import { CardByline, CardTitle } from "../cardComponentsImports"
 
 interface BreakingNewsCardProps {
     title: string;
